@@ -1,0 +1,338 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		A10000000000000000000001 /* SundryApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = B10000000000000000000001 /* SundryApp.swift */; };
+		A10000000000000000000002 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B10000000000000000000002 /* ContentView.swift */; };
+		A10000000000000000000003 /* TripStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = B10000000000000000000003 /* TripStore.swift */; };
+		A10000000000000000000004 /* TripSidebar.swift in Sources */ = {isa = PBXBuildFile; fileRef = B10000000000000000000004 /* TripSidebar.swift */; };
+		A10000000000000000000005 /* NewTripSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = B10000000000000000000005 /* NewTripSheet.swift */; };
+		A10000000000000000000006 /* ChecklistView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B10000000000000000000006 /* ChecklistView.swift */; };
+		A10000000000000000000007 /* ItemInspector.swift in Sources */ = {isa = PBXBuildFile; fileRef = B10000000000000000000007 /* ItemInspector.swift */; };
+		A10000000000000000000008 /* AvailabilityGate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B10000000000000000000008 /* AvailabilityGate.swift */; };
+		A10000000000000000000009 /* GeneratedListSchema.swift in Sources */ = {isa = PBXBuildFile; fileRef = B10000000000000000000009 /* GeneratedListSchema.swift */; };
+		A1000000000000000000000A /* FoundationModelsBackend.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1000000000000000000000A /* FoundationModelsBackend.swift */; };
+		A1000000000000000000000B /* OpenMeteoClimateProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1000000000000000000000B /* OpenMeteoClimateProvider.swift */; };
+		A1000000000000000000000C /* sundry_ffi.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1000000000000000000000C /* sundry_ffi.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		B00000000000000000000001 /* Sundry.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Sundry.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		B10000000000000000000001 /* SundryApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SundryApp.swift; sourceTree = "<group>"; };
+		B10000000000000000000002 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		B10000000000000000000003 /* TripStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TripStore.swift; sourceTree = "<group>"; };
+		B10000000000000000000004 /* TripSidebar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TripSidebar.swift; sourceTree = "<group>"; };
+		B10000000000000000000005 /* NewTripSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewTripSheet.swift; sourceTree = "<group>"; };
+		B10000000000000000000006 /* ChecklistView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChecklistView.swift; sourceTree = "<group>"; };
+		B10000000000000000000007 /* ItemInspector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemInspector.swift; sourceTree = "<group>"; };
+		B10000000000000000000008 /* AvailabilityGate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AvailabilityGate.swift; sourceTree = "<group>"; };
+		B10000000000000000000009 /* GeneratedListSchema.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneratedListSchema.swift; sourceTree = "<group>"; };
+		B1000000000000000000000A /* FoundationModelsBackend.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoundationModelsBackend.swift; sourceTree = "<group>"; };
+		B1000000000000000000000B /* OpenMeteoClimateProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenMeteoClimateProvider.swift; sourceTree = "<group>"; };
+		B1000000000000000000000C /* sundry_ffi.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = sundry_ffi.swift; path = Vendor/sundry_ffi.swift; sourceTree = "<group>"; };
+		B1000000000000000000000D /* Sundry.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Sundry.entitlements; sourceTree = "<group>"; };
+		B1000000000000000000000E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		C10000000000000000000001 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		D10000000000000000000001 = {
+			isa = PBXGroup;
+			children = (
+				D10000000000000000000002 /* Sundry */,
+				B1000000000000000000000C /* sundry_ffi.swift */,
+				D10000000000000000000005 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		D10000000000000000000002 /* Sundry */ = {
+			isa = PBXGroup;
+			children = (
+				B10000000000000000000001 /* SundryApp.swift */,
+				B1000000000000000000000D /* Sundry.entitlements */,
+				B1000000000000000000000E /* Info.plist */,
+				D10000000000000000000003 /* Views */,
+				D10000000000000000000004 /* ViewModels */,
+				D10000000000000000000006 /* Backends */,
+			);
+			path = Sundry;
+			sourceTree = "<group>";
+		};
+		D10000000000000000000003 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				B10000000000000000000002 /* ContentView.swift */,
+				B10000000000000000000004 /* TripSidebar.swift */,
+				B10000000000000000000005 /* NewTripSheet.swift */,
+				B10000000000000000000006 /* ChecklistView.swift */,
+				B10000000000000000000007 /* ItemInspector.swift */,
+				B10000000000000000000008 /* AvailabilityGate.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		D10000000000000000000004 /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				B10000000000000000000003 /* TripStore.swift */,
+			);
+			path = ViewModels;
+			sourceTree = "<group>";
+		};
+		D10000000000000000000005 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				B00000000000000000000001 /* Sundry.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		D10000000000000000000006 /* Backends */ = {
+			isa = PBXGroup;
+			children = (
+				B10000000000000000000009 /* GeneratedListSchema.swift */,
+				B1000000000000000000000A /* FoundationModelsBackend.swift */,
+				B1000000000000000000000B /* OpenMeteoClimateProvider.swift */,
+			);
+			path = Backends;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		E10000000000000000000001 /* Sundry */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = F10000000000000000000002 /* Build configuration list for PBXNativeTarget "Sundry" */;
+			buildPhases = (
+				E10000000000000000000002 /* Build Rust core */,
+				E10000000000000000000003 /* Sources */,
+				C10000000000000000000001 /* Frameworks */,
+				E10000000000000000000004 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Sundry;
+			productName = Sundry;
+			productReference = B00000000000000000000001 /* Sundry.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		E10000000000000000000000 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 2600;
+				LastUpgradeCheck = 2600;
+			};
+			buildConfigurationList = F10000000000000000000001 /* Build configuration list for PBXProject "Sundry" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = D10000000000000000000001;
+			productRefGroup = D10000000000000000000005 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				E10000000000000000000001 /* Sundry */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		E10000000000000000000002 /* Build Rust core */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Build Rust core";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/bash;
+			shellScript = "set -euo pipefail\nexport PATH=\"$HOME/.cargo/bin:/opt/homebrew/bin:$PATH\"\ncd \"$SRCROOT/..\"\ncargo build -p sundry-ffi --release --target aarch64-apple-darwin\n";
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		E10000000000000000000003 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A10000000000000000000001 /* SundryApp.swift in Sources */,
+				A10000000000000000000002 /* ContentView.swift in Sources */,
+				A10000000000000000000003 /* TripStore.swift in Sources */,
+				A10000000000000000000004 /* TripSidebar.swift in Sources */,
+				A10000000000000000000005 /* NewTripSheet.swift in Sources */,
+				A10000000000000000000006 /* ChecklistView.swift in Sources */,
+				A10000000000000000000007 /* ItemInspector.swift in Sources */,
+				A10000000000000000000008 /* AvailabilityGate.swift in Sources */,
+				A10000000000000000000009 /* GeneratedListSchema.swift in Sources */,
+				A1000000000000000000000A /* FoundationModelsBackend.swift in Sources */,
+				A1000000000000000000000B /* OpenMeteoClimateProvider.swift in Sources */,
+				A1000000000000000000000C /* sundry_ffi.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXResourcesBuildPhase section */
+		E10000000000000000000004 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		F20000000000000000000001 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = arm64;
+				CLANG_ENABLE_MODULES = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_TESTABILITY = YES;
+				MACOSX_DEPLOYMENT_TARGET = 26.0;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 6.0;
+			};
+			name = Debug;
+		};
+		F20000000000000000000002 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = arm64;
+				CLANG_ENABLE_MODULES = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				MACOSX_DEPLOYMENT_TARGET = 26.0;
+				SDKROOT = macosx;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 6.0;
+			};
+			name = Release;
+		};
+		F20000000000000000000003 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = arm64;
+				CODE_SIGN_ENTITLEMENTS = Sundry/Sundry.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				ENABLE_HARDENED_RUNTIME = YES;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = Sundry/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "@executable_path/../Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(SRCROOT)/../target/aarch64-apple-darwin/release",
+					"$(inherited)",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 26.0;
+				MARKETING_VERSION = 0.1.0;
+				OTHER_LDFLAGS = (
+					"-lsundry_ffi",
+					"-lc++",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.pradhul.sundry;
+				PRODUCT_NAME = Sundry;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_INCLUDE_PATHS = "$(SRCROOT)/Vendor/sundry_ffiFFI";
+				SWIFT_STRICT_CONCURRENCY = complete;
+				SWIFT_VERSION = 6.0;
+			};
+			name = Debug;
+		};
+		F20000000000000000000004 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = arm64;
+				CODE_SIGN_ENTITLEMENTS = Sundry/Sundry.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				ENABLE_HARDENED_RUNTIME = YES;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = Sundry/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "@executable_path/../Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(SRCROOT)/../target/aarch64-apple-darwin/release",
+					"$(inherited)",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 26.0;
+				MARKETING_VERSION = 0.1.0;
+				OTHER_LDFLAGS = (
+					"-lsundry_ffi",
+					"-lc++",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.pradhul.sundry;
+				PRODUCT_NAME = Sundry;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_INCLUDE_PATHS = "$(SRCROOT)/Vendor/sundry_ffiFFI";
+				SWIFT_STRICT_CONCURRENCY = complete;
+				SWIFT_VERSION = 6.0;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		F10000000000000000000001 /* Build configuration list for PBXProject "Sundry" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				F20000000000000000000001 /* Debug */,
+				F20000000000000000000002 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		F10000000000000000000002 /* Build configuration list for PBXNativeTarget "Sundry" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				F20000000000000000000003 /* Debug */,
+				F20000000000000000000004 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = E10000000000000000000000 /* Project object */;
+}
