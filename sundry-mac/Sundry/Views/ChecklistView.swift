@@ -33,7 +33,7 @@ struct ChecklistView: View {
                 }
             }
 
-            ForEach(store.categoryOrder, id: \.self) { category in
+            ForEach(store.orderedCategories, id: \.self) { category in
                 let inCategory = visible.filter { $0.category == category }
                 if !inCategory.isEmpty {
                     Section(category) {

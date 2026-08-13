@@ -18,7 +18,7 @@ final class TripStore {
     var selectedTripId: String?
     var isCreatingTrip = false
     var generationState: GenerationState = .idle
-    var categoryOrder: [String] = categoryOrder()
+    var orderedCategories: [String] = []
 
     private let core: SundryCore
 
@@ -33,6 +33,7 @@ final class TripStore {
             climate: OpenMeteoClimateProvider(),
             llm: FoundationModelsBackend()
         )
+        orderedCategories = categoryOrder()
         refresh()
     }
 
@@ -85,7 +86,7 @@ final class TripStore {
 
     func generate() async {
         guard let tripId = selectedTripId else { return }
-        let total = categoryOrder.count
+        let total = orderedCategories.count
         generationState = .running(completed: 0, total: total)
         do {
             let outcome = try await core.generate(tripId: tripId)
