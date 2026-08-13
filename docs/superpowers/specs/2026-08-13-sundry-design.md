@@ -42,6 +42,20 @@ These were settled during brainstorming and are recorded here so the reasoning s
 
 **Because inference is free and local, regeneration is cheap.** There is no cost pressure discouraging the user from regenerating a list, which makes the non-destructive merge rule below more valuable rather than less.
 
+## Spike results
+
+Run 2026-08-13 against `SystemLanguageModel.default` on macOS 26.5.2 (Apple Silicon). Command Line Tools do not ship `FoundationModelsMacros`, so the spike asked for JSON in the prompt rather than using `@Generable`. The Mac app still uses constrained decoding via `@Generable` in Xcode.
+
+**Verdict: proceed.** Climate grounding works. Electrical grounding needs an explicit instruction, which `build_prompt` now carries.
+
+**Kyoto / November / Electronics (first prompt):** three generic items (camera, portable charger, headphones). Stayed in category and did not contradict 100V, but ignored socket types and voltage entirely. Rationales were mostly filler. Failed the adapter criterion.
+
+**Kyoto / November / Electronics (tightened prompt):** adding *You MUST reason about the supplied mains electricity facts* produced a travel adapter whose rationale cited type A/B sockets. Camera and power bank remained, but the adapter is the item that makes the app worth using. That sentence is required in every electronics (and more generally every) prompt.
+
+**Reykjavik / February / Clothing:** eight items, all cold-and-wet. Rationales cited −2 °C, 3 °C highs, and 78 mm precipitation. Distinct from the Kyoto list, which is the test that grounding actually reaches the model.
+
+**Prompt wording to keep:** *Trip facts (authoritative — do not contradict these)*, *Only this category*, *Use the facts above rather than your own knowledge*, *one-sentence reason referring to something specific about this trip*, and *You MUST reason about the supplied mains electricity, currency, driving side, tap water, and climate facts. Do not ignore a fact that is relevant to this category.*
+
 ## Architecture
 
 Three layers, with a hard rule: Swift contains no business logic, and Rust knows nothing about views. There is exactly one carefully-bounded exception, described below.
