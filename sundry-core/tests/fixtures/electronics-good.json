@@ -1,0 +1,6 @@
+{
+  "items": [
+    { "name": "Type A plug adapter", "quantity": 2, "rationale": "Japan uses type A and B sockets at 100V.", "essential": true },
+    { "name": "USB-C charger", "quantity": 1, "rationale": "Seven nights away needs nightly charging.", "essential": true }
+  ]
+}

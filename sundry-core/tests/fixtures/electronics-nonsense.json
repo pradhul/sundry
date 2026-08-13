@@ -1,0 +1,9 @@
+{
+  "items": [
+    { "name": "", "quantity": 1, "rationale": "Empty name.", "essential": false },
+    { "name": "Charger", "quantity": 0, "rationale": "Zero quantity.", "essential": false },
+    { "name": "Charger", "quantity": 900, "rationale": "Absurd quantity.", "essential": false },
+    { "name": "Charger", "quantity": 1, "rationale": "A usable charger.", "essential": false },
+    { "name": "charger", "quantity": 1, "rationale": "Duplicate of Charger differing only in case.", "essential": false }
+  ]
+}

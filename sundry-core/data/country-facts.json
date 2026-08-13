@@ -1,0 +1,2618 @@
+[
+  {
+    "code": "AF",
+    "name": "Afghanistan",
+    "plug_types": [
+      "C",
+      "F"
+    ],
+    "voltage": 220,
+    "frequency": 50,
+    "currency": "AFN",
+    "drives_on": "Right",
+    "tap_water": "NotPotable"
+  },
+  {
+    "code": "AL",
+    "name": "Albania",
+    "plug_types": [
+      "C",
+      "F"
+    ],
+    "voltage": 230,
+    "frequency": 50,
+    "currency": "ALL",
+    "drives_on": "Right",
+    "tap_water": "Caution"
+  },
+  {
+    "code": "DZ",
+    "name": "Algeria",
+    "plug_types": [
+      "C",
+      "F"
+    ],
+    "voltage": 230,
+    "frequency": 50,
+    "currency": "DZD",
+    "drives_on": "Right",
+    "tap_water": "Caution"
+  },
+  {
+    "code": "AD",
+    "name": "Andorra",
+    "plug_types": [
+      "C",
+      "F"
+    ],
+    "voltage": 230,
+    "frequency": 50,
+    "currency": "EUR",
+    "drives_on": "Right",
+    "tap_water": "Potable"
+  },
+  {
+    "code": "AO",
+    "name": "Angola",
+    "plug_types": [
+      "C",
+      "F"
+    ],
+    "voltage": 220,
+    "frequency": 50,
+    "currency": "AOA",
+    "drives_on": "Right",
+    "tap_water": "NotPotable"
+  },
+  {
+    "code": "AG",
+    "name": "Antigua and Barbuda",
+    "plug_types": [
+      "A",
+      "B"
+    ],
+    "voltage": 230,
+    "frequency": 60,
+    "currency": "XCD",
+    "drives_on": "Left",
+    "tap_water": "Caution"
+  },
+  {
+    "code": "AR",
+    "name": "Argentina",
+    "plug_types": [
+      "C",
+      "I"
+    ],
+    "voltage": 220,
+    "frequency": 50,
+    "currency": "ARS",
+    "drives_on": "Right",
+    "tap_water": "Caution"
+  },
+  {
+    "code": "AM",
+    "name": "Armenia",
+    "plug_types": [
+      "C",
+      "F"
+    ],
+    "voltage": 230,
+    "frequency": 50,
+    "currency": "AMD",
+    "drives_on": "Right",
+    "tap_water": "Caution"
+  },
+  {
+    "code": "AU",
+    "name": "Australia",
+    "plug_types": [
+      "I"
+    ],
+    "voltage": 230,
+    "frequency": 50,
+    "currency": "AUD",
+    "drives_on": "Left",
+    "tap_water": "Potable"
+  },
+  {
+    "code": "AT",
+    "name": "Austria",
+    "plug_types": [
+      "C",
+      "F"
+    ],
+    "voltage": 230,
+    "frequency": 50,
+    "currency": "EUR",
+    "drives_on": "Right",
+    "tap_water": "Potable"
+  },
+  {
+    "code": "AZ",
+    "name": "Azerbaijan",
+    "plug_types": [
+      "C",
+      "F"
+    ],
+    "voltage": 220,
+    "frequency": 50,
+    "currency": "AZN",
+    "drives_on": "Right",
+    "tap_water": "Caution"
+  },
+  {
+    "code": "BS",
+    "name": "Bahamas",
+    "plug_types": [
+      "A",
+      "B"
+    ],
+    "voltage": 120,
+    "frequency": 60,
+    "currency": "BSD",
+    "drives_on": "Left",
+    "tap_water": "Caution"
+  },
+  {
+    "code": "BH",
+    "name": "Bahrain",
+    "plug_types": [
+      "G"
+    ],
+    "voltage": 230,
+    "frequency": 50,
+    "currency": "BHD",
+    "drives_on": "Right",
+    "tap_water": "Caution"
+  },
+  {
+    "code": "BD",
+    "name": "Bangladesh",
+    "plug_types": [
+      "C",
+      "D",
+      "G",
+      "K"
+    ],
+    "voltage": 220,
+    "frequency": 50,
+    "currency": "BDT",
+    "drives_on": "Left",
+    "tap_water": "NotPotable"
+  },
+  {
+    "code": "BB",
+    "name": "Barbados",
+    "plug_types": [
+      "A",
+      "B"
+    ],
+    "voltage": 115,
+    "frequency": 50,
+    "currency": "BBD",
+    "drives_on": "Left",
+    "tap_water": "Caution"
+  },
+  {
+    "code": "BY",
+    "name": "Belarus",
+    "plug_types": [
+      "C",
+      "F"
+    ],
+    "voltage": 230,
+    "frequency": 50,
+    "currency": "BYN",
+    "drives_on": "Right",
+    "tap_water": "Caution"
+  },
+  {
+    "code": "BE",
+    "name": "Belgium",
+    "plug_types": [
+      "C",
+      "E"
+    ],
+    "voltage": 230,
+    "frequency": 50,
+    "currency": "EUR",
+    "drives_on": "Right",
+    "tap_water": "Potable"
+  },
+  {
+    "code": "BZ",
+    "name": "Belize",
+    "plug_types": [
+      "A",
+      "B",
+      "G"
+    ],
+    "voltage": 110,
+    "frequency": 60,
+    "currency": "BZD",
+    "drives_on": "Right",
+    "tap_water": "Caution"
+  },
+  {
+    "code": "BJ",
+    "name": "Benin",
+    "plug_types": [
+      "C",
+      "E"
+    ],
+    "voltage": 220,
+    "frequency": 50,
+    "currency": "XOF",
+    "drives_on": "Right",
+    "tap_water": "NotPotable"
+  },
+  {
+    "code": "BT",
+    "name": "Bhutan",
+    "plug_types": [
+      "C",
+      "D",
+      "G"
+    ],
+    "voltage": 230,
+    "frequency": 50,
+    "currency": "BTN",
+    "drives_on": "Left",
+    "tap_water": "Caution"
+  },
+  {
+    "code": "BO",
+    "name": "Bolivia",
+    "plug_types": [
+      "A",
+      "C"
+    ],
+    "voltage": 230,
+    "frequency": 50,
+    "currency": "BOB",
+    "drives_on": "Right",
+    "tap_water": "NotPotable"
+  },
+  {
+    "code": "BA",
+    "name": "Bosnia and Herzegovina",
+    "plug_types": [
+      "C",
+      "F"
+    ],
+    "voltage": 230,
+    "frequency": 50,
+    "currency": "BAM",
+    "drives_on": "Right",
+    "tap_water": "Caution"
+  },
+  {
+    "code": "BW",
+    "name": "Botswana",
+    "plug_types": [
+      "D",
+      "G",
+      "M"
+    ],
+    "voltage": 230,
+    "frequency": 50,
+    "currency": "BWP",
+    "drives_on": "Left",
+    "tap_water": "Caution"
+  },
+  {
+    "code": "BR",
+    "name": "Brazil",
+    "plug_types": [
+      "C",
+      "N"
+    ],
+    "voltage": 127,
+    "frequency": 60,
+    "currency": "BRL",
+    "drives_on": "Right",
+    "tap_water": "Caution"
+  },
+  {
+    "code": "BN",
+    "name": "Brunei",
+    "plug_types": [
+      "G"
+    ],
+    "voltage": 240,
+    "frequency": 50,
+    "currency": "BND",
+    "drives_on": "Left",
+    "tap_water": "Potable"
+  },
+  {
+    "code": "BG",
+    "name": "Bulgaria",
+    "plug_types": [
+      "C",
+      "F"
+    ],
+    "voltage": 230,
+    "frequency": 50,
+    "currency": "BGN",
+    "drives_on": "Right",
+    "tap_water": "Potable"
+  },
+  {
+    "code": "BF",
+    "name": "Burkina Faso",
+    "plug_types": [
+      "C",
+      "E"
+    ],
+    "voltage": 220,
+    "frequency": 50,
+    "currency": "XOF",
+    "drives_on": "Right",
+    "tap_water": "NotPotable"
+  },
+  {
+    "code": "BI",
+    "name": "Burundi",
+    "plug_types": [
+      "C",
+      "E"
+    ],
+    "voltage": 220,
+    "frequency": 50,
+    "currency": "BIF",
+    "drives_on": "Right",
+    "tap_water": "NotPotable"
+  },
+  {
+    "code": "KH",
+    "name": "Cambodia",
+    "plug_types": [
+      "A",
+      "C",
+      "G"
+    ],
+    "voltage": 230,
+    "frequency": 50,
+    "currency": "KHR",
+    "drives_on": "Right",
+    "tap_water": "NotPotable"
+  },
+  {
+    "code": "CM",
+    "name": "Cameroon",
+    "plug_types": [
+      "C",
+      "E"
+    ],
+    "voltage": 220,
+    "frequency": 50,
+    "currency": "XAF",
+    "drives_on": "Right",
+    "tap_water": "NotPotable"
+  },
+  {
+    "code": "CA",
+    "name": "Canada",
+    "plug_types": [
+      "A",
+      "B"
+    ],
+    "voltage": 120,
+    "frequency": 60,
+    "currency": "CAD",
+    "drives_on": "Right",
+    "tap_water": "Potable"
+  },
+  {
+    "code": "CV",
+    "name": "Cabo Verde",
+    "plug_types": [
+      "C",
+      "F"
+    ],
+    "voltage": 230,
+    "frequency": 50,
+    "currency": "CVE",
+    "drives_on": "Right",
+    "tap_water": "Caution"
+  },
+  {
+    "code": "CF",
+    "name": "Central African Republic",
+    "plug_types": [
+      "C",
+      "E"
+    ],
+    "voltage": 220,
+    "frequency": 50,
+    "currency": "XAF",
+    "drives_on": "Right",
+    "tap_water": "NotPotable"
+  },
+  {
+    "code": "TD",
+    "name": "Chad",
+    "plug_types": [
+      "C",
+      "D",
+      "E",
+      "F"
+    ],
+    "voltage": 220,
+    "frequency": 50,
+    "currency": "XAF",
+    "drives_on": "Right",
+    "tap_water": "NotPotable"
+  },
+  {
+    "code": "CL",
+    "name": "Chile",
+    "plug_types": [
+      "C",
+      "L"
+    ],
+    "voltage": 220,
+    "frequency": 50,
+    "currency": "CLP",
+    "drives_on": "Right",
+    "tap_water": "Potable"
+  },
+  {
+    "code": "CN",
+    "name": "China",
+    "plug_types": [
+      "A",
+      "C",
+      "I"
+    ],
+    "voltage": 220,
+    "frequency": 50,
+    "currency": "CNY",
+    "drives_on": "Right",
+    "tap_water": "Caution"
+  },
+  {
+    "code": "CO",
+    "name": "Colombia",
+    "plug_types": [
+      "A",
+      "B"
+    ],
+    "voltage": 110,
+    "frequency": 60,
+    "currency": "COP",
+    "drives_on": "Right",
+    "tap_water": "Caution"
+  },
+  {
+    "code": "KM",
+    "name": "Comoros",
+    "plug_types": [
+      "C",
+      "E"
+    ],
+    "voltage": 220,
+    "frequency": 50,
+    "currency": "KMF",
+    "drives_on": "Right",
+    "tap_water": "NotPotable"
+  },
+  {
+    "code": "CG",
+    "name": "Congo",
+    "plug_types": [
+      "C",
+      "E"
+    ],
+    "voltage": 230,
+    "frequency": 50,
+    "currency": "XAF",
+    "drives_on": "Right",
+    "tap_water": "NotPotable"
+  },
+  {
+    "code": "CD",
+    "name": "DR Congo",
+    "plug_types": [
+      "C",
+      "D",
+      "E"
+    ],
+    "voltage": 220,
+    "frequency": 50,
+    "currency": "CDF",
+    "drives_on": "Right",
+    "tap_water": "NotPotable"
+  },
+  {
+    "code": "CR",
+    "name": "Costa Rica",
+    "plug_types": [
+      "A",
+      "B"
+    ],
+    "voltage": 120,
+    "frequency": 60,
+    "currency": "CRC",
+    "drives_on": "Right",
+    "tap_water": "Potable"
+  },
+  {
+    "code": "CI",
+    "name": "Cote d'Ivoire",
+    "plug_types": [
+      "C",
+      "E"
+    ],
+    "voltage": 220,
+    "frequency": 50,
+    "currency": "XOF",
+    "drives_on": "Right",
+    "tap_water": "NotPotable"
+  },
+  {
+    "code": "HR",
+    "name": "Croatia",
+    "plug_types": [
+      "C",
+      "F"
+    ],
+    "voltage": 230,
+    "frequency": 50,
+    "currency": "EUR",
+    "drives_on": "Right",
+    "tap_water": "Potable"
+  },
+  {
+    "code": "CU",
+    "name": "Cuba",
+    "plug_types": [
+      "A",
+      "B",
+      "C",
+      "L"
+    ],
+    "voltage": 110,
+    "frequency": 60,
+    "currency": "CUP",
+    "drives_on": "Right",
+    "tap_water": "Caution"
+  },
+  {
+    "code": "CY",
+    "name": "Cyprus",
+    "plug_types": [
+      "G"
+    ],
+    "voltage": 240,
+    "frequency": 50,
+    "currency": "EUR",
+    "drives_on": "Left",
+    "tap_water": "Potable"
+  },
+  {
+    "code": "CZ",
+    "name": "Czechia",
+    "plug_types": [
+      "C",
+      "E"
+    ],
+    "voltage": 230,
+    "frequency": 50,
+    "currency": "CZK",
+    "drives_on": "Right",
+    "tap_water": "Potable"
+  },
+  {
+    "code": "DK",
+    "name": "Denmark",
+    "plug_types": [
+      "C",
+      "E",
+      "F",
+      "K"
+    ],
+    "voltage": 230,
+    "frequency": 50,
+    "currency": "DKK",
+    "drives_on": "Right",
+    "tap_water": "Potable"
+  },
+  {
+    "code": "DJ",
+    "name": "Djibouti",
+    "plug_types": [
+      "C",
+      "E"
+    ],
+    "voltage": 220,
+    "frequency": 50,
+    "currency": "DJF",
+    "drives_on": "Right",
+    "tap_water": "NotPotable"
+  },
+  {
+    "code": "DM",
+    "name": "Dominica",
+    "plug_types": [
+      "D",
+      "G"
+    ],
+    "voltage": 230,
+    "frequency": 50,
+    "currency": "XCD",
+    "drives_on": "Left",
+    "tap_water": "Caution"
+  },
+  {
+    "code": "DO",
+    "name": "Dominican Republic",
+    "plug_types": [
+      "A",
+      "B"
+    ],
+    "voltage": 120,
+    "frequency": 60,
+    "currency": "DOP",
+    "drives_on": "Right",
+    "tap_water": "Caution"
+  },
+  {
+    "code": "EC",
+    "name": "Ecuador",
+    "plug_types": [
+      "A",
+      "B"
+    ],
+    "voltage": 120,
+    "frequency": 60,
+    "currency": "USD",
+    "drives_on": "Right",
+    "tap_water": "Caution"
+  },
+  {
+    "code": "EG",
+    "name": "Egypt",
+    "plug_types": [
+      "C",
+      "F"
+    ],
+    "voltage": 220,
+    "frequency": 50,
+    "currency": "EGP",
+    "drives_on": "Right",
+    "tap_water": "NotPotable"
+  },
+  {
+    "code": "SV",
+    "name": "El Salvador",
+    "plug_types": [
+      "A",
+      "B"
+    ],
+    "voltage": 120,
+    "frequency": 60,
+    "currency": "USD",
+    "drives_on": "Right",
+    "tap_water": "Caution"
+  },
+  {
+    "code": "GQ",
+    "name": "Equatorial Guinea",
+    "plug_types": [
+      "C",
+      "E"
+    ],
+    "voltage": 220,
+    "frequency": 50,
+    "currency": "XAF",
+    "drives_on": "Right",
+    "tap_water": "NotPotable"
+  },
+  {
+    "code": "ER",
+    "name": "Eritrea",
+    "plug_types": [
+      "C",
+      "L"
+    ],
+    "voltage": 230,
+    "frequency": 50,
+    "currency": "ERN",
+    "drives_on": "Right",
+    "tap_water": "NotPotable"
+  },
+  {
+    "code": "EE",
+    "name": "Estonia",
+    "plug_types": [
+      "C",
+      "F"
+    ],
+    "voltage": 230,
+    "frequency": 50,
+    "currency": "EUR",
+    "drives_on": "Right",
+    "tap_water": "Potable"
+  },
+  {
+    "code": "SZ",
+    "name": "Eswatini",
+    "plug_types": [
+      "M"
+    ],
+    "voltage": 230,
+    "frequency": 50,
+    "currency": "SZL",
+    "drives_on": "Left",
+    "tap_water": "Caution"
+  },
+  {
+    "code": "ET",
+    "name": "Ethiopia",
+    "plug_types": [
+      "C",
+      "F",
+      "L"
+    ],
+    "voltage": 220,
+    "frequency": 50,
+    "currency": "ETB",
+    "drives_on": "Right",
+    "tap_water": "NotPotable"
+  },
+  {
+    "code": "FJ",
+    "name": "Fiji",
+    "plug_types": [
+      "I"
+    ],
+    "voltage": 240,
+    "frequency": 50,
+    "currency": "FJD",
+    "drives_on": "Left",
+    "tap_water": "Caution"
+  },
+  {
+    "code": "FI",
+    "name": "Finland",
+    "plug_types": [
+      "C",
+      "F"
+    ],
+    "voltage": 230,
+    "frequency": 50,
+    "currency": "EUR",
+    "drives_on": "Right",
+    "tap_water": "Potable"
+  },
+  {
+    "code": "FR",
+    "name": "France",
+    "plug_types": [
+      "C",
+      "E"
+    ],
+    "voltage": 230,
+    "frequency": 50,
+    "currency": "EUR",
+    "drives_on": "Right",
+    "tap_water": "Potable"
+  },
+  {
+    "code": "GA",
+    "name": "Gabon",
+    "plug_types": [
+      "C",
+      "E"
+    ],
+    "voltage": 220,
+    "frequency": 50,
+    "currency": "XAF",
+    "drives_on": "Right",
+    "tap_water": "NotPotable"
+  },
+  {
+    "code": "GM",
+    "name": "Gambia",
+    "plug_types": [
+      "G"
+    ],
+    "voltage": 230,
+    "frequency": 50,
+    "currency": "GMD",
+    "drives_on": "Right",
+    "tap_water": "NotPotable"
+  },
+  {
+    "code": "GE",
+    "name": "Georgia",
+    "plug_types": [
+      "C",
+      "F"
+    ],
+    "voltage": 220,
+    "frequency": 50,
+    "currency": "GEL",
+    "drives_on": "Right",
+    "tap_water": "Caution"
+  },
+  {
+    "code": "DE",
+    "name": "Germany",
+    "plug_types": [
+      "C",
+      "F"
+    ],
+    "voltage": 230,
+    "frequency": 50,
+    "currency": "EUR",
+    "drives_on": "Right",
+    "tap_water": "Potable"
+  },
+  {
+    "code": "GH",
+    "name": "Ghana",
+    "plug_types": [
+      "D",
+      "G"
+    ],
+    "voltage": 230,
+    "frequency": 50,
+    "currency": "GHS",
+    "drives_on": "Right",
+    "tap_water": "NotPotable"
+  },
+  {
+    "code": "GR",
+    "name": "Greece",
+    "plug_types": [
+      "C",
+      "F"
+    ],
+    "voltage": 230,
+    "frequency": 50,
+    "currency": "EUR",
+    "drives_on": "Right",
+    "tap_water": "Potable"
+  },
+  {
+    "code": "GD",
+    "name": "Grenada",
+    "plug_types": [
+      "G"
+    ],
+    "voltage": 230,
+    "frequency": 50,
+    "currency": "XCD",
+    "drives_on": "Left",
+    "tap_water": "Caution"
+  },
+  {
+    "code": "GT",
+    "name": "Guatemala",
+    "plug_types": [
+      "A",
+      "B"
+    ],
+    "voltage": 120,
+    "frequency": 60,
+    "currency": "GTQ",
+    "drives_on": "Right",
+    "tap_water": "Caution"
+  },
+  {
+    "code": "GN",
+    "name": "Guinea",
+    "plug_types": [
+      "C",
+      "F",
+      "K"
+    ],
+    "voltage": 220,
+    "frequency": 50,
+    "currency": "GNF",
+    "drives_on": "Right",
+    "tap_water": "NotPotable"
+  },
+  {
+    "code": "GW",
+    "name": "Guinea-Bissau",
+    "plug_types": [
+      "C"
+    ],
+    "voltage": 220,
+    "frequency": 50,
+    "currency": "XOF",
+    "drives_on": "Right",
+    "tap_water": "NotPotable"
+  },
+  {
+    "code": "GY",
+    "name": "Guyana",
+    "plug_types": [
+      "A",
+      "B",
+      "D",
+      "G"
+    ],
+    "voltage": 240,
+    "frequency": 60,
+    "currency": "GYD",
+    "drives_on": "Left",
+    "tap_water": "NotPotable"
+  },
+  {
+    "code": "HT",
+    "name": "Haiti",
+    "plug_types": [
+      "A",
+      "B"
+    ],
+    "voltage": 110,
+    "frequency": 60,
+    "currency": "HTG",
+    "drives_on": "Right",
+    "tap_water": "NotPotable"
+  },
+  {
+    "code": "HN",
+    "name": "Honduras",
+    "plug_types": [
+      "A",
+      "B"
+    ],
+    "voltage": 110,
+    "frequency": 60,
+    "currency": "HNL",
+    "drives_on": "Right",
+    "tap_water": "Caution"
+  },
+  {
+    "code": "HK",
+    "name": "Hong Kong",
+    "plug_types": [
+      "G"
+    ],
+    "voltage": 220,
+    "frequency": 50,
+    "currency": "HKD",
+    "drives_on": "Left",
+    "tap_water": "Potable"
+  },
+  {
+    "code": "HU",
+    "name": "Hungary",
+    "plug_types": [
+      "C",
+      "F"
+    ],
+    "voltage": 230,
+    "frequency": 50,
+    "currency": "HUF",
+    "drives_on": "Right",
+    "tap_water": "Potable"
+  },
+  {
+    "code": "IS",
+    "name": "Iceland",
+    "plug_types": [
+      "C",
+      "F"
+    ],
+    "voltage": 230,
+    "frequency": 50,
+    "currency": "ISK",
+    "drives_on": "Right",
+    "tap_water": "Potable"
+  },
+  {
+    "code": "IN",
+    "name": "India",
+    "plug_types": [
+      "C",
+      "D",
+      "M"
+    ],
+    "voltage": 230,
+    "frequency": 50,
+    "currency": "INR",
+    "drives_on": "Left",
+    "tap_water": "NotPotable"
+  },
+  {
+    "code": "ID",
+    "name": "Indonesia",
+    "plug_types": [
+      "C",
+      "F"
+    ],
+    "voltage": 230,
+    "frequency": 50,
+    "currency": "IDR",
+    "drives_on": "Left",
+    "tap_water": "NotPotable"
+  },
+  {
+    "code": "IR",
+    "name": "Iran",
+    "plug_types": [
+      "C",
+      "F"
+    ],
+    "voltage": 230,
+    "frequency": 50,
+    "currency": "IRR",
+    "drives_on": "Right",
+    "tap_water": "Caution"
+  },
+  {
+    "code": "IQ",
+    "name": "Iraq",
+    "plug_types": [
+      "C",
+      "D",
+      "G"
+    ],
+    "voltage": 230,
+    "frequency": 50,
+    "currency": "IQD",
+    "drives_on": "Right",
+    "tap_water": "NotPotable"
+  },
+  {
+    "code": "IE",
+    "name": "Ireland",
+    "plug_types": [
+      "G"
+    ],
+    "voltage": 230,
+    "frequency": 50,
+    "currency": "EUR",
+    "drives_on": "Left",
+    "tap_water": "Potable"
+  },
+  {
+    "code": "IL",
+    "name": "Israel",
+    "plug_types": [
+      "C",
+      "H",
+      "M"
+    ],
+    "voltage": 230,
+    "frequency": 50,
+    "currency": "ILS",
+    "drives_on": "Right",
+    "tap_water": "Potable"
+  },
+  {
+    "code": "IT",
+    "name": "Italy",
+    "plug_types": [
+      "C",
+      "F",
+      "L"
+    ],
+    "voltage": 230,
+    "frequency": 50,
+    "currency": "EUR",
+    "drives_on": "Right",
+    "tap_water": "Potable"
+  },
+  {
+    "code": "JM",
+    "name": "Jamaica",
+    "plug_types": [
+      "A",
+      "B"
+    ],
+    "voltage": 110,
+    "frequency": 50,
+    "currency": "JMD",
+    "drives_on": "Left",
+    "tap_water": "Caution"
+  },
+  {
+    "code": "JP",
+    "name": "Japan",
+    "plug_types": [
+      "A",
+      "B"
+    ],
+    "voltage": 100,
+    "frequency": 50,
+    "currency": "JPY",
+    "drives_on": "Left",
+    "tap_water": "Potable"
+  },
+  {
+    "code": "JO",
+    "name": "Jordan",
+    "plug_types": [
+      "C",
+      "D",
+      "F",
+      "G",
+      "J"
+    ],
+    "voltage": 230,
+    "frequency": 50,
+    "currency": "JOD",
+    "drives_on": "Right",
+    "tap_water": "Caution"
+  },
+  {
+    "code": "KZ",
+    "name": "Kazakhstan",
+    "plug_types": [
+      "C",
+      "F"
+    ],
+    "voltage": 220,
+    "frequency": 50,
+    "currency": "KZT",
+    "drives_on": "Right",
+    "tap_water": "Caution"
+  },
+  {
+    "code": "KE",
+    "name": "Kenya",
+    "plug_types": [
+      "G"
+    ],
+    "voltage": 240,
+    "frequency": 50,
+    "currency": "KES",
+    "drives_on": "Left",
+    "tap_water": "NotPotable"
+  },
+  {
+    "code": "KI",
+    "name": "Kiribati",
+    "plug_types": [
+      "I"
+    ],
+    "voltage": 240,
+    "frequency": 50,
+    "currency": "AUD",
+    "drives_on": "Left",
+    "tap_water": "Caution"
+  },
+  {
+    "code": "KW",
+    "name": "Kuwait",
+    "plug_types": [
+      "G"
+    ],
+    "voltage": 240,
+    "frequency": 50,
+    "currency": "KWD",
+    "drives_on": "Right",
+    "tap_water": "Caution"
+  },
+  {
+    "code": "KG",
+    "name": "Kyrgyzstan",
+    "plug_types": [
+      "C",
+      "F"
+    ],
+    "voltage": 220,
+    "frequency": 50,
+    "currency": "KGS",
+    "drives_on": "Right",
+    "tap_water": "Caution"
+  },
+  {
+    "code": "LA",
+    "name": "Laos",
+    "plug_types": [
+      "A",
+      "B",
+      "C",
+      "E",
+      "F"
+    ],
+    "voltage": 230,
+    "frequency": 50,
+    "currency": "LAK",
+    "drives_on": "Right",
+    "tap_water": "NotPotable"
+  },
+  {
+    "code": "LV",
+    "name": "Latvia",
+    "plug_types": [
+      "C",
+      "F"
+    ],
+    "voltage": 230,
+    "frequency": 50,
+    "currency": "EUR",
+    "drives_on": "Right",
+    "tap_water": "Potable"
+  },
+  {
+    "code": "LB",
+    "name": "Lebanon",
+    "plug_types": [
+      "A",
+      "B",
+      "C",
+      "D",
+      "G"
+    ],
+    "voltage": 230,
+    "frequency": 50,
+    "currency": "LBP",
+    "drives_on": "Right",
+    "tap_water": "Caution"
+  },
+  {
+    "code": "LS",
+    "name": "Lesotho",
+    "plug_types": [
+      "M"
+    ],
+    "voltage": 220,
+    "frequency": 50,
+    "currency": "LSL",
+    "drives_on": "Left",
+    "tap_water": "Caution"
+  },
+  {
+    "code": "LR",
+    "name": "Liberia",
+    "plug_types": [
+      "A",
+      "B"
+    ],
+    "voltage": 120,
+    "frequency": 60,
+    "currency": "LRD",
+    "drives_on": "Right",
+    "tap_water": "NotPotable"
+  },
+  {
+    "code": "LY",
+    "name": "Libya",
+    "plug_types": [
+      "C",
+      "L"
+    ],
+    "voltage": 230,
+    "frequency": 50,
+    "currency": "LYD",
+    "drives_on": "Right",
+    "tap_water": "Caution"
+  },
+  {
+    "code": "LI",
+    "name": "Liechtenstein",
+    "plug_types": [
+      "C",
+      "J"
+    ],
+    "voltage": 230,
+    "frequency": 50,
+    "currency": "CHF",
+    "drives_on": "Right",
+    "tap_water": "Potable"
+  },
+  {
+    "code": "LT",
+    "name": "Lithuania",
+    "plug_types": [
+      "C",
+      "F"
+    ],
+    "voltage": 230,
+    "frequency": 50,
+    "currency": "EUR",
+    "drives_on": "Right",
+    "tap_water": "Potable"
+  },
+  {
+    "code": "LU",
+    "name": "Luxembourg",
+    "plug_types": [
+      "C",
+      "F"
+    ],
+    "voltage": 230,
+    "frequency": 50,
+    "currency": "EUR",
+    "drives_on": "Right",
+    "tap_water": "Potable"
+  },
+  {
+    "code": "MO",
+    "name": "Macao",
+    "plug_types": [
+      "D",
+      "G",
+      "M"
+    ],
+    "voltage": 220,
+    "frequency": 50,
+    "currency": "MOP",
+    "drives_on": "Left",
+    "tap_water": "Potable"
+  },
+  {
+    "code": "MG",
+    "name": "Madagascar",
+    "plug_types": [
+      "C",
+      "D",
+      "E",
+      "J",
+      "K"
+    ],
+    "voltage": 220,
+    "frequency": 50,
+    "currency": "MGA",
+    "drives_on": "Right",
+    "tap_water": "NotPotable"
+  },
+  {
+    "code": "MW",
+    "name": "Malawi",
+    "plug_types": [
+      "G"
+    ],
+    "voltage": 230,
+    "frequency": 50,
+    "currency": "MWK",
+    "drives_on": "Left",
+    "tap_water": "NotPotable"
+  },
+  {
+    "code": "MY",
+    "name": "Malaysia",
+    "plug_types": [
+      "G"
+    ],
+    "voltage": 240,
+    "frequency": 50,
+    "currency": "MYR",
+    "drives_on": "Left",
+    "tap_water": "Caution"
+  },
+  {
+    "code": "MV",
+    "name": "Maldives",
+    "plug_types": [
+      "C",
+      "D",
+      "G",
+      "J",
+      "K",
+      "L"
+    ],
+    "voltage": 230,
+    "frequency": 50,
+    "currency": "MVR",
+    "drives_on": "Left",
+    "tap_water": "NotPotable"
+  },
+  {
+    "code": "ML",
+    "name": "Mali",
+    "plug_types": [
+      "C",
+      "E"
+    ],
+    "voltage": 220,
+    "frequency": 50,
+    "currency": "XOF",
+    "drives_on": "Right",
+    "tap_water": "NotPotable"
+  },
+  {
+    "code": "MT",
+    "name": "Malta",
+    "plug_types": [
+      "G"
+    ],
+    "voltage": 230,
+    "frequency": 50,
+    "currency": "EUR",
+    "drives_on": "Left",
+    "tap_water": "Potable"
+  },
+  {
+    "code": "MH",
+    "name": "Marshall Islands",
+    "plug_types": [
+      "A",
+      "B"
+    ],
+    "voltage": 120,
+    "frequency": 60,
+    "currency": "USD",
+    "drives_on": "Right",
+    "tap_water": "Caution"
+  },
+  {
+    "code": "MR",
+    "name": "Mauritania",
+    "plug_types": [
+      "C"
+    ],
+    "voltage": 220,
+    "frequency": 50,
+    "currency": "MRU",
+    "drives_on": "Right",
+    "tap_water": "NotPotable"
+  },
+  {
+    "code": "MU",
+    "name": "Mauritius",
+    "plug_types": [
+      "C",
+      "G"
+    ],
+    "voltage": 230,
+    "frequency": 50,
+    "currency": "MUR",
+    "drives_on": "Left",
+    "tap_water": "Caution"
+  },
+  {
+    "code": "MX",
+    "name": "Mexico",
+    "plug_types": [
+      "A",
+      "B"
+    ],
+    "voltage": 127,
+    "frequency": 60,
+    "currency": "MXN",
+    "drives_on": "Right",
+    "tap_water": "Caution"
+  },
+  {
+    "code": "FM",
+    "name": "Micronesia",
+    "plug_types": [
+      "A",
+      "B"
+    ],
+    "voltage": 120,
+    "frequency": 60,
+    "currency": "USD",
+    "drives_on": "Right",
+    "tap_water": "Caution"
+  },
+  {
+    "code": "MD",
+    "name": "Moldova",
+    "plug_types": [
+      "C",
+      "F"
+    ],
+    "voltage": 230,
+    "frequency": 50,
+    "currency": "MDL",
+    "drives_on": "Right",
+    "tap_water": "Caution"
+  },
+  {
+    "code": "MC",
+    "name": "Monaco",
+    "plug_types": [
+      "C",
+      "E",
+      "F"
+    ],
+    "voltage": 230,
+    "frequency": 50,
+    "currency": "EUR",
+    "drives_on": "Right",
+    "tap_water": "Potable"
+  },
+  {
+    "code": "MN",
+    "name": "Mongolia",
+    "plug_types": [
+      "C",
+      "E"
+    ],
+    "voltage": 220,
+    "frequency": 50,
+    "currency": "MNT",
+    "drives_on": "Right",
+    "tap_water": "Caution"
+  },
+  {
+    "code": "ME",
+    "name": "Montenegro",
+    "plug_types": [
+      "C",
+      "F"
+    ],
+    "voltage": 230,
+    "frequency": 50,
+    "currency": "EUR",
+    "drives_on": "Right",
+    "tap_water": "Potable"
+  },
+  {
+    "code": "MA",
+    "name": "Morocco",
+    "plug_types": [
+      "C",
+      "E"
+    ],
+    "voltage": 220,
+    "frequency": 50,
+    "currency": "MAD",
+    "drives_on": "Right",
+    "tap_water": "Caution"
+  },
+  {
+    "code": "MZ",
+    "name": "Mozambique",
+    "plug_types": [
+      "C",
+      "F",
+      "M"
+    ],
+    "voltage": 220,
+    "frequency": 50,
+    "currency": "MZN",
+    "drives_on": "Left",
+    "tap_water": "NotPotable"
+  },
+  {
+    "code": "MM",
+    "name": "Myanmar",
+    "plug_types": [
+      "A",
+      "C",
+      "D",
+      "G",
+      "I"
+    ],
+    "voltage": 230,
+    "frequency": 50,
+    "currency": "MMK",
+    "drives_on": "Right",
+    "tap_water": "NotPotable"
+  },
+  {
+    "code": "NA",
+    "name": "Namibia",
+    "plug_types": [
+      "D",
+      "M"
+    ],
+    "voltage": 220,
+    "frequency": 50,
+    "currency": "NAD",
+    "drives_on": "Left",
+    "tap_water": "Caution"
+  },
+  {
+    "code": "NR",
+    "name": "Nauru",
+    "plug_types": [
+      "I"
+    ],
+    "voltage": 240,
+    "frequency": 50,
+    "currency": "AUD",
+    "drives_on": "Left",
+    "tap_water": "Caution"
+  },
+  {
+    "code": "NP",
+    "name": "Nepal",
+    "plug_types": [
+      "C",
+      "D",
+      "M"
+    ],
+    "voltage": 230,
+    "frequency": 50,
+    "currency": "NPR",
+    "drives_on": "Left",
+    "tap_water": "NotPotable"
+  },
+  {
+    "code": "NL",
+    "name": "Netherlands",
+    "plug_types": [
+      "C",
+      "F"
+    ],
+    "voltage": 230,
+    "frequency": 50,
+    "currency": "EUR",
+    "drives_on": "Right",
+    "tap_water": "Potable"
+  },
+  {
+    "code": "NZ",
+    "name": "New Zealand",
+    "plug_types": [
+      "I"
+    ],
+    "voltage": 230,
+    "frequency": 50,
+    "currency": "NZD",
+    "drives_on": "Left",
+    "tap_water": "Potable"
+  },
+  {
+    "code": "NI",
+    "name": "Nicaragua",
+    "plug_types": [
+      "A",
+      "B"
+    ],
+    "voltage": 120,
+    "frequency": 60,
+    "currency": "NIO",
+    "drives_on": "Right",
+    "tap_water": "Caution"
+  },
+  {
+    "code": "NE",
+    "name": "Niger",
+    "plug_types": [
+      "C",
+      "D",
+      "E",
+      "F"
+    ],
+    "voltage": 220,
+    "frequency": 50,
+    "currency": "XOF",
+    "drives_on": "Right",
+    "tap_water": "NotPotable"
+  },
+  {
+    "code": "NG",
+    "name": "Nigeria",
+    "plug_types": [
+      "D",
+      "G"
+    ],
+    "voltage": 230,
+    "frequency": 50,
+    "currency": "NGN",
+    "drives_on": "Right",
+    "tap_water": "NotPotable"
+  },
+  {
+    "code": "KP",
+    "name": "North Korea",
+    "plug_types": [
+      "A",
+      "C",
+      "F"
+    ],
+    "voltage": 220,
+    "frequency": 50,
+    "currency": "KPW",
+    "drives_on": "Right",
+    "tap_water": "Caution"
+  },
+  {
+    "code": "MK",
+    "name": "North Macedonia",
+    "plug_types": [
+      "C",
+      "F"
+    ],
+    "voltage": 230,
+    "frequency": 50,
+    "currency": "MKD",
+    "drives_on": "Right",
+    "tap_water": "Caution"
+  },
+  {
+    "code": "NO",
+    "name": "Norway",
+    "plug_types": [
+      "C",
+      "F"
+    ],
+    "voltage": 230,
+    "frequency": 50,
+    "currency": "NOK",
+    "drives_on": "Right",
+    "tap_water": "Potable"
+  },
+  {
+    "code": "OM",
+    "name": "Oman",
+    "plug_types": [
+      "G"
+    ],
+    "voltage": 240,
+    "frequency": 50,
+    "currency": "OMR",
+    "drives_on": "Right",
+    "tap_water": "Caution"
+  },
+  {
+    "code": "PK",
+    "name": "Pakistan",
+    "plug_types": [
+      "C",
+      "D"
+    ],
+    "voltage": 230,
+    "frequency": 50,
+    "currency": "PKR",
+    "drives_on": "Left",
+    "tap_water": "NotPotable"
+  },
+  {
+    "code": "PW",
+    "name": "Palau",
+    "plug_types": [
+      "A",
+      "B"
+    ],
+    "voltage": 120,
+    "frequency": 60,
+    "currency": "USD",
+    "drives_on": "Right",
+    "tap_water": "Caution"
+  },
+  {
+    "code": "PS",
+    "name": "Palestine",
+    "plug_types": [
+      "C",
+      "H"
+    ],
+    "voltage": 230,
+    "frequency": 50,
+    "currency": "ILS",
+    "drives_on": "Right",
+    "tap_water": "Caution"
+  },
+  {
+    "code": "PA",
+    "name": "Panama",
+    "plug_types": [
+      "A",
+      "B"
+    ],
+    "voltage": 120,
+    "frequency": 60,
+    "currency": "PAB",
+    "drives_on": "Right",
+    "tap_water": "Caution"
+  },
+  {
+    "code": "PG",
+    "name": "Papua New Guinea",
+    "plug_types": [
+      "I"
+    ],
+    "voltage": 240,
+    "frequency": 50,
+    "currency": "PGK",
+    "drives_on": "Left",
+    "tap_water": "NotPotable"
+  },
+  {
+    "code": "PY",
+    "name": "Paraguay",
+    "plug_types": [
+      "A",
+      "C"
+    ],
+    "voltage": 220,
+    "frequency": 50,
+    "currency": "PYG",
+    "drives_on": "Right",
+    "tap_water": "Caution"
+  },
+  {
+    "code": "PE",
+    "name": "Peru",
+    "plug_types": [
+      "A",
+      "B",
+      "C"
+    ],
+    "voltage": 220,
+    "frequency": 60,
+    "currency": "PEN",
+    "drives_on": "Right",
+    "tap_water": "Caution"
+  },
+  {
+    "code": "PH",
+    "name": "Philippines",
+    "plug_types": [
+      "A",
+      "B",
+      "C"
+    ],
+    "voltage": 220,
+    "frequency": 60,
+    "currency": "PHP",
+    "drives_on": "Right",
+    "tap_water": "NotPotable"
+  },
+  {
+    "code": "PL",
+    "name": "Poland",
+    "plug_types": [
+      "C",
+      "E"
+    ],
+    "voltage": 230,
+    "frequency": 50,
+    "currency": "PLN",
+    "drives_on": "Right",
+    "tap_water": "Potable"
+  },
+  {
+    "code": "PT",
+    "name": "Portugal",
+    "plug_types": [
+      "C",
+      "F"
+    ],
+    "voltage": 230,
+    "frequency": 50,
+    "currency": "EUR",
+    "drives_on": "Right",
+    "tap_water": "Potable"
+  },
+  {
+    "code": "QA",
+    "name": "Qatar",
+    "plug_types": [
+      "G"
+    ],
+    "voltage": 240,
+    "frequency": 50,
+    "currency": "QAR",
+    "drives_on": "Right",
+    "tap_water": "Caution"
+  },
+  {
+    "code": "RO",
+    "name": "Romania",
+    "plug_types": [
+      "C",
+      "F"
+    ],
+    "voltage": 230,
+    "frequency": 50,
+    "currency": "RON",
+    "drives_on": "Right",
+    "tap_water": "Potable"
+  },
+  {
+    "code": "RU",
+    "name": "Russia",
+    "plug_types": [
+      "C",
+      "F"
+    ],
+    "voltage": 220,
+    "frequency": 50,
+    "currency": "RUB",
+    "drives_on": "Right",
+    "tap_water": "Caution"
+  },
+  {
+    "code": "RW",
+    "name": "Rwanda",
+    "plug_types": [
+      "C",
+      "J"
+    ],
+    "voltage": 230,
+    "frequency": 50,
+    "currency": "RWF",
+    "drives_on": "Right",
+    "tap_water": "NotPotable"
+  },
+  {
+    "code": "KN",
+    "name": "Saint Kitts and Nevis",
+    "plug_types": [
+      "A",
+      "B",
+      "D",
+      "G"
+    ],
+    "voltage": 230,
+    "frequency": 60,
+    "currency": "XCD",
+    "drives_on": "Left",
+    "tap_water": "Caution"
+  },
+  {
+    "code": "LC",
+    "name": "Saint Lucia",
+    "plug_types": [
+      "G"
+    ],
+    "voltage": 230,
+    "frequency": 50,
+    "currency": "XCD",
+    "drives_on": "Left",
+    "tap_water": "Caution"
+  },
+  {
+    "code": "VC",
+    "name": "Saint Vincent and the Grenadines",
+    "plug_types": [
+      "A",
+      "C",
+      "E",
+      "G",
+      "I",
+      "K"
+    ],
+    "voltage": 230,
+    "frequency": 50,
+    "currency": "XCD",
+    "drives_on": "Left",
+    "tap_water": "Caution"
+  },
+  {
+    "code": "WS",
+    "name": "Samoa",
+    "plug_types": [
+      "I"
+    ],
+    "voltage": 230,
+    "frequency": 50,
+    "currency": "WST",
+    "drives_on": "Left",
+    "tap_water": "Caution"
+  },
+  {
+    "code": "SM",
+    "name": "San Marino",
+    "plug_types": [
+      "C",
+      "F",
+      "L"
+    ],
+    "voltage": 230,
+    "frequency": 50,
+    "currency": "EUR",
+    "drives_on": "Right",
+    "tap_water": "Potable"
+  },
+  {
+    "code": "ST",
+    "name": "Sao Tome and Principe",
+    "plug_types": [
+      "C",
+      "F"
+    ],
+    "voltage": 230,
+    "frequency": 50,
+    "currency": "STN",
+    "drives_on": "Right",
+    "tap_water": "NotPotable"
+  },
+  {
+    "code": "SA",
+    "name": "Saudi Arabia",
+    "plug_types": [
+      "G"
+    ],
+    "voltage": 220,
+    "frequency": 60,
+    "currency": "SAR",
+    "drives_on": "Right",
+    "tap_water": "Caution"
+  },
+  {
+    "code": "SN",
+    "name": "Senegal",
+    "plug_types": [
+      "C",
+      "D",
+      "E",
+      "K"
+    ],
+    "voltage": 230,
+    "frequency": 50,
+    "currency": "XOF",
+    "drives_on": "Right",
+    "tap_water": "NotPotable"
+  },
+  {
+    "code": "RS",
+    "name": "Serbia",
+    "plug_types": [
+      "C",
+      "F"
+    ],
+    "voltage": 230,
+    "frequency": 50,
+    "currency": "RSD",
+    "drives_on": "Right",
+    "tap_water": "Potable"
+  },
+  {
+    "code": "SC",
+    "name": "Seychelles",
+    "plug_types": [
+      "G"
+    ],
+    "voltage": 240,
+    "frequency": 50,
+    "currency": "SCR",
+    "drives_on": "Left",
+    "tap_water": "Caution"
+  },
+  {
+    "code": "SL",
+    "name": "Sierra Leone",
+    "plug_types": [
+      "D",
+      "G"
+    ],
+    "voltage": 230,
+    "frequency": 50,
+    "currency": "SLE",
+    "drives_on": "Right",
+    "tap_water": "NotPotable"
+  },
+  {
+    "code": "SG",
+    "name": "Singapore",
+    "plug_types": [
+      "G"
+    ],
+    "voltage": 230,
+    "frequency": 50,
+    "currency": "SGD",
+    "drives_on": "Left",
+    "tap_water": "Potable"
+  },
+  {
+    "code": "SK",
+    "name": "Slovakia",
+    "plug_types": [
+      "C",
+      "E"
+    ],
+    "voltage": 230,
+    "frequency": 50,
+    "currency": "EUR",
+    "drives_on": "Right",
+    "tap_water": "Potable"
+  },
+  {
+    "code": "SI",
+    "name": "Slovenia",
+    "plug_types": [
+      "C",
+      "F"
+    ],
+    "voltage": 230,
+    "frequency": 50,
+    "currency": "EUR",
+    "drives_on": "Right",
+    "tap_water": "Potable"
+  },
+  {
+    "code": "SB",
+    "name": "Solomon Islands",
+    "plug_types": [
+      "I",
+      "G"
+    ],
+    "voltage": 230,
+    "frequency": 50,
+    "currency": "SBD",
+    "drives_on": "Left",
+    "tap_water": "Caution"
+  },
+  {
+    "code": "SO",
+    "name": "Somalia",
+    "plug_types": [
+      "C"
+    ],
+    "voltage": 220,
+    "frequency": 50,
+    "currency": "SOS",
+    "drives_on": "Right",
+    "tap_water": "NotPotable"
+  },
+  {
+    "code": "ZA",
+    "name": "South Africa",
+    "plug_types": [
+      "C",
+      "M",
+      "N"
+    ],
+    "voltage": 230,
+    "frequency": 50,
+    "currency": "ZAR",
+    "drives_on": "Left",
+    "tap_water": "Potable"
+  },
+  {
+    "code": "KR",
+    "name": "South Korea",
+    "plug_types": [
+      "C",
+      "F"
+    ],
+    "voltage": 220,
+    "frequency": 60,
+    "currency": "KRW",
+    "drives_on": "Right",
+    "tap_water": "Potable"
+  },
+  {
+    "code": "SS",
+    "name": "South Sudan",
+    "plug_types": [
+      "C",
+      "D"
+    ],
+    "voltage": 230,
+    "frequency": 50,
+    "currency": "SSP",
+    "drives_on": "Right",
+    "tap_water": "NotPotable"
+  },
+  {
+    "code": "ES",
+    "name": "Spain",
+    "plug_types": [
+      "C",
+      "F"
+    ],
+    "voltage": 230,
+    "frequency": 50,
+    "currency": "EUR",
+    "drives_on": "Right",
+    "tap_water": "Potable"
+  },
+  {
+    "code": "LK",
+    "name": "Sri Lanka",
+    "plug_types": [
+      "D",
+      "G",
+      "M"
+    ],
+    "voltage": 230,
+    "frequency": 50,
+    "currency": "LKR",
+    "drives_on": "Left",
+    "tap_water": "NotPotable"
+  },
+  {
+    "code": "SD",
+    "name": "Sudan",
+    "plug_types": [
+      "C",
+      "D"
+    ],
+    "voltage": 230,
+    "frequency": 50,
+    "currency": "SDG",
+    "drives_on": "Right",
+    "tap_water": "NotPotable"
+  },
+  {
+    "code": "SR",
+    "name": "Suriname",
+    "plug_types": [
+      "A",
+      "B",
+      "C",
+      "F"
+    ],
+    "voltage": 127,
+    "frequency": 60,
+    "currency": "SRD",
+    "drives_on": "Left",
+    "tap_water": "Caution"
+  },
+  {
+    "code": "SE",
+    "name": "Sweden",
+    "plug_types": [
+      "C",
+      "F"
+    ],
+    "voltage": 230,
+    "frequency": 50,
+    "currency": "SEK",
+    "drives_on": "Right",
+    "tap_water": "Potable"
+  },
+  {
+    "code": "CH",
+    "name": "Switzerland",
+    "plug_types": [
+      "C",
+      "J"
+    ],
+    "voltage": 230,
+    "frequency": 50,
+    "currency": "CHF",
+    "drives_on": "Right",
+    "tap_water": "Potable"
+  },
+  {
+    "code": "SY",
+    "name": "Syria",
+    "plug_types": [
+      "C",
+      "E",
+      "L"
+    ],
+    "voltage": 220,
+    "frequency": 50,
+    "currency": "SYP",
+    "drives_on": "Right",
+    "tap_water": "NotPotable"
+  },
+  {
+    "code": "TW",
+    "name": "Taiwan",
+    "plug_types": [
+      "A",
+      "B"
+    ],
+    "voltage": 110,
+    "frequency": 60,
+    "currency": "TWD",
+    "drives_on": "Right",
+    "tap_water": "Potable"
+  },
+  {
+    "code": "TJ",
+    "name": "Tajikistan",
+    "plug_types": [
+      "C",
+      "F",
+      "I"
+    ],
+    "voltage": 220,
+    "frequency": 50,
+    "currency": "TJS",
+    "drives_on": "Right",
+    "tap_water": "Caution"
+  },
+  {
+    "code": "TZ",
+    "name": "Tanzania",
+    "plug_types": [
+      "D",
+      "G"
+    ],
+    "voltage": 230,
+    "frequency": 50,
+    "currency": "TZS",
+    "drives_on": "Left",
+    "tap_water": "NotPotable"
+  },
+  {
+    "code": "TH",
+    "name": "Thailand",
+    "plug_types": [
+      "A",
+      "B",
+      "C",
+      "O"
+    ],
+    "voltage": 230,
+    "frequency": 50,
+    "currency": "THB",
+    "drives_on": "Left",
+    "tap_water": "Caution"
+  },
+  {
+    "code": "TL",
+    "name": "Timor-Leste",
+    "plug_types": [
+      "C",
+      "E",
+      "F",
+      "I"
+    ],
+    "voltage": 220,
+    "frequency": 50,
+    "currency": "USD",
+    "drives_on": "Left",
+    "tap_water": "NotPotable"
+  },
+  {
+    "code": "TG",
+    "name": "Togo",
+    "plug_types": [
+      "C"
+    ],
+    "voltage": 220,
+    "frequency": 50,
+    "currency": "XOF",
+    "drives_on": "Right",
+    "tap_water": "NotPotable"
+  },
+  {
+    "code": "TO",
+    "name": "Tonga",
+    "plug_types": [
+      "I"
+    ],
+    "voltage": 240,
+    "frequency": 50,
+    "currency": "TOP",
+    "drives_on": "Left",
+    "tap_water": "Caution"
+  },
+  {
+    "code": "TT",
+    "name": "Trinidad and Tobago",
+    "plug_types": [
+      "A",
+      "B"
+    ],
+    "voltage": 115,
+    "frequency": 60,
+    "currency": "TTD",
+    "drives_on": "Left",
+    "tap_water": "Caution"
+  },
+  {
+    "code": "TN",
+    "name": "Tunisia",
+    "plug_types": [
+      "C",
+      "E"
+    ],
+    "voltage": 230,
+    "frequency": 50,
+    "currency": "TND",
+    "drives_on": "Right",
+    "tap_water": "Caution"
+  },
+  {
+    "code": "TR",
+    "name": "Turkey",
+    "plug_types": [
+      "C",
+      "F"
+    ],
+    "voltage": 230,
+    "frequency": 50,
+    "currency": "TRY",
+    "drives_on": "Right",
+    "tap_water": "Caution"
+  },
+  {
+    "code": "TM",
+    "name": "Turkmenistan",
+    "plug_types": [
+      "B",
+      "C",
+      "F"
+    ],
+    "voltage": 220,
+    "frequency": 50,
+    "currency": "TMT",
+    "drives_on": "Right",
+    "tap_water": "Caution"
+  },
+  {
+    "code": "TV",
+    "name": "Tuvalu",
+    "plug_types": [
+      "I"
+    ],
+    "voltage": 220,
+    "frequency": 50,
+    "currency": "AUD",
+    "drives_on": "Left",
+    "tap_water": "Caution"
+  },
+  {
+    "code": "UG",
+    "name": "Uganda",
+    "plug_types": [
+      "G"
+    ],
+    "voltage": 240,
+    "frequency": 50,
+    "currency": "UGX",
+    "drives_on": "Left",
+    "tap_water": "NotPotable"
+  },
+  {
+    "code": "UA",
+    "name": "Ukraine",
+    "plug_types": [
+      "C",
+      "F"
+    ],
+    "voltage": 230,
+    "frequency": 50,
+    "currency": "UAH",
+    "drives_on": "Right",
+    "tap_water": "Caution"
+  },
+  {
+    "code": "AE",
+    "name": "United Arab Emirates",
+    "plug_types": [
+      "G"
+    ],
+    "voltage": 230,
+    "frequency": 50,
+    "currency": "AED",
+    "drives_on": "Right",
+    "tap_water": "Caution"
+  },
+  {
+    "code": "GB",
+    "name": "United Kingdom",
+    "plug_types": [
+      "G"
+    ],
+    "voltage": 230,
+    "frequency": 50,
+    "currency": "GBP",
+    "drives_on": "Left",
+    "tap_water": "Potable"
+  },
+  {
+    "code": "US",
+    "name": "United States",
+    "plug_types": [
+      "A",
+      "B"
+    ],
+    "voltage": 120,
+    "frequency": 60,
+    "currency": "USD",
+    "drives_on": "Right",
+    "tap_water": "Potable"
+  },
+  {
+    "code": "UY",
+    "name": "Uruguay",
+    "plug_types": [
+      "C",
+      "F",
+      "I",
+      "L"
+    ],
+    "voltage": 230,
+    "frequency": 50,
+    "currency": "UYU",
+    "drives_on": "Right",
+    "tap_water": "Potable"
+  },
+  {
+    "code": "UZ",
+    "name": "Uzbekistan",
+    "plug_types": [
+      "C",
+      "F",
+      "I"
+    ],
+    "voltage": 220,
+    "frequency": 50,
+    "currency": "UZS",
+    "drives_on": "Right",
+    "tap_water": "Caution"
+  },
+  {
+    "code": "VU",
+    "name": "Vanuatu",
+    "plug_types": [
+      "C",
+      "G",
+      "I"
+    ],
+    "voltage": 230,
+    "frequency": 50,
+    "currency": "VUV",
+    "drives_on": "Left",
+    "tap_water": "Caution"
+  },
+  {
+    "code": "VA",
+    "name": "Vatican City",
+    "plug_types": [
+      "C",
+      "F",
+      "L"
+    ],
+    "voltage": 230,
+    "frequency": 50,
+    "currency": "EUR",
+    "drives_on": "Right",
+    "tap_water": "Potable"
+  },
+  {
+    "code": "VE",
+    "name": "Venezuela",
+    "plug_types": [
+      "A",
+      "B"
+    ],
+    "voltage": 120,
+    "frequency": 60,
+    "currency": "VES",
+    "drives_on": "Right",
+    "tap_water": "Caution"
+  },
+  {
+    "code": "VN",
+    "name": "Vietnam",
+    "plug_types": [
+      "A",
+      "C",
+      "D"
+    ],
+    "voltage": 220,
+    "frequency": 50,
+    "currency": "VND",
+    "drives_on": "Right",
+    "tap_water": "NotPotable"
+  },
+  {
+    "code": "YE",
+    "name": "Yemen",
+    "plug_types": [
+      "A",
+      "D",
+      "G"
+    ],
+    "voltage": 230,
+    "frequency": 50,
+    "currency": "YER",
+    "drives_on": "Right",
+    "tap_water": "NotPotable"
+  },
+  {
+    "code": "ZM",
+    "name": "Zambia",
+    "plug_types": [
+      "C",
+      "D",
+      "G"
+    ],
+    "voltage": 230,
+    "frequency": 50,
+    "currency": "ZMW",
+    "drives_on": "Left",
+    "tap_water": "NotPotable"
+  },
+  {
+    "code": "ZW",
+    "name": "Zimbabwe",
+    "plug_types": [
+      "D",
+      "G"
+    ],
+    "voltage": 220,
+    "frequency": 50,
+    "currency": "ZWG",
+    "drives_on": "Left",
+    "tap_water": "NotPotable"
+  }
+]
