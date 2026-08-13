@@ -1,5 +1,5 @@
 [workspace]
-members = ["sundry-core"]
+members = ["sundry-core", "sundry-ffi"]
 resolver = "2"
 
 [workspace.package]
