@@ -81,7 +81,8 @@ struct ChecklistView: View {
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
                 .transition(.opacity.combined(with: .scale(scale: 0.98)))
             } else if !store.items.isEmpty || isRunning {
-                HSplitView {
+                // Equal-width columns: To pack plus one per traveller.
+                HStack(spacing: 0) {
                     packingColumn(
                         title: "To pack",
                         count: toPack.count,
@@ -90,26 +91,29 @@ struct ChecklistView: View {
                         essentialsFirst: true,
                         packedStyle: false
                     )
+                    .frame(minWidth: columnMinWidth, maxWidth: .infinity)
 
                     ForEach(Array(store.travellerNames.enumerated()), id: \.offset) { _, name in
                         let packed = visible.filter {
                             $0.state == .packed && $0.ownerName == name
                         }
+                        Rectangle().fill(Olive.rule).frame(width: 1)
                         packingColumn(
-                            title: "Packed for \(name)",
+                            title: store.travellerNames.count >= 3 ? name : "Packed for \(name)",
                             count: packed.count,
                             empty: "Nothing packed yet",
                             items: packed,
                             essentialsFirst: false,
                             packedStyle: true
                         )
-                        // 1-2 travellers get roomy columns; 3+ stay readable side by side.
-                        .frame(minWidth: store.travellerNames.count >= 3 ? 150 : 200)
+                        .frame(minWidth: columnMinWidth, maxWidth: .infinity)
+                        .help("Packed for \(name)")
                     }
 
                     if selectedItem != nil {
+                        Rectangle().fill(Olive.rule).frame(width: 1)
                         ItemInspector(item: selectedItem)
-                            .frame(minWidth: 180, idealWidth: 260, maxWidth: 420)
+                            .frame(width: 260)
                     }
                 }
                 .transition(.opacity)
@@ -180,6 +184,16 @@ struct ChecklistView: View {
     }
 
     @ViewBuilder
+    /// Narrower minimum as more travellers share the window.
+    private var columnMinWidth: CGFloat {
+        switch store.travellerNames.count {
+        case ...1: return 260
+        case 2: return 200
+        case 3: return 150
+        default: return 120
+        }
+    }
+
     private func packingColumn(
         title: String,
         count: Int,
@@ -193,6 +207,9 @@ struct ChecklistView: View {
                 Text(title)
                     .font(.system(.body, design: .serif).weight(.semibold))
                     .foregroundStyle(Olive.ink)
+                    .lineLimit(1)
+                    .truncationMode(.tail)
+                    .minimumScaleFactor(0.85)
                 Text("\(count)")
                     .font(.caption2.weight(.bold).monospacedDigit())
                     .foregroundStyle(Olive.paper)

@@ -214,13 +214,7 @@ fn dup_key(name: &str) -> Vec<String> {
         .to_lowercase()
         .split(|c: char| !c.is_alphanumeric())
         .filter(|w| !w.is_empty() && !DUP_STOPWORDS.contains(w))
-        .map(|w| match w {
-            // Card brands are just credit cards for packing purposes.
-            "visa" | "mastercard" | "amex" => "credit".to_string(),
-            _ => w.to_string(),
-        })
         .map(|w| {
-            let w = w.as_str();
             if w.len() > 3
                 && w.ends_with("es")
                 && (w.ends_with("shes") || w.ends_with("ches") || w.ends_with("sses"))
@@ -269,7 +263,76 @@ pub fn refines(general: &str, specific: &str) -> bool {
 
 /// True when two names describe the same thing ("SPF-rated thermal base
 /// layers" vs "Thermal base layer").
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum CardKind {
+    Credit,
+    Debit,
+    /// A brand or generic card with no credit/debit word ("Visa card", "Bank card").
+    Unspecified,
+}
+
+const CARD_BRANDS: [&str; 10] = [
+    "visa",
+    "mastercard",
+    "master card",
+    "amex",
+    "american express",
+    "rupay",
+    "maestro",
+    "discover",
+    "diners",
+    "jcb",
+];
+const NOT_PAYMENT_CARDS: [&str; 12] = [
+    "sim",
+    "id card",
+    "identity",
+    "memory",
+    "sd card",
+    "business card",
+    "playing card",
+    "boarding",
+    "key card",
+    "membership",
+    "insurance",
+    "holder",
+];
+
+/// Classifies payment-card names so brand-only lines merge with the matching
+/// Credit card / Debit card line.
+pub fn card_kind(name: &str) -> Option<CardKind> {
+    let n = name.to_lowercase();
+    if NOT_PAYMENT_CARDS.iter().any(|w| n.contains(w)) {
+        return None;
+    }
+    let brand = CARD_BRANDS.iter().any(|b| n.contains(b));
+    let has_card = n
+        .split(|c: char| !c.is_alphanumeric())
+        .any(|w| w == "card" || w == "cards");
+    if !brand && !has_card {
+        return None;
+    }
+    if n.contains("debit") {
+        Some(CardKind::Debit)
+    } else if n.contains("credit") || n.contains("amex") || n.contains("american express") {
+        Some(CardKind::Credit)
+    } else if brand
+        || n == "card"
+        || n == "cards"
+        || n.contains("bank card")
+        || n.contains("payment card")
+        || n.contains("travel card")
+    {
+        Some(CardKind::Unspecified)
+    } else {
+        None
+    }
+}
+
 pub fn is_near_duplicate(a: &str, b: &str) -> bool {
+    if let (Some(x), Some(y)) = (card_kind(a), card_kind(b)) {
+        return x == y || x == CardKind::Unspecified || y == CardKind::Unspecified;
+    }
     let ka = dup_key(a);
     let kb = dup_key(b);
     if ka.is_empty() || kb.is_empty() {
@@ -449,5 +512,22 @@ mod tests {
         assert!(!refines("Phone", "Phone charger"));
         assert!(!refines("Thermal sweater", "Sweater"));
         assert!(!refines("Sweater", "Sweater"));
+    }
+
+    #[test]
+    fn payment_cards_merge_by_kind() {
+        assert!(is_near_duplicate("Visa card", "Credit card"));
+        assert!(is_near_duplicate("Visa card", "Debit card"));
+        assert!(is_near_duplicate("RuPay card", "Debit card"));
+        assert!(is_near_duplicate("Mastercard", "Credit card"));
+        assert!(is_near_duplicate("Amex", "Credit card"));
+        assert!(is_near_duplicate("Visa debit card", "Debit card"));
+        assert!(is_near_duplicate("Card", "Credit card"));
+        assert!(is_near_duplicate("Bank card", "Debit card"));
+        assert!(!is_near_duplicate("Debit card", "Credit card"));
+        assert!(!is_near_duplicate("Visa debit card", "Amex"));
+        assert!(!is_near_duplicate("SIM card", "Credit card"));
+        assert!(!is_near_duplicate("ID card", "Debit card"));
+        assert_eq!(card_kind("Card holder"), None);
     }
 }

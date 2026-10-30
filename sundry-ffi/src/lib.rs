@@ -395,7 +395,7 @@ impl SundryCore {
                 message: "item name is empty".into(),
             });
         }
-        let quantity = quantity.clamp(1, 20);
+        let quantity = quantity.clamp(1, sundry_core::llm::MAX_TRIP_QUANTITY);
         let mut doc = self.store.load(tid).map_err(core_err)?;
         let key = sundry_core::llm::normalise(&trimmed);
         if doc

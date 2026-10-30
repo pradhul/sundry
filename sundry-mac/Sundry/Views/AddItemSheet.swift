@@ -38,7 +38,7 @@ struct AddItemSheet: View {
                         Text(cat).tag(cat)
                     }
                 }
-                Stepper("Quantity: \(Int(quantity))", value: $quantity, in: 1...20)
+                Stepper("Quantity: \(Int(quantity))", value: $quantity, in: 1...60)
                 Toggle("Essential", isOn: $essential)
                     .tint(Olive.accent)
 
