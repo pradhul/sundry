@@ -376,6 +376,8 @@ struct ChecklistView: View {
             HStack(spacing: 8) {
                 Text(item.name)
                     .font(.body.weight(.medium))
+                    .fixedSize(horizontal: false, vertical: true)
+                    .layoutPriority(1)
                     .foregroundStyle(item.state == .notNeeded ? Olive.taupe : Olive.ink)
                     .strikethrough(item.state == .notNeeded, color: Olive.taupe)
                     .animation(Olive.snappy(reduceMotion), value: item.state)
@@ -385,7 +387,7 @@ struct ChecklistView: View {
                         .foregroundStyle(Olive.taupe)
                 }
                 if item.essential {
-                    Text("Essential")
+                    Text("Essential").fixedSize()
                         .font(.caption2.weight(.semibold))
                         .tracking(0.3)
                         .padding(.horizontal, 6)
@@ -520,21 +522,11 @@ struct ItemStateControl: View {
         Group {
             switch layout {
             case .row:
-                HStack(spacing: 4) {
-                    chip("Later", active: state == .todo) { onChange(.later) }
-                    ForEach(Array(store.travellerNames.enumerated()), id: \.offset) { _, name in
-                        chip(
-                            name,
-                            active: state == .packed && ownerName == name,
-                            packed: true
-                        ) {
-                            onChange(.pack(name))
-                        }
-                    }
-                    chip("Not needed", active: state == .notNeeded) {
-                        onChange(.notNeeded)
-                    }
-                    Spacer(minLength: 0)
+                // Full labels when they fit; otherwise compact icon/initial chips
+                // (tooltips + accessibility labels keep the meaning).
+                ViewThatFits(in: .horizontal) {
+                    fullRow
+                    compactRow
                 }
             case .stack:
                 VStack(alignment: .leading, spacing: 3) {
@@ -557,11 +549,73 @@ struct ItemStateControl: View {
         }
     }
 
+    private var fullRow: some View {
+        HStack(spacing: 4) {
+            chip("Later", active: state == .todo) { onChange(.later) }
+            ForEach(Array(store.travellerNames.enumerated()), id: \.offset) { _, name in
+                chip(name, active: state == .packed && ownerName == name, packed: true) {
+                    onChange(.pack(name))
+                }
+            }
+            chip("Not needed", active: state == .notNeeded) { onChange(.notNeeded) }
+            Spacer(minLength: 0)
+        }
+        .fixedSize(horizontal: true, vertical: false)
+    }
+
+    private var compactRow: some View {
+        let labels = TravellerLabels.short(store.travellerNames)
+        return HStack(spacing: 4) {
+            iconChip("clock", help: "Later", active: state == .todo) { onChange(.later) }
+            ForEach(Array(store.travellerNames.enumerated()), id: \.offset) { index, name in
+                chip(
+                    labels[index],
+                    active: state == .packed && ownerName == name,
+                    packed: true,
+                    help: "Pack for \(name)"
+                ) {
+                    onChange(.pack(name))
+                }
+                .accessibilityLabel("Pack for \(name)")
+            }
+            iconChip("xmark", help: "Not needed", active: state == .notNeeded) {
+                onChange(.notNeeded)
+            }
+            Spacer(minLength: 0)
+        }
+    }
+
+    private func iconChip(
+        _ symbol: String,
+        help: String,
+        active: Bool,
+        action: @escaping () -> Void
+    ) -> some View {
+        Button(action: action) {
+            Image(systemName: symbol)
+                .font(.caption2.weight(.bold))
+                .frame(width: 14, height: 14)
+                .padding(.horizontal, 6)
+                .padding(.vertical, 3)
+                .foregroundStyle(active ? Olive.paper : Olive.ink.opacity(0.7))
+                .background(active ? Olive.sap : Olive.cream)
+                .overlay(
+                    RoundedRectangle(cornerRadius: 6, style: .continuous)
+                        .strokeBorder(Olive.buttonBorder.opacity(active ? 0 : 1), lineWidth: 1)
+                )
+                .clipShape(RoundedRectangle(cornerRadius: 6, style: .continuous))
+        }
+        .buttonStyle(.plain)
+        .help(help)
+        .accessibilityLabel(help)
+    }
+
     private func chip(
         _ title: String,
         active: Bool,
         packed: Bool = false,
         stretch: Bool = false,
+        help: String? = nil,
         action: @escaping () -> Void
     ) -> some View {
         Button(action: action) {
@@ -585,6 +639,27 @@ struct ItemStateControl: View {
                 .animation(Olive.snappy(reduceMotion), value: active)
         }
         .buttonStyle(.plain)
-        .help(title)
+        .help(help ?? title)
+    }
+}
+
+/// Shortest unambiguous labels for compact chips: initials, growing to more
+/// letters only where travellers share a prefix (Ana / Appu -> An / Ap).
+enum TravellerLabels {
+    static func short(_ names: [String]) -> [String] {
+        names.map { name in
+            let chars = Array(name)
+            guard !chars.isEmpty else { return "?" }
+            for length in 1...chars.count {
+                let prefix = String(chars.prefix(length)).lowercased()
+                let clashes = names.filter {
+                    $0 != name && $0.lowercased().hasPrefix(prefix)
+                }
+                if clashes.isEmpty {
+                    return String(chars.prefix(length)).capitalized
+                }
+            }
+            return name
+        }
     }
 }
