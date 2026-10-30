@@ -192,7 +192,8 @@ pub fn prepare(
                 item.quantity = 1;
             }
             if crate::placement::is_personal(&item.name) {
-                item.quantity = (item.quantity * travellers).min(crate::llm::MAX_QUANTITY);
+                item.quantity =
+                    (item.quantity * travellers).min(crate::llm::trip_quantity_cap(travellers));
             } else {
                 item.quantity = crate::placement::shared_quantity(&item.name, travellers);
             }
@@ -657,8 +658,8 @@ mod tests {
         assert_eq!((adapter.0, adapter.1.quantity), (Category::Electronics, 1));
         assert_eq!(find("Reusable water bottle").unwrap().1.quantity, 3);
         assert_eq!(find("Toothbrush").unwrap().1.quantity, 3);
-        // 7 nights + 1 spare, times 3 travellers, capped at MAX_QUANTITY.
-        assert_eq!(find("Underwear").unwrap().1.quantity, 20);
+        // 7 nights + 1 spare, times 3 travellers.
+        assert_eq!(find("Underwear").unwrap().1.quantity, 24);
     }
 
     #[test]

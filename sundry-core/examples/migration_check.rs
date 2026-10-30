@@ -14,10 +14,19 @@ fn main() {
             .travellers
             .iter()
             .map(|t| {
-                let n = items.iter().filter(|i| i.owner == Owner::Traveller(t.id)).count();
+                let n = items
+                    .iter()
+                    .filter(|i| i.owner == Owner::Traveller(t.id))
+                    .count();
                 format!("{}={}", t.name, n)
             })
             .collect();
-        println!("{} {} items={} travellers=[{}]", e.id, e.title, items.len(), packed.join(", "));
+        println!(
+            "{} {} items={} travellers=[{}]",
+            e.id,
+            e.title,
+            items.len(),
+            packed.join(", ")
+        );
     }
 }

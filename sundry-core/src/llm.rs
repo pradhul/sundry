@@ -3,7 +3,18 @@ use std::collections::HashSet;
 #[cfg(any(test, feature = "test-support"))]
 use std::sync::Mutex;
 
+/// Per-line cap for a single person's quantity (and model output validation).
 pub const MAX_QUANTITY: u32 = 20;
+/// Absolute ceiling for a whole-trip line after per-traveller scaling.
+pub const MAX_TRIP_QUANTITY: u32 = 60;
+
+/// Cap for a line shared by `travellers` people: per-person cap times travellers,
+/// never below the per-person cap and never above the absolute ceiling.
+pub fn trip_quantity_cap(travellers: u32) -> u32 {
+    MAX_QUANTITY
+        .saturating_mul(travellers.max(1))
+        .clamp(MAX_QUANTITY, MAX_TRIP_QUANTITY)
+}
 
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct GeneratedItem {
@@ -164,5 +175,14 @@ mod tests {
         let backend = FakeLlmBackend::replaying(vec![GOOD.to_string()]);
         let raw = block_on(backend.generate("any prompt".into())).unwrap();
         assert_eq!(raw, GOOD);
+    }
+
+    #[test]
+    fn trip_cap_scales_with_travellers() {
+        assert_eq!(trip_quantity_cap(0), 20);
+        assert_eq!(trip_quantity_cap(1), 20);
+        assert_eq!(trip_quantity_cap(2), 40);
+        assert_eq!(trip_quantity_cap(3), 60);
+        assert_eq!(trip_quantity_cap(10), 60);
     }
 }

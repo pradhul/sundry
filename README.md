@@ -49,7 +49,7 @@ The first launch asks you to enable Apple Intelligence if it is off. Create a tr
 ./scripts/package-dmg.sh
 ```
 
-Produces `dist/Sundry-0.1.1.dmg`. AirDrop or send it; the recipient opens the DMG, drags **Sundry → Applications**, then **right-click → Open** the first time (free ad-hoc signing — no Apple Developer fee). A paid Developer ID would remove that Gatekeeper step.
+Produces `dist/Sundry-0.2.0.dmg`. AirDrop or send it; the recipient opens the DMG, drags **Sundry → Applications**, then **right-click → Open** the first time (free ad-hoc signing — no Apple Developer fee). A paid Developer ID would remove that Gatekeeper step.
 
 ## Regenerating UniFFI bindings
 

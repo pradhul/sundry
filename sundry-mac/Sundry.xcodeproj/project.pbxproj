@@ -301,7 +301,7 @@
 				CODE_SIGN_ENTITLEMENTS = Sundry/Sundry.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				ENABLE_HARDENED_RUNTIME = YES;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = Sundry/Info.plist;
@@ -311,7 +311,7 @@
 					"$(inherited)",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 26.0;
-				MARKETING_VERSION = 0.1.0;
+				MARKETING_VERSION = 0.2.0;
 				OTHER_LDFLAGS = (
 					"-force_load",
 					"$(SRCROOT)/../target/aarch64-apple-darwin/release/libsundry_ffi.a",
@@ -336,7 +336,7 @@
 				CODE_SIGN_IDENTITY = "-";
 				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				ENABLE_HARDENED_RUNTIME = YES;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = Sundry/Info.plist;
@@ -346,7 +346,7 @@
 					"$(inherited)",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 26.0;
-				MARKETING_VERSION = 0.1.0;
+				MARKETING_VERSION = 0.2.0;
 				OTHER_LDFLAGS = (
 					"-force_load",
 					"$(SRCROOT)/../target/aarch64-apple-darwin/release/libsundry_ffi.a",
