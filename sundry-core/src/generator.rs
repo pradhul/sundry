@@ -188,6 +188,9 @@ pub fn prepare(
             item.name = crate::placement::fit_purpose(&item.name, &ctx.trip.purposes)?;
             let target = crate::placement::home_category(&item.name).unwrap_or(category);
             let mut item = specialise(ctx, target, vec![item]).pop()?;
+            if crate::placement::is_one_per_person(&item.name) {
+                item.quantity = 1;
+            }
             if crate::placement::is_personal(&item.name) {
                 item.quantity = (item.quantity * travellers).min(crate::llm::MAX_QUANTITY);
             }
@@ -639,7 +642,8 @@ mod tests {
                 gen("Headlamp", 1),
                 gen("Compact umbrella", 1),
                 gen("Travel adapter", 1),
-                gen("Reusable water bottle", 1),
+                gen("Reusable water bottle", 2),
+                gen("Toothbrush", 2),
                 gen("Underwear", 1),
             ],
         );
@@ -650,6 +654,7 @@ mod tests {
         let adapter = find("Type A/B plug adapter").unwrap();
         assert_eq!((adapter.0, adapter.1.quantity), (Category::Electronics, 1));
         assert_eq!(find("Reusable water bottle").unwrap().1.quantity, 3);
+        assert_eq!(find("Toothbrush").unwrap().1.quantity, 3);
         // 7 nights + 1 spare, times 3 travellers, capped at MAX_QUANTITY.
         assert_eq!(find("Underwear").unwrap().1.quantity, 20);
     }

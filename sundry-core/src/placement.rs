@@ -179,6 +179,37 @@ pub fn is_personal(name: &str) -> bool {
     ) && !has(&n, &["laptop", "shoe bag", "boot bag"])
 }
 
+/// Personal items where one per person is the right answer, whatever count the
+/// model suggested (it often gives a total instead of a per-person number).
+pub fn is_one_per_person(name: &str) -> bool {
+    let n = name.to_lowercase();
+    is_personal(name)
+        && has(
+            &n,
+            &[
+                "toothbrush",
+                "coat",
+                "parka",
+                "jacket",
+                "glove",
+                "mitten",
+                "hat",
+                "beanie",
+                "scarf",
+                "passport",
+                "water bottle",
+                "eye mask",
+                "sleep mask",
+                "wallet",
+                "daypack",
+                "shoe",
+                "boot",
+                "sneaker",
+                "pillow",
+            ],
+        )
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
