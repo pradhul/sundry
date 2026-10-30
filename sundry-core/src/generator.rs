@@ -119,10 +119,57 @@ impl Generator<'_> {
             Err(e) => return Ok(Err(e.to_string())),
         };
         match parse_and_validate(&raw) {
-            Ok(items) => Ok(Ok(doc.merge_generated(category, &items)?.added)),
+            Ok(items) => {
+                let items = specialise(ctx, category, items);
+                Ok(Ok(doc.merge_generated(category, &items)?.added))
+            }
             Err(e) => Ok(Err(e.to_string())),
         }
     }
+}
+
+/// Items that should come in one per day (plus a spare).
+fn daily_quantity(ctx: &GroundedContext) -> u32 {
+    (ctx.trip.nights + 1).clamp(1, crate::llm::MAX_QUANTITY)
+}
+
+fn is_daily_item(name: &str) -> bool {
+    let n = name.to_lowercase();
+    n.contains("underwear") || n.contains("sock")
+}
+
+fn plug_adapter_name(ctx: &GroundedContext) -> Option<String> {
+    ctx.facts
+        .first()
+        .map(|f| format!("Type {} plug adapter", f.plug_types.join("/")))
+}
+
+/// Deterministic fix-ups of model output: a generic plug adapter becomes the
+/// destination-specific one, and per-day items scale with trip length.
+pub fn specialise(
+    ctx: &GroundedContext,
+    category: Category,
+    items: Vec<GeneratedItem>,
+) -> Vec<GeneratedItem> {
+    items
+        .into_iter()
+        .map(|mut item| {
+            let lower = item.name.to_lowercase();
+            if category == Category::Electronics
+                && lower.contains("adapter")
+                && !lower.contains("type ")
+                && !lower.contains("usb")
+            {
+                if let Some(name) = plug_adapter_name(ctx) {
+                    item.name = name;
+                }
+            }
+            if is_daily_item(&item.name) {
+                item.quantity = item.quantity.max(daily_quantity(ctx));
+            }
+            item
+        })
+        .collect()
 }
 
 /// Retry a category once if fewer than this many items survived validation.
@@ -179,6 +226,14 @@ pub fn staples(
                     "Underwear",
                     format!("One per day for {} nights.", ctx.trip.nights),
                     true,
+                ),
+            ));
+            out.push((
+                vec!["sleepwear", "pajama", "pyjama", "nightwear"],
+                staple(
+                    "Sleepwear",
+                    "Something warm to sleep in each night.".into(),
+                    false,
                 ),
             ));
             out.push((
@@ -240,6 +295,12 @@ pub fn staples(
             ));
         }
         _ => {}
+    }
+    let daily = daily_quantity(ctx);
+    for (_, item) in out.iter_mut() {
+        if is_daily_item(&item.name) {
+            item.quantity = daily;
+        }
     }
     let existing: Vec<String> = existing.iter().map(|n| n.to_lowercase()).collect();
     out.into_iter()
@@ -464,5 +525,54 @@ mod tests {
         ] {
             assert!(n.contains(&want.to_string()), "missing {want}: {n:?}");
         }
+    }
+
+    fn gen(name: &str, quantity: u32) -> GeneratedItem {
+        GeneratedItem {
+            name: name.into(),
+            quantity,
+            rationale: "r".into(),
+            essential: false,
+        }
+    }
+
+    #[test]
+    fn generic_plug_adapter_becomes_country_specific() {
+        let ctx = kyoto_ctx(true);
+        let out = specialise(
+            &ctx,
+            Category::Electronics,
+            vec![
+                gen("Plug adapter", 1),
+                gen("Travel adapter", 1),
+                gen("USB-C adapter", 1),
+            ],
+        );
+        assert_eq!(out[0].name, "Type A/B plug adapter");
+        assert_eq!(out[1].name, "Type A/B plug adapter");
+        assert_eq!(out[2].name, "USB-C adapter");
+    }
+
+    #[test]
+    fn daily_items_scale_with_trip_length() {
+        let ctx = kyoto_ctx(true); // 7 nights
+        let out = specialise(
+            &ctx,
+            Category::Clothing,
+            vec![gen("Underwear", 1), gen("Sweater", 1)],
+        );
+        assert_eq!(out[0].quantity, 8);
+        assert_eq!(out[1].quantity, 1);
+        let socks: Vec<GeneratedItem> = staples(&ctx, Category::Footwear, &[]);
+        assert_eq!(socks[0].quantity, 8);
+        let under = staples(&ctx, Category::Clothing, &[]);
+        assert_eq!(
+            under
+                .iter()
+                .find(|i| i.name == "Underwear")
+                .unwrap()
+                .quantity,
+            8
+        );
     }
 }

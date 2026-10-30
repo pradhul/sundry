@@ -21,6 +21,15 @@ pub enum SundryError {
     BadId { message: String },
 }
 
+/// A Swift callback that throws something other than `SundryError` must land
+/// as an ordinary error for that one call (e.g. a single category), not abort
+/// the whole generation.
+impl From<uniffi::UnexpectedUniFFICallbackError> for SundryError {
+    fn from(e: uniffi::UnexpectedUniFFICallbackError) -> Self {
+        SundryError::Core { message: e.reason }
+    }
+}
+
 fn core_err<E: std::fmt::Display>(e: E) -> SundryError {
     SundryError::Core {
         message: e.to_string(),

@@ -214,7 +214,13 @@ fn dup_key(name: &str) -> Vec<String> {
         .to_lowercase()
         .split(|c: char| !c.is_alphanumeric())
         .filter(|w| !w.is_empty() && !DUP_STOPWORDS.contains(w))
+        .map(|w| match w {
+            // Card brands are just credit cards for packing purposes.
+            "visa" | "mastercard" | "amex" => "credit".to_string(),
+            _ => w.to_string(),
+        })
         .map(|w| {
+            let w = w.as_str();
             if w.len() > 3
                 && w.ends_with("es")
                 && (w.ends_with("shes") || w.ends_with("ches") || w.ends_with("sses"))
@@ -227,6 +233,9 @@ fn dup_key(name: &str) -> Vec<String> {
             }
         })
         .collect();
+    if words.iter().any(|w| w == "credit") && !words.iter().any(|w| w == "card") {
+        words.push("card".into());
+    }
     words.sort();
     words.dedup();
     words
@@ -395,5 +404,12 @@ mod tests {
                 "{n} rejected"
             );
         }
+    }
+
+    #[test]
+    fn card_brands_dedupe_against_credit_cards() {
+        assert!(is_near_duplicate("Visa card", "Credit card"));
+        assert!(is_near_duplicate("Mastercard", "Credit card"));
+        assert!(!is_near_duplicate("Debit card", "Credit card"));
     }
 }
