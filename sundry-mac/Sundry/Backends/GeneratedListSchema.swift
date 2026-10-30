@@ -4,7 +4,7 @@ import FoundationModels
 /// decoding; Rust remains the authority on shape and performs all validation.
 @Generable
 struct GeneratedItemSchema: Codable {
-    @Guide(description: "Short item name, e.g. 'Type F plug adapter'")
+    @Guide(description: "Plain product name, e.g. 'Rain jacket' or 'Toothpaste'")
     var name: String
     @Guide(description: "How many to pack, between 1 and 20")
     var quantity: Int
@@ -16,5 +16,6 @@ struct GeneratedItemSchema: Codable {
 
 @Generable
 struct GeneratedListSchema: Codable {
+    @Guide(description: "Between 4 and 8 distinct items", .maximumCount(8))
     var items: [GeneratedItemSchema]
 }
