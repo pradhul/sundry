@@ -334,14 +334,44 @@ void uniffi_sundry_ffi_fn_free_sundrycore(void*_Nonnull ptr, RustCallStatus *_No
 void*_Nonnull uniffi_sundry_ffi_fn_constructor_sundrycore_new(RustBuffer storage_root, void*_Nonnull climate, void*_Nonnull llm, RustCallStatus *_Nonnull out_status
 );
 #endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_SUNDRY_FFI_FN_METHOD_SUNDRYCORE_ADD_MANUAL_ITEM
+#define UNIFFI_FFIDEF_UNIFFI_SUNDRY_FFI_FN_METHOD_SUNDRYCORE_ADD_MANUAL_ITEM
+RustBuffer uniffi_sundry_ffi_fn_method_sundrycore_add_manual_item(void*_Nonnull ptr, RustBuffer trip_id, RustBuffer name, RustBuffer category, uint32_t quantity, int8_t essential, RustCallStatus *_Nonnull out_status
+);
+#endif
 #ifndef UNIFFI_FFIDEF_UNIFFI_SUNDRY_FFI_FN_METHOD_SUNDRYCORE_CREATE_TRIP
 #define UNIFFI_FFIDEF_UNIFFI_SUNDRY_FFI_FN_METHOD_SUNDRYCORE_CREATE_TRIP
 RustBuffer uniffi_sundry_ffi_fn_method_sundrycore_create_trip(void*_Nonnull ptr, RustBuffer title, RustBuffer city, RustBuffer country_code, int32_t year, uint32_t month, uint32_t nights, RustBuffer traveller_names, RustBuffer purposes, RustCallStatus *_Nonnull out_status
 );
 #endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_SUNDRY_FFI_FN_METHOD_SUNDRYCORE_DEDUPE_TRIP
+#define UNIFFI_FFIDEF_UNIFFI_SUNDRY_FFI_FN_METHOD_SUNDRYCORE_DEDUPE_TRIP
+uint32_t uniffi_sundry_ffi_fn_method_sundrycore_dedupe_trip(void*_Nonnull ptr, RustBuffer trip_id, RustCallStatus *_Nonnull out_status
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_SUNDRY_FFI_FN_METHOD_SUNDRYCORE_DELETE_TRIP
+#define UNIFFI_FFIDEF_UNIFFI_SUNDRY_FFI_FN_METHOD_SUNDRYCORE_DELETE_TRIP
+void uniffi_sundry_ffi_fn_method_sundrycore_delete_trip(void*_Nonnull ptr, RustBuffer trip_id, RustCallStatus *_Nonnull out_status
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_SUNDRY_FFI_FN_METHOD_SUNDRYCORE_ENSURE_TRAVELLERS
+#define UNIFFI_FFIDEF_UNIFFI_SUNDRY_FFI_FN_METHOD_SUNDRYCORE_ENSURE_TRAVELLERS
+void uniffi_sundry_ffi_fn_method_sundrycore_ensure_travellers(void*_Nonnull ptr, RustBuffer trip_id, RustBuffer names, RustCallStatus *_Nonnull out_status
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_SUNDRY_FFI_FN_METHOD_SUNDRYCORE_EXPORT_TRIP
+#define UNIFFI_FFIDEF_UNIFFI_SUNDRY_FFI_FN_METHOD_SUNDRYCORE_EXPORT_TRIP
+RustBuffer uniffi_sundry_ffi_fn_method_sundrycore_export_trip(void*_Nonnull ptr, RustBuffer trip_id, RustCallStatus *_Nonnull out_status
+);
+#endif
 #ifndef UNIFFI_FFIDEF_UNIFFI_SUNDRY_FFI_FN_METHOD_SUNDRYCORE_GENERATE
 #define UNIFFI_FFIDEF_UNIFFI_SUNDRY_FFI_FN_METHOD_SUNDRYCORE_GENERATE
 uint64_t uniffi_sundry_ffi_fn_method_sundrycore_generate(void*_Nonnull ptr, RustBuffer trip_id
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_SUNDRY_FFI_FN_METHOD_SUNDRYCORE_IMPORT_TRIP
+#define UNIFFI_FFIDEF_UNIFFI_SUNDRY_FFI_FN_METHOD_SUNDRYCORE_IMPORT_TRIP
+RustBuffer uniffi_sundry_ffi_fn_method_sundrycore_import_trip(void*_Nonnull ptr, RustBuffer bytes, RustCallStatus *_Nonnull out_status
 );
 #endif
 #ifndef UNIFFI_FFIDEF_UNIFFI_SUNDRY_FFI_FN_METHOD_SUNDRYCORE_LIST_TRIPS
@@ -352,6 +382,16 @@ RustBuffer uniffi_sundry_ffi_fn_method_sundrycore_list_trips(void*_Nonnull ptr, 
 #ifndef UNIFFI_FFIDEF_UNIFFI_SUNDRY_FFI_FN_METHOD_SUNDRYCORE_LOAD_ITEMS
 #define UNIFFI_FFIDEF_UNIFFI_SUNDRY_FFI_FN_METHOD_SUNDRYCORE_LOAD_ITEMS
 RustBuffer uniffi_sundry_ffi_fn_method_sundrycore_load_items(void*_Nonnull ptr, RustBuffer trip_id, RustCallStatus *_Nonnull out_status
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_SUNDRY_FFI_FN_METHOD_SUNDRYCORE_LOAD_TRIP_FACTS
+#define UNIFFI_FFIDEF_UNIFFI_SUNDRY_FFI_FN_METHOD_SUNDRYCORE_LOAD_TRIP_FACTS
+RustBuffer uniffi_sundry_ffi_fn_method_sundrycore_load_trip_facts(void*_Nonnull ptr, RustBuffer trip_id, RustCallStatus *_Nonnull out_status
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_SUNDRY_FFI_FN_METHOD_SUNDRYCORE_SET_ITEM_PACKED_FOR
+#define UNIFFI_FFIDEF_UNIFFI_SUNDRY_FFI_FN_METHOD_SUNDRYCORE_SET_ITEM_PACKED_FOR
+void uniffi_sundry_ffi_fn_method_sundrycore_set_item_packed_for(void*_Nonnull ptr, RustBuffer trip_id, RustBuffer item_id, RustBuffer traveller_name, RustCallStatus *_Nonnull out_status
 );
 #endif
 #ifndef UNIFFI_FFIDEF_UNIFFI_SUNDRY_FFI_FN_METHOD_SUNDRYCORE_SET_ITEM_STATE
@@ -663,15 +703,51 @@ uint16_t uniffi_sundry_ffi_checksum_method_llmtransport_generate(void
     
 );
 #endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_SUNDRY_FFI_CHECKSUM_METHOD_SUNDRYCORE_ADD_MANUAL_ITEM
+#define UNIFFI_FFIDEF_UNIFFI_SUNDRY_FFI_CHECKSUM_METHOD_SUNDRYCORE_ADD_MANUAL_ITEM
+uint16_t uniffi_sundry_ffi_checksum_method_sundrycore_add_manual_item(void
+    
+);
+#endif
 #ifndef UNIFFI_FFIDEF_UNIFFI_SUNDRY_FFI_CHECKSUM_METHOD_SUNDRYCORE_CREATE_TRIP
 #define UNIFFI_FFIDEF_UNIFFI_SUNDRY_FFI_CHECKSUM_METHOD_SUNDRYCORE_CREATE_TRIP
 uint16_t uniffi_sundry_ffi_checksum_method_sundrycore_create_trip(void
     
 );
 #endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_SUNDRY_FFI_CHECKSUM_METHOD_SUNDRYCORE_DEDUPE_TRIP
+#define UNIFFI_FFIDEF_UNIFFI_SUNDRY_FFI_CHECKSUM_METHOD_SUNDRYCORE_DEDUPE_TRIP
+uint16_t uniffi_sundry_ffi_checksum_method_sundrycore_dedupe_trip(void
+    
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_SUNDRY_FFI_CHECKSUM_METHOD_SUNDRYCORE_DELETE_TRIP
+#define UNIFFI_FFIDEF_UNIFFI_SUNDRY_FFI_CHECKSUM_METHOD_SUNDRYCORE_DELETE_TRIP
+uint16_t uniffi_sundry_ffi_checksum_method_sundrycore_delete_trip(void
+    
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_SUNDRY_FFI_CHECKSUM_METHOD_SUNDRYCORE_ENSURE_TRAVELLERS
+#define UNIFFI_FFIDEF_UNIFFI_SUNDRY_FFI_CHECKSUM_METHOD_SUNDRYCORE_ENSURE_TRAVELLERS
+uint16_t uniffi_sundry_ffi_checksum_method_sundrycore_ensure_travellers(void
+    
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_SUNDRY_FFI_CHECKSUM_METHOD_SUNDRYCORE_EXPORT_TRIP
+#define UNIFFI_FFIDEF_UNIFFI_SUNDRY_FFI_CHECKSUM_METHOD_SUNDRYCORE_EXPORT_TRIP
+uint16_t uniffi_sundry_ffi_checksum_method_sundrycore_export_trip(void
+    
+);
+#endif
 #ifndef UNIFFI_FFIDEF_UNIFFI_SUNDRY_FFI_CHECKSUM_METHOD_SUNDRYCORE_GENERATE
 #define UNIFFI_FFIDEF_UNIFFI_SUNDRY_FFI_CHECKSUM_METHOD_SUNDRYCORE_GENERATE
 uint16_t uniffi_sundry_ffi_checksum_method_sundrycore_generate(void
+    
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_SUNDRY_FFI_CHECKSUM_METHOD_SUNDRYCORE_IMPORT_TRIP
+#define UNIFFI_FFIDEF_UNIFFI_SUNDRY_FFI_CHECKSUM_METHOD_SUNDRYCORE_IMPORT_TRIP
+uint16_t uniffi_sundry_ffi_checksum_method_sundrycore_import_trip(void
     
 );
 #endif
@@ -684,6 +760,18 @@ uint16_t uniffi_sundry_ffi_checksum_method_sundrycore_list_trips(void
 #ifndef UNIFFI_FFIDEF_UNIFFI_SUNDRY_FFI_CHECKSUM_METHOD_SUNDRYCORE_LOAD_ITEMS
 #define UNIFFI_FFIDEF_UNIFFI_SUNDRY_FFI_CHECKSUM_METHOD_SUNDRYCORE_LOAD_ITEMS
 uint16_t uniffi_sundry_ffi_checksum_method_sundrycore_load_items(void
+    
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_SUNDRY_FFI_CHECKSUM_METHOD_SUNDRYCORE_LOAD_TRIP_FACTS
+#define UNIFFI_FFIDEF_UNIFFI_SUNDRY_FFI_CHECKSUM_METHOD_SUNDRYCORE_LOAD_TRIP_FACTS
+uint16_t uniffi_sundry_ffi_checksum_method_sundrycore_load_trip_facts(void
+    
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_SUNDRY_FFI_CHECKSUM_METHOD_SUNDRYCORE_SET_ITEM_PACKED_FOR
+#define UNIFFI_FFIDEF_UNIFFI_SUNDRY_FFI_CHECKSUM_METHOD_SUNDRYCORE_SET_ITEM_PACKED_FOR
+uint16_t uniffi_sundry_ffi_checksum_method_sundrycore_set_item_packed_for(void
     
 );
 #endif

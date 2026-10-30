@@ -19,6 +19,13 @@
 		A1000000000000000000000A /* FoundationModelsBackend.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1000000000000000000000A /* FoundationModelsBackend.swift */; };
 		A1000000000000000000000B /* OpenMeteoClimateProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1000000000000000000000B /* OpenMeteoClimateProvider.swift */; };
 		A1000000000000000000000C /* sundry_ffi.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1000000000000000000000C /* sundry_ffi.swift */; };
+		A1000000000000000000000D /* OliveTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1000000000000000000000F /* OliveTheme.swift */; };
+		A1000000000000000000000E /* Travellers.swift in Sources */ = {isa = PBXBuildFile; fileRef = B10000000000000000000010 /* Travellers.swift */; };
+		A1000000000000000000000F /* AddItemSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = B10000000000000000000011 /* AddItemSheet.swift */; };
+		A10000000000000000000012 /* TripSyncShare.swift in Sources */ = {isa = PBXBuildFile; fileRef = B10000000000000000000012 /* TripSyncShare.swift */; };
+		A10000000000000000000013 /* TripInboxWatcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = B10000000000000000000013 /* TripInboxWatcher.swift */; };
+		A10000000000000000000014 /* TravellerNameBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = B10000000000000000000014 /* TravellerNameBar.swift */; };
+		A10000000000000000000015 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B10000000000000000000015 /* Assets.xcassets */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -37,6 +44,13 @@
 		B1000000000000000000000C /* sundry_ffi.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = sundry_ffi.swift; path = Vendor/sundry_ffi.swift; sourceTree = "<group>"; };
 		B1000000000000000000000D /* Sundry.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Sundry.entitlements; sourceTree = "<group>"; };
 		B1000000000000000000000E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		B1000000000000000000000F /* OliveTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OliveTheme.swift; sourceTree = "<group>"; };
+		B10000000000000000000010 /* Travellers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Travellers.swift; sourceTree = "<group>"; };
+		B10000000000000000000011 /* AddItemSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddItemSheet.swift; sourceTree = "<group>"; };
+		B10000000000000000000012 /* TripSyncShare.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TripSyncShare.swift; sourceTree = "<group>"; };
+		B10000000000000000000013 /* TripInboxWatcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TripInboxWatcher.swift; sourceTree = "<group>"; };
+		B10000000000000000000014 /* TravellerNameBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TravellerNameBar.swift; sourceTree = "<group>"; };
+		B10000000000000000000015 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -63,11 +77,15 @@
 			isa = PBXGroup;
 			children = (
 				B10000000000000000000001 /* SundryApp.swift */,
+				B10000000000000000000010 /* Travellers.swift */,
 				B1000000000000000000000D /* Sundry.entitlements */,
 				B1000000000000000000000E /* Info.plist */,
+				B10000000000000000000015 /* Assets.xcassets */,
 				D10000000000000000000003 /* Views */,
 				D10000000000000000000004 /* ViewModels */,
 				D10000000000000000000006 /* Backends */,
+				D10000000000000000000007 /* Theme */,
+				D10000000000000000000008 /* Sync */,
 			);
 			path = Sundry;
 			sourceTree = "<group>";
@@ -78,9 +96,11 @@
 				B10000000000000000000002 /* ContentView.swift */,
 				B10000000000000000000004 /* TripSidebar.swift */,
 				B10000000000000000000005 /* NewTripSheet.swift */,
+				B10000000000000000000011 /* AddItemSheet.swift */,
 				B10000000000000000000006 /* ChecklistView.swift */,
 				B10000000000000000000007 /* ItemInspector.swift */,
 				B10000000000000000000008 /* AvailabilityGate.swift */,
+				B10000000000000000000014 /* TravellerNameBar.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -109,6 +129,23 @@
 				B1000000000000000000000B /* OpenMeteoClimateProvider.swift */,
 			);
 			path = Backends;
+			sourceTree = "<group>";
+		};
+		D10000000000000000000007 /* Theme */ = {
+			isa = PBXGroup;
+			children = (
+				B1000000000000000000000F /* OliveTheme.swift */,
+			);
+			path = Theme;
+			sourceTree = "<group>";
+		};
+		D10000000000000000000008 /* Sync */ = {
+			isa = PBXGroup;
+			children = (
+				B10000000000000000000012 /* TripSyncShare.swift */,
+				B10000000000000000000013 /* TripInboxWatcher.swift */,
+			);
+			path = Sync;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -178,7 +215,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/bash;
-			shellScript = "set -euo pipefail\nexport PATH=\"$HOME/.cargo/bin:/opt/homebrew/bin:$PATH\"\nunset CARGO_TARGET_DIR\ncd \"$SRCROOT/..\"\ncargo build -p sundry-ffi --release --target aarch64-apple-darwin\n";
+			shellScript = "set -euo pipefail\nexport PATH=\"$HOME/.cargo/bin:/opt/homebrew/bin:$PATH\"\nunset CARGO_TARGET_DIR\ncd \"$SRCROOT/..\"\ncargo build -p sundry-ffi --release --target aarch64-apple-darwin\nLIB=\"$PWD/target/aarch64-apple-darwin/release/libsundry_ffi.dylib\"\nOUT=\"/tmp/sundry-uniffi-$$\"\nmkdir -p \"$OUT\"\ncargo run -p sundry-ffi --bin uniffi-bindgen -- generate --library \"$LIB\" --language swift --out-dir \"$OUT\"\ncp \"$OUT/sundry_ffi.swift\" \"$SRCROOT/Vendor/sundry_ffi.swift\"\ncp \"$OUT/sundry_ffiFFI.h\" \"$SRCROOT/Vendor/sundry_ffiFFI/sundry_ffiFFI.h\"\ncp \"$OUT/sundry_ffiFFI.modulemap\" \"$SRCROOT/Vendor/sundry_ffiFFI/module.modulemap\"\nrm -rf \"$OUT\"\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -199,6 +236,12 @@
 				A1000000000000000000000A /* FoundationModelsBackend.swift in Sources */,
 				A1000000000000000000000B /* OpenMeteoClimateProvider.swift in Sources */,
 				A1000000000000000000000C /* sundry_ffi.swift in Sources */,
+				A1000000000000000000000D /* OliveTheme.swift in Sources */,
+				A1000000000000000000000E /* Travellers.swift in Sources */,
+				A1000000000000000000000F /* AddItemSheet.swift in Sources */,
+				A10000000000000000000012 /* TripSyncShare.swift in Sources */,
+				A10000000000000000000013 /* TripInboxWatcher.swift in Sources */,
+				A10000000000000000000014 /* TravellerNameBar.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -209,6 +252,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A10000000000000000000015 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -253,6 +297,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ARCHS = arm64;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = Sundry/Sundry.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
@@ -268,8 +313,10 @@
 				MACOSX_DEPLOYMENT_TARGET = 26.0;
 				MARKETING_VERSION = 0.1.0;
 				OTHER_LDFLAGS = (
-					"-lsundry_ffi",
+					"-force_load",
+					"$(SRCROOT)/../target/aarch64-apple-darwin/release/libsundry_ffi.a",
 					"-lc++",
+					"-liconv",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.pradhul.sundry;
 				PRODUCT_NAME = Sundry;
@@ -284,8 +331,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ARCHS = arm64;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = Sundry/Sundry.entitlements;
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -299,8 +348,10 @@
 				MACOSX_DEPLOYMENT_TARGET = 26.0;
 				MARKETING_VERSION = 0.1.0;
 				OTHER_LDFLAGS = (
-					"-lsundry_ffi",
+					"-force_load",
+					"$(SRCROOT)/../target/aarch64-apple-darwin/release/libsundry_ffi.a",
 					"-lc++",
+					"-liconv",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.pradhul.sundry;
 				PRODUCT_NAME = Sundry;

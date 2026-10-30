@@ -1,4 +1,7 @@
 module sundry_ffiFFI {
     header "sundry_ffiFFI.h"
     export *
+    use "Darwin"
+    use "_Builtin_stdbool"
+    use "_Builtin_stdint"
 }

@@ -1,3 +1,4 @@
+pub mod category_filter;
 pub mod climate;
 pub mod document;
 pub mod facts;

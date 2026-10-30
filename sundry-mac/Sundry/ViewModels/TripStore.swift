@@ -1,5 +1,7 @@
 import Foundation
 import Observation
+import SwiftUI
+import UniformTypeIdentifiers
 
 extension ItemDto: Identifiable {}
 
@@ -16,11 +18,19 @@ final class TripStore {
     var trips: [TripSummaryDto] = []
     var items: [ItemDto] = []
     var selectedTripId: String?
+    var tripFacts: TripFactsDto?
     var isCreatingTrip = false
+    var isAddingItem = false
     var generationState: GenerationState = .idle
     var orderedCategories: [String] = []
+    var statusMessage: String?
+    var tripPendingDelete: TripSummaryDto?
+    /// Editable packing-for names (toolbar). Drives columns, chips, and trip travellers.
+    var travellerNames: [String] = Travellers.load()
 
     private let core: SundryCore
+    private let inboxWatcher = TripInboxWatcher()
+    private var importedPaths = Set<String>()
 
     init() {
         let root = FileManager.default
@@ -35,20 +45,47 @@ final class TripStore {
         )
         orderedCategories = categoryOrder()
         refresh()
+        startInboxWatch()
+    }
+
+    func setTravellerName(at index: Int, to raw: String) {
+        guard travellerNames.indices.contains(index) else { return }
+        let trimmed = raw.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !trimmed.isEmpty else { return }
+        guard travellerNames[index] != trimmed else { return }
+
+        travellerNames[index] = trimmed
+        Travellers.save(travellerNames)
+        applyTravellersToSelectedTrip()
+        refresh()
+    }
+
+    private func applyTravellersToSelectedTrip() {
+        guard let id = selectedTripId else { return }
+        try? core.ensureTravellers(tripId: id, names: travellerNames)
     }
 
     func refresh() {
         trips = (try? core.listTrips()) ?? []
         if let id = selectedTripId {
             items = (try? core.loadItems(tripId: id)) ?? []
+            tripFacts = try? core.loadTripFacts(tripId: id)
         } else {
             items = []
+            tripFacts = nil
         }
     }
 
     func select(_ id: String?) {
+        if selectedTripId != id {
+            generationState = .idle
+            statusMessage = nil
+        }
         selectedTripId = id
-        generationState = .idle
+        if let id {
+            try? core.ensureTravellers(tripId: id, names: travellerNames)
+            _ = try? core.dedupeTrip(tripId: id)
+        }
         refresh()
     }
 
@@ -59,33 +96,125 @@ final class TripStore {
         year: Int32,
         month: UInt32,
         nights: UInt32,
-        travellers: [String],
         purposes: [String]
-    ) {
-        guard let id = try? core.createTrip(
+    ) throws {
+        let id = try core.createTrip(
             title: title,
             city: city,
             countryCode: countryCode,
             year: year,
             month: month,
             nights: nights,
-            travellerNames: travellers,
+            travellerNames: travellerNames,
             purposes: purposes
-        ) else { return }
+        )
         isCreatingTrip = false
         select(id)
         Task { await generate() }
     }
 
-    func toggle(_ item: ItemDto) {
+    func deleteTrip(_ trip: TripSummaryDto) {
+        do {
+            try core.deleteTrip(tripId: trip.id)
+            if selectedTripId == trip.id {
+                selectedTripId = nil
+                generationState = .idle
+            }
+            tripPendingDelete = nil
+            refresh()
+            statusMessage = "Deleted “\(trip.title)”."
+        } catch {
+            statusMessage = error.localizedDescription
+        }
+    }
+
+    func setItemState(_ item: ItemDto, _ state: ItemStateDto) {
         guard let tripId = selectedTripId else { return }
-        let next: ItemStateDto = item.state == .packed ? .todo : .packed
-        try? core.setItemState(tripId: tripId, itemId: item.id, state: next)
+        try? core.setItemState(tripId: tripId, itemId: item.id, state: state)
         refresh()
+    }
+
+    func packItem(_ item: ItemDto, for travellerName: String) {
+        guard let tripId = selectedTripId else { return }
+        try? core.setItemPackedFor(
+            tripId: tripId,
+            itemId: item.id,
+            travellerName: travellerName
+        )
+        refresh()
+    }
+
+    func addManualItem(name: String, category: String, quantity: UInt32, essential: Bool) throws {
+        guard let tripId = selectedTripId else { return }
+        _ = try core.addManualItem(
+            tripId: tripId,
+            name: name,
+            category: category,
+            quantity: quantity,
+            essential: essential
+        )
+        isAddingItem = false
+        refresh()
+        statusMessage = "Added “\(name.trimmingCharacters(in: .whitespaces))”"
+    }
+
+    /// One-tap AirDrop — no save dialog; the other Mac's open Sundry picks it up.
+    func shareViaAirDrop() {
+        guard let tripId = selectedTripId,
+              let trip = trips.first(where: { $0.id == tripId }),
+              let data = try? core.exportTrip(tripId: tripId)
+        else {
+            statusMessage = "Couldn’t share this trip."
+            return
+        }
+        do {
+            try TripSyncShare.airDrop(data: data, suggestedName: trip.title)
+            statusMessage = "AirDrop open — pick her Mac. Keep Sundry open on both sides."
+        } catch {
+            statusMessage = error.localizedDescription
+        }
+    }
+
+    func importTrip(from url: URL) {
+        let path = url.standardizedFileURL.path
+        guard !importedPaths.contains(path) else { return }
+
+        do {
+            let accessed = url.startAccessingSecurityScopedResource()
+            defer {
+                if accessed { url.stopAccessingSecurityScopedResource() }
+            }
+            let data = try Data(contentsOf: url)
+            let id = try core.importTrip(bytes: data)
+            try? core.ensureTravellers(tripId: id, names: travellerNames)
+            _ = try? core.dedupeTrip(tripId: id)
+            importedPaths.insert(path)
+            select(id)
+            statusMessage = "Synced from shared trip."
+
+            // Prefer not leaving the AirDrop file in Downloads once we've absorbed it.
+            if url.path.contains("/Downloads/") {
+                try? FileManager.default.removeItem(at: url)
+            }
+        } catch {
+            statusMessage = error.localizedDescription
+        }
+    }
+
+    func handleIncomingURL(_ url: URL) {
+        guard url.pathExtension.lowercased() == "sundry" else { return }
+        importTrip(from: url)
+    }
+
+    func startInboxWatch() {
+        inboxWatcher.start { [weak self] url in
+            self?.importTrip(from: url)
+        }
     }
 
     func generate() async {
         guard let tripId = selectedTripId else { return }
+        _ = try? core.dedupeTrip(tripId: tripId)
         let total = orderedCategories.count
         generationState = .running(completed: 0, total: total)
         do {
@@ -93,13 +222,24 @@ final class TripStore {
             let failures = outcome.perCategory.compactMap { c in
                 c.error.map { "\(c.category): \($0)" }
             }
-            generationState = .finished(
-                climateGrounded: outcome.climateGrounded,
-                failures: failures
-            )
+            await MainActor.run {
+                refresh()
+                generationState = .finished(
+                    climateGrounded: outcome.climateGrounded,
+                    failures: failures
+                )
+            }
         } catch {
-            generationState = .failed(error.localizedDescription)
+            await MainActor.run {
+                refresh()
+                generationState = .failed(error.localizedDescription)
+            }
         }
-        refresh()
+    }
+}
+
+extension UTType {
+    static var sundryTrip: UTType {
+        UTType(exportedAs: "com.pradhul.sundry.trip")
     }
 }

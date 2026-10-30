@@ -32,7 +32,15 @@ cargo build -p sundry-ffi --release --target aarch64-apple-darwin
 open sundry-mac/Sundry.xcodeproj
 ```
 
-The first launch asks you to enable Apple Intelligence if it is off. Create a trip with city + ISO country code (e.g. Kyoto / JP) and a month; generation fills the checklist one category at a time.
+The first launch asks you to enable Apple Intelligence if it is off. Create a trip with a place and month; generation fills the checklist one category at a time.
+
+## Package a DMG (share with her Mac)
+
+```bash
+./scripts/package-dmg.sh
+```
+
+Produces `dist/Sundry-0.1.1.dmg`. AirDrop it; she opens the DMG, drags **Sundry → Applications**, then **right-click → Open** the first time (free ad-hoc signing — no Apple Developer fee). A paid Developer ID would remove that Gatekeeper step.
 
 ## Regenerating UniFFI bindings
 
@@ -41,3 +49,7 @@ The first launch asks you to enable Apple Intelligence if it is off. Create a tr
 ```
 
 Copy updated `sundry_ffi.swift` and `sundry_ffiFFI.h` into `sundry-mac/Vendor/` if the FFI surface changed.
+
+## License
+
+[MIT](LICENSE)

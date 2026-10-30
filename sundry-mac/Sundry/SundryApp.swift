@@ -10,7 +10,12 @@ struct SundryApp: App {
                 ContentView()
                     .environment(store)
             }
+            .oliveJournal()
+            .onOpenURL { url in
+                store.handleIncomingURL(url)
+            }
         }
+        .handlesExternalEvents(matching: Set(arrayLiteral: "*"))
         .commands {
             CommandGroup(after: .newItem) {
                 Button("New Trip") { store.isCreatingTrip = true }

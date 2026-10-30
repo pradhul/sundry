@@ -12,22 +12,48 @@ struct TripSidebar: View {
     }
 
     var body: some View {
-        List(selection: Binding(
-            get: { store.selectedTripId },
-            set: { store.select($0) }
-        )) {
-            if !upcoming.isEmpty {
-                Section("Upcoming") {
-                    ForEach(upcoming, id: \.id) { row($0) }
+        VStack(alignment: .leading, spacing: 0) {
+            Text("Sundry")
+                .font(.system(.title2, design: .serif).weight(.bold))
+                .tracking(-0.4)
+                .foregroundStyle(Olive.paper)
+                .padding(.horizontal, 16)
+                .padding(.top, 18)
+                .padding(.bottom, 14)
+
+            List(selection: Binding(
+                get: { store.selectedTripId },
+                set: { store.select($0) }
+            )) {
+                if !upcoming.isEmpty {
+                    Section {
+                        ForEach(upcoming, id: \.id) { row($0) }
+                    } header: {
+                        Text("Upcoming trips")
+                            .font(.caption2.weight(.semibold))
+                            .tracking(1.4)
+                            .textCase(.uppercase)
+                            .foregroundStyle(Olive.paper.opacity(0.5))
+                    }
+                }
+                if !past.isEmpty {
+                    Section {
+                        ForEach(past, id: \.id) { row($0) }
+                    } header: {
+                        Text("Past trips")
+                            .font(.caption2.weight(.semibold))
+                            .tracking(1.4)
+                            .textCase(.uppercase)
+                            .foregroundStyle(Olive.paper.opacity(0.5))
+                    }
                 }
             }
-            if !past.isEmpty {
-                Section("Past") {
-                    ForEach(past, id: \.id) { row($0) }
-                }
-            }
+            .listStyle(.sidebar)
+            .scrollContentBackground(.hidden)
         }
-        .navigationTitle("Sundry")
+        .background(Olive.sap)
+        .foregroundStyle(Olive.paper)
+        .toolbarBackground(Olive.sap, for: .windowToolbar)
         .toolbar {
             Button {
                 store.isCreatingTrip = true
@@ -42,18 +68,32 @@ struct TripSidebar: View {
                     systemImage: "airplane.departure",
                     description: Text("Add a trip to get a packing list.")
                 )
+                .foregroundStyle(Olive.paper)
             }
         }
     }
 
     private func row(_ trip: TripSummaryDto) -> some View {
-        VStack(alignment: .leading) {
+        VStack(alignment: .leading, spacing: 2) {
             Text(trip.title)
+                .font(.body.weight(.semibold))
+                .tracking(0.1)
             Text("\(monthName(trip.month)) \(String(trip.year))")
                 .font(.caption)
-                .foregroundStyle(.secondary)
+                .foregroundStyle(Olive.paper.opacity(0.65))
         }
         .tag(trip.id)
+        .listRowBackground(
+            RoundedRectangle(cornerRadius: 8, style: .continuous)
+                .fill(store.selectedTripId == trip.id ? Olive.paper.opacity(0.14) : Color.clear)
+                .padding(.horizontal, 4)
+        )
+        .padding(.vertical, 4)
+        .contextMenu {
+            Button("Delete Trip…", role: .destructive) {
+                store.tripPendingDelete = trip
+            }
+        }
     }
 
     private func isUpcoming(_ trip: TripSummaryDto) -> Bool {

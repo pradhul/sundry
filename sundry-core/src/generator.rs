@@ -70,7 +70,9 @@ impl<'a> Generator<'a> {
         let mut per_category = Vec::with_capacity(Category::ALL.len());
 
         for category in Category::ALL {
-            let prompt = build_prompt(&ctx, category);
+            let already_listed: Vec<String> =
+                doc.items()?.into_iter().map(|i| i.name).collect();
+            let prompt = build_prompt(&ctx, category, &already_listed);
             let outcome = match self.llm.generate(prompt).await {
                 Err(e) => CategoryOutcome {
                     category,

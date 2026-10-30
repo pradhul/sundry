@@ -45,17 +45,19 @@ struct AvailabilityGate<Content: View>: View {
         perform: (() -> Void)?
     ) -> some View {
         VStack(spacing: 12) {
-            Image(systemName: "sparkles").font(.largeTitle)
-            Text(title).font(.title2.weight(.semibold))
+            Image(systemName: "sparkles").font(.largeTitle).foregroundStyle(Olive.accent)
+            Text(title).font(.title2.weight(.semibold)).foregroundStyle(Olive.ink)
             Text(detail)
                 .multilineTextAlignment(.center)
-                .foregroundStyle(.secondary)
+                .foregroundStyle(Olive.taupe)
                 .frame(maxWidth: 380)
             if let action, let perform {
-                Button(action, action: perform).buttonStyle(.borderedProminent)
+                Button(action, action: perform).buttonStyle(OlivePrimaryButtonStyle())
             }
         }
         .padding(40)
         .frame(minWidth: 480, minHeight: 320)
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .background(Olive.paper)
     }
 }

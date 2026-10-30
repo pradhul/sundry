@@ -1,11 +1,33 @@
 import Foundation
 
+struct PlaceHit: Identifiable, Hashable {
+    let name: String
+    let country: String
+    let countryCode: String
+    let admin1: String?
+    let latitude: Double
+    let longitude: Double
+
+    var id: String { "\(latitude),\(longitude),\(countryCode)" }
+
+    var label: String {
+        [name, admin1, country]
+            .compactMap { $0 }
+            .filter { !$0.isEmpty }
+            .joined(separator: ", ")
+    }
+}
+
 /// Open-Meteo requires no API key and no account.
 final class OpenMeteoClimateProvider: ClimateTransport, Sendable {
     private struct GeocodeResponse: Decodable {
         struct Result: Decodable {
+            let name: String?
             let latitude: Double
             let longitude: Double
+            let country: String?
+            let country_code: String?
+            let admin1: String?
         }
         let results: [Result]?
     }
@@ -18,6 +40,34 @@ final class OpenMeteoClimateProvider: ClimateTransport, Sendable {
             let daylight_duration: [Double?]
         }
         let daily: Daily
+    }
+
+    func resolve(place: String) async -> [PlaceHit] {
+        let trimmed = place.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !trimmed.isEmpty else { return [] }
+
+        var components = URLComponents(string: "https://geocoding-api.open-meteo.com/v1/search")!
+        components.queryItems = [
+            .init(name: "name", value: trimmed),
+            .init(name: "count", value: "5"),
+            .init(name: "language", value: "en"),
+        ]
+        guard let url = components.url,
+              let (data, _) = try? await URLSession.shared.data(from: url),
+              let decoded = try? JSONDecoder().decode(GeocodeResponse.self, from: data)
+        else { return [] }
+
+        return (decoded.results ?? []).compactMap { result in
+            guard let countryCode = result.country_code, countryCode.count == 2 else { return nil }
+            return PlaceHit(
+                name: result.name ?? trimmed,
+                country: result.country ?? countryCode,
+                countryCode: countryCode.uppercased(),
+                admin1: result.admin1,
+                latitude: result.latitude,
+                longitude: result.longitude
+            )
+        }
     }
 
     func normals(city: String, countryCode: String, month: UInt32) async -> ClimateNormalsDto? {

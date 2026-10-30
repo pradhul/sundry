@@ -6,7 +6,7 @@ use sundry_core::facts::FactsTable;
 use sundry_core::generator::Generator;
 use sundry_core::llm::{LlmBackend, LlmError};
 use sundry_core::model::{
-    Destination, Item, ItemState, Purpose, TravelWindow, Traveller, Trip,
+    Destination, Item, ItemState, Owner, Purpose, TravelWindow, Traveller, Trip,
 };
 use sundry_core::store::{Store, TripIndexEntry};
 use uuid::Uuid;
@@ -149,20 +149,39 @@ pub struct ItemDto {
     pub state: ItemStateDto,
     pub rationale: Option<String>,
     pub essential: bool,
+    pub owner_name: Option<String>,
 }
 
-impl From<Item> for ItemDto {
-    fn from(i: Item) -> Self {
-        ItemDto {
-            id: i.id.to_string(),
-            name: i.name,
-            quantity: i.quantity,
-            category: i.category.label().to_string(),
-            state: i.state.into(),
-            rationale: i.rationale,
-            essential: i.essential,
-        }
+fn item_to_dto(item: Item, trip: &Trip) -> ItemDto {
+    let owner_name = match item.owner {
+        Owner::Shared => None,
+        Owner::Traveller(id) => trip
+            .travellers
+            .iter()
+            .find(|t| t.id == id)
+            .map(|t| t.name.clone()),
+    };
+    ItemDto {
+        id: item.id.to_string(),
+        name: item.name,
+        quantity: item.quantity,
+        category: item.category.label().to_string(),
+        state: item.state.into(),
+        rationale: item.rationale,
+        essential: item.essential,
+        owner_name,
     }
+}
+
+#[derive(uniffi::Record)]
+pub struct TripFactsDto {
+    pub city: String,
+    pub country_code: String,
+    pub country_name: Option<String>,
+    pub plug_types: Vec<String>,
+    pub voltage: Option<u32>,
+    pub frequency: Option<u32>,
+    pub currency: Option<String>,
 }
 
 #[derive(uniffi::Record)]
@@ -253,12 +272,56 @@ impl SundryCore {
     pub fn load_items(&self, trip_id: String) -> Result<Vec<ItemDto>, SundryError> {
         let id = parse_id(&trip_id)?;
         let doc = self.store.load(id).map_err(core_err)?;
+        let trip = doc.trip().map_err(core_err)?;
         Ok(doc
             .items()
             .map_err(core_err)?
             .into_iter()
-            .map(Into::into)
+            .map(|i| item_to_dto(i, &trip))
             .collect())
+    }
+
+    pub fn load_trip_facts(&self, trip_id: String) -> Result<TripFactsDto, SundryError> {
+        let id = parse_id(&trip_id)?;
+        let doc = self.store.load(id).map_err(core_err)?;
+        let trip = doc.trip().map_err(core_err)?;
+        let dest = trip
+            .destinations
+            .first()
+            .cloned()
+            .unwrap_or(Destination {
+                country_code: String::new(),
+                city: String::new(),
+            });
+        let facts = self.facts.get(&dest.country_code);
+        Ok(TripFactsDto {
+            city: dest.city,
+            country_code: dest.country_code,
+            country_name: facts.map(|f| f.name.clone()),
+            plug_types: facts.map(|f| f.plug_types.clone()).unwrap_or_default(),
+            voltage: facts.map(|f| f.voltage),
+            frequency: facts.map(|f| f.frequency),
+            currency: facts.map(|f| f.currency.clone()),
+        })
+    }
+
+    pub fn ensure_travellers(
+        &self,
+        trip_id: String,
+        names: Vec<String>,
+    ) -> Result<(), SundryError> {
+        let tid = parse_id(&trip_id)?;
+        let mut doc = self.store.load(tid).map_err(core_err)?;
+        doc.ensure_travellers(&names).map_err(core_err)?;
+        self.store.save(&mut doc).map_err(core_err)
+    }
+
+    pub fn dedupe_trip(&self, trip_id: String) -> Result<u32, SundryError> {
+        let tid = parse_id(&trip_id)?;
+        let mut doc = self.store.load(tid).map_err(core_err)?;
+        let removed = doc.dedupe_by_normalised_name().map_err(core_err)?;
+        self.store.save(&mut doc).map_err(core_err)?;
+        Ok(removed as u32)
     }
 
     pub fn set_item_state(
@@ -272,6 +335,92 @@ impl SundryCore {
         let mut doc = self.store.load(tid).map_err(core_err)?;
         doc.set_item_state(iid, state.into()).map_err(core_err)?;
         self.store.save(&mut doc).map_err(core_err)
+    }
+
+    pub fn set_item_packed_for(
+        &self,
+        trip_id: String,
+        item_id: String,
+        traveller_name: String,
+    ) -> Result<(), SundryError> {
+        let tid = parse_id(&trip_id)?;
+        let iid = parse_id(&item_id)?;
+        let mut doc = self.store.load(tid).map_err(core_err)?;
+        doc.set_item_packed_for(iid, &traveller_name)
+            .map_err(core_err)?;
+        self.store.save(&mut doc).map_err(core_err)
+    }
+
+    pub fn delete_trip(&self, trip_id: String) -> Result<(), SundryError> {
+        let tid = parse_id(&trip_id)?;
+        self.store.delete(tid).map_err(core_err)
+    }
+
+    pub fn add_manual_item(
+        &self,
+        trip_id: String,
+        name: String,
+        category: String,
+        quantity: u32,
+        essential: bool,
+    ) -> Result<String, SundryError> {
+        let tid = parse_id(&trip_id)?;
+        let cat = sundry_core::model::Category::from_label(&category).ok_or_else(|| {
+            SundryError::Core {
+                message: format!("unknown category: {category}"),
+            }
+        })?;
+        let trimmed = name.trim().to_string();
+        if trimmed.is_empty() {
+            return Err(SundryError::Core {
+                message: "item name is empty".into(),
+            });
+        }
+        let quantity = quantity.clamp(1, 20);
+        let mut doc = self.store.load(tid).map_err(core_err)?;
+        let key = sundry_core::llm::normalise(&trimmed);
+        if doc
+            .items()
+            .map_err(core_err)?
+            .iter()
+            .any(|i| sundry_core::llm::normalise(&i.name) == key)
+        {
+            return Err(SundryError::Core {
+                message: format!("“{trimmed}” is already on the list"),
+            });
+        }
+        let mut item = Item::manual(&trimmed, cat);
+        item.quantity = quantity;
+        item.essential = essential;
+        let id = item.id;
+        doc.add_item(&item).map_err(core_err)?;
+        self.store.save(&mut doc).map_err(core_err)?;
+        Ok(id.to_string())
+    }
+
+    pub fn export_trip(&self, trip_id: String) -> Result<Vec<u8>, SundryError> {
+        let tid = parse_id(&trip_id)?;
+        let mut doc = self.store.load(tid).map_err(core_err)?;
+        Ok(doc.save())
+    }
+
+    /// Import a shared `.automerge` file. Merges into an existing trip with the same id,
+    /// otherwise saves it as a new trip on this Mac.
+    pub fn import_trip(&self, bytes: Vec<u8>) -> Result<String, SundryError> {
+        let mut incoming = TripDocument::load(&bytes).map_err(core_err)?;
+        let trip = incoming.trip().map_err(core_err)?;
+        let id = trip.id;
+        match self.store.load(id) {
+            Ok(mut local) => {
+                local.merge(&mut incoming).map_err(core_err)?;
+                local.dedupe_by_normalised_name().map_err(core_err)?;
+                self.store.save(&mut local).map_err(core_err)?;
+            }
+            Err(_) => {
+                self.store.save(&mut incoming).map_err(core_err)?;
+            }
+        }
+        Ok(id.to_string())
     }
 
     pub async fn generate(&self, trip_id: String) -> Result<GenerationOutcomeDto, SundryError> {

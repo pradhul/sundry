@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+
+<html class="h-full" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Sundry - Bali Aug 2026</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,200..800;1,6..72,200..800&amp;family=Source+Sans+3:ital,wght@0,200..900;1,200..900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        'mac-sidebar': '#3F4A2E',
+                        'mac-main': '#F4EFE4',
+                        'mac-accent': '#5c6b43',
+                        'mac-text-light': '#F4EFE4',
+                        'mac-text-dark': '#2c2925',
+                        'mac-border': '#d8d3c5',
+                        'mac-strikethrough': '#a39b8c',
+                        'mac-packed': '#4a5d23',
+                        'mac-button': '#e8e2d1',
+                        'mac-button-border': '#c8c2b1',
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    fontFamily: {
+                        "headline": ["Newsreader", "serif"],
+                        "display": ["Newsreader", "serif"],
+                        "body": ["\"Source Sans 3\"", "sans-serif"],
+                        "label": ["\"Source Sans 3\"", "sans-serif"]
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        .mac-window {
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2), 0 0 0 1px rgba(0,0,0,0.1);
+        }
+        .mac-traffic-light {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 8px;
+            border: 1px solid rgba(0,0,0,0.1);
+        }
+        .mac-close { background-color: #ff5f56; }
+        .mac-minimize { background-color: #ffbd2e; }
+        .mac-maximize { background-color: #27c93f; }
+        
+        /* Custom scrollbar for columns */
+        .column-scroll::-webkit-scrollbar {
+            width: 6px;
+        }
+        .column-scroll::-webkit-scrollbar-track {
+            background: transparent; 
+        }
+        .column-scroll::-webkit-scrollbar-thumb {
+            background: rgba(0,0,0,0.1); 
+            border-radius: 10px;
+        }
+        .column-scroll:hover::-webkit-scrollbar-thumb {
+            background: rgba(0,0,0,0.2); 
+        }
+    </style>
+</head>
+<body class="bg-gray-200 h-full flex items-center justify-center p-8 font-body text-mac-text-dark selection:bg-mac-accent selection:text-white">
+<!-- macOS Window Container -->
+<div class="mac-window bg-mac-main w-full max-w-[1400px] h-full max-h-[900px] rounded-xl overflow-hidden flex flex-col relative border border-mac-border shadow-2xl">
+<!-- macOS Toolbar -->
+<header class="bg-mac-main/90 backdrop-blur-md h-14 border-b border-mac-border flex items-center justify-between px-4 sticky top-0 z-10 window-drag">
+<!-- Left: Traffic Lights & Sidebar Toggle -->
+<div class="flex items-center w-64 shrink-0">
+<div class="flex mr-6">
+<span class="mac-traffic-light mac-close shadow-sm"></span>
+<span class="mac-traffic-light mac-minimize shadow-sm"></span>
+<span class="mac-traffic-light mac-maximize shadow-sm"></span>
+</div>
+<button class="text-mac-text-dark/60 hover:text-mac-text-dark transition-colors p-1 rounded-md hover:bg-black/5">
+<span class="material-symbols-outlined text-[20px]" data-icon="view_sidebar">view_sidebar</span>
+</button>
+</div>
+<!-- Center: Search -->
+<div class="flex-1 max-w-md mx-4">
+<div class="relative flex items-center w-full h-8 rounded-md bg-white border border-mac-button-border shadow-sm px-2">
+<span class="material-symbols-outlined text-mac-text-dark/40 text-[16px] mr-2" data-icon="search">search</span>
+<input class="w-full bg-transparent border-none p-0 text-sm focus:ring-0 placeholder:text-mac-text-dark/40 font-body" placeholder="Search Bali Aug 2026..." type="text"/>
+</div>
+</div>
+<!-- Right: Actions -->
+<div class="flex items-center space-x-2 shrink-0">
+<button class="flex items-center space-x-1 px-3 h-8 rounded-md bg-mac-button border border-mac-button-border hover:bg-white shadow-sm transition-colors text-sm font-medium">
+<span class="material-symbols-outlined text-[18px]" data-icon="add">add</span>
+<span>Add</span>
+</button>
+<button class="flex items-center space-x-1 px-3 h-8 rounded-md bg-mac-button border border-mac-button-border hover:bg-white shadow-sm transition-colors text-sm font-medium">
+<span class="material-symbols-outlined text-[18px]" data-icon="sync">sync</span>
+<span>Sync</span>
+</button>
+<button class="flex items-center space-x-1 px-3 h-8 rounded-md bg-mac-button border border-mac-button-border hover:bg-white shadow-sm transition-colors text-sm font-medium text-mac-accent">
+<span class="material-symbols-outlined text-[18px]" data-icon="auto_awesome">auto_awesome</span>
+<span>Regenerate</span>
+</button>
+</div>
+</header>
+<!-- Main Content Area -->
+<div class="flex flex-1 overflow-hidden">
+<!-- Sidebar -->
+<nav class="w-64 bg-mac-sidebar text-mac-text-light flex flex-col shrink-0 border-r border-mac-border/30">
+<div class="p-4 pt-6">
+<h1 class="font-headline font-bold text-2xl tracking-tight mb-8 text-white">Sundry</h1>
+<div class="space-y-1">
+<div class="px-2 py-1 text-xs font-semibold uppercase tracking-wider text-mac-text-light/50 mb-2">Upcoming Trips</div>
+<a class="flex items-center px-2 py-1.5 rounded-md bg-mac-accent/50 text-white font-medium group" href="#">
+<span class="material-symbols-outlined text-[18px] mr-3 opacity-70 group-hover:opacity-100" data-icon="flight_takeoff">flight_takeoff</span>
+                            Bali Aug 2026
+                        </a>
+<a class="flex items-center px-2 py-1.5 rounded-md hover:bg-white/10 text-mac-text-light/80 hover:text-white transition-colors group" href="#">
+<span class="material-symbols-outlined text-[18px] mr-3 opacity-70 group-hover:opacity-100" data-icon="beach_access">beach_access</span>
+                            Goa Dec 2026
+                        </a>
+</div>
+<div class="space-y-1 mt-8">
+<div class="px-2 py-1 text-xs font-semibold uppercase tracking-wider text-mac-text-light/50 mb-2">Past Trips</div>
+<a class="flex items-center px-2 py-1.5 rounded-md hover:bg-white/10 text-mac-text-light/80 hover:text-white transition-colors group" href="#">
+<span class="material-symbols-outlined text-[18px] mr-3 opacity-70 group-hover:opacity-100" data-icon="landscape">landscape</span>
+                            Swiss Alps '25
+                        </a>
+<a class="flex items-center px-2 py-1.5 rounded-md hover:bg-white/10 text-mac-text-light/80 hover:text-white transition-colors group" href="#">
+<span class="material-symbols-outlined text-[18px] mr-3 opacity-70 group-hover:opacity-100" data-icon="location_city">location_city</span>
+                            Tokyo '24
+                        </a>
+</div>
+</div>
+<div class="mt-auto p-4">
+<a class="flex items-center px-2 py-1.5 rounded-md hover:bg-white/10 text-mac-text-light/80 hover:text-white transition-colors group" href="#">
+<span class="material-symbols-outlined text-[18px] mr-3 opacity-70 group-hover:opacity-100" data-icon="settings">settings</span>
+                        Preferences
+                    </a>
+</div>
+</nav>
+<!-- Grid Columns -->
+<main class="flex-1 flex overflow-hidden">
+<!-- Column 1: To Pack -->
+<div class="w-1/3 flex flex-col border-r border-mac-border bg-mac-main">
+<div class="h-10 flex items-center px-4 border-b border-mac-border bg-white/50 backdrop-blur-sm sticky top-0 z-10">
+<h2 class="font-headline font-semibold text-lg text-mac-text-dark">To pack</h2>
+<span class="ml-2 text-xs bg-mac-text-dark/10 px-2 py-0.5 rounded-full">14</span>
+</div>
+<div class="flex-1 overflow-y-auto p-4 column-scroll">
+<!-- Section: Documents -->
+<div class="mb-6">
+<h3 class="text-xs font-bold uppercase tracking-wider text-mac-text-dark/50 mb-3 border-b border-mac-border/50 pb-1">Documents</h3>
+<!-- Item 1 (Selected/Strikethrough) -->
+<div class="flex items-start group mb-3 bg-white/40 p-2 rounded-lg ring-1 ring-mac-accent/30 cursor-pointer">
+<div class="flex flex-col space-y-1 mr-3 shrink-0">
+<button class="w-6 h-6 rounded flex items-center justify-center border border-mac-border hover:bg-mac-button transition-colors text-[10px] font-bold text-mac-text-dark/40" title="Later">L</button>
+<button class="w-6 h-6 rounded flex items-center justify-center border border-mac-packed bg-mac-packed text-white transition-colors text-[10px] font-bold" title="Appu">A</button>
+<button class="w-6 h-6 rounded flex items-center justify-center border border-mac-border hover:bg-mac-button transition-colors text-[10px] font-bold text-mac-text-dark/40" title="Swathi">S</button>
+<button class="w-6 h-6 rounded flex items-center justify-center border border-mac-border hover:bg-red-100 transition-colors text-[10px] font-bold text-mac-text-dark/40" title="Not Needed">X</button>
+</div>
+<div class="flex-1 pt-0.5">
+<div class="font-medium text-mac-strikethrough line-through decoration-mac-strikethrough/50">Passport</div>
+<div class="text-xs text-mac-text-dark/50 mt-1 line-through decoration-mac-strikethrough/50">Check expiry date. Both.</div>
+</div>
+</div>
+<!-- Item 2 -->
+<div class="flex items-start group mb-3 hover:bg-black/5 p-2 rounded-lg cursor-pointer transition-colors">
+<div class="flex flex-col space-y-1 mr-3 shrink-0">
+<button class="w-6 h-6 rounded flex items-center justify-center border border-mac-border hover:bg-mac-button transition-colors text-[10px] font-bold text-mac-text-dark/40" title="Later">L</button>
+<button class="w-6 h-6 rounded flex items-center justify-center border border-mac-border hover:bg-mac-button transition-colors text-[10px] font-bold text-mac-text-dark/40" title="Appu">A</button>
+<button class="w-6 h-6 rounded flex items-center justify-center border border-mac-border hover:bg-mac-button transition-colors text-[10px] font-bold text-mac-text-dark/40" title="Swathi">S</button>
+<button class="w-6 h-6 rounded flex items-center justify-center border border-mac-border hover:bg-red-100 transition-colors text-[10px] font-bold text-mac-text-dark/40" title="Not Needed">X</button>
+</div>
+<div class="flex-1 pt-0.5">
+<div class="font-medium text-mac-text-dark">Travel Insurance</div>
+</div>
+</div>
+</div>
+<!-- Section: Essentials -->
+<div class="mb-6">
+<h3 class="text-xs font-bold uppercase tracking-wider text-mac-text-dark/50 mb-3 border-b border-mac-border/50 pb-1">Essentials</h3>
+<!-- Item 3 -->
+<div class="flex items-start group mb-3 hover:bg-black/5 p-2 rounded-lg cursor-pointer transition-colors">
+<div class="flex flex-col space-y-1 mr-3 shrink-0">
+<button class="w-6 h-6 rounded flex items-center justify-center border border-mac-border hover:bg-mac-button transition-colors text-[10px] font-bold text-mac-text-dark/40" title="Later">L</button>
+<button class="w-6 h-6 rounded flex items-center justify-center border border-mac-border hover:bg-mac-button transition-colors text-[10px] font-bold text-mac-text-dark/40" title="Appu">A</button>
+<button class="w-6 h-6 rounded flex items-center justify-center border border-mac-border hover:bg-mac-button transition-colors text-[10px] font-bold text-mac-text-dark/40" title="Swathi">S</button>
+<button class="w-6 h-6 rounded flex items-center justify-center border border-mac-border hover:bg-red-100 transition-colors text-[10px] font-bold text-mac-text-dark/40" title="Not Needed">X</button>
+</div>
+<div class="flex-1 pt-0.5">
+<div class="font-medium text-mac-text-dark">Sunscreen</div>
+<div class="text-xs text-mac-text-dark/50 mt-1">SPF 50+ Reef safe</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Column 2: Packed for Appu -->
+<div class="w-1/3 flex flex-col border-r border-mac-border bg-white/30">
+<div class="h-10 flex items-center px-4 border-b border-mac-border bg-white/50 backdrop-blur-sm sticky top-0 z-10">
+<h2 class="font-headline font-semibold text-lg text-mac-text-dark">Packed for Appu</h2>
+<span class="ml-2 text-xs bg-mac-packed text-white px-2 py-0.5 rounded-full">1</span>
+</div>
+<div class="flex-1 overflow-y-auto p-4 column-scroll">
+<!-- Item -->
+<div class="flex items-start group mb-3 bg-mac-packed/5 p-2 rounded-lg cursor-pointer border border-mac-packed/20">
+<div class="flex-1 pt-0.5">
+<div class="font-medium text-mac-packed flex items-center">
+<span class="material-symbols-outlined text-[16px] mr-1" data-icon="check_circle">check_circle</span>
+                                    Passport
+                                </div>
+<div class="text-xs text-mac-text-dark/60 mt-1 ml-5">Checked expiry. In front pocket.</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Column 3: Packed for Swathi -->
+<div class="w-1/3 flex flex-col bg-white/30">
+<div class="h-10 flex items-center px-4 border-b border-mac-border bg-white/50 backdrop-blur-sm sticky top-0 z-10">
+<h2 class="font-headline font-semibold text-lg text-mac-text-dark">Packed for Swathi</h2>
+<span class="ml-2 text-xs bg-mac-packed text-white px-2 py-0.5 rounded-full">0</span>
+</div>
+<div class="flex-1 overflow-y-auto p-4 flex items-center justify-center column-scroll">
+<div class="text-center text-mac-text-dark/40 flex flex-col items-center">
+<span class="material-symbols-outlined text-4xl mb-2" data-icon="luggage">luggage</span>
+<p class="text-sm font-medium">Nothing packed yet</p>
+</div>
+</div>
+</div>
+</main>
+<!-- Inspector Panel -->
+<aside class="w-72 bg-white border-l border-mac-border flex flex-col shrink-0">
+<div class="h-10 flex items-center px-4 border-b border-mac-border bg-gray-50 shrink-0">
+<h3 class="font-semibold text-sm text-mac-text-dark">Item Details</h3>
+</div>
+<div class="p-5 overflow-y-auto flex-1">
+<div class="mb-6 text-center">
+<div class="w-20 h-20 bg-mac-main rounded-xl mx-auto flex items-center justify-center mb-3 shadow-sm border border-mac-border/50 text-mac-accent">
+<span class="material-symbols-outlined text-4xl" data-icon="book">book</span>
+</div>
+<h2 class="font-headline text-xl font-bold text-mac-text-dark">Passport</h2>
+<p class="text-xs text-mac-text-dark/50 mt-1 uppercase tracking-wider font-semibold">Documents</p>
+</div>
+<div class="space-y-4">
+<div>
+<label class="block text-xs font-semibold text-mac-text-dark/60 mb-1">Status</label>
+<div class="flex items-center bg-mac-packed/10 text-mac-packed px-3 py-1.5 rounded-md text-sm font-medium border border-mac-packed/20">
+<span class="material-symbols-outlined text-[16px] mr-2" data-icon="check_circle">check_circle</span>
+                                Packed for Appu
+                            </div>
+</div>
+<div>
+<label class="block text-xs font-semibold text-mac-text-dark/60 mb-1">Notes</label>
+<textarea class="w-full bg-mac-main/50 border border-mac-border rounded-md p-2 text-sm text-mac-text-dark resize-none h-24 focus:ring-1 focus:ring-mac-accent focus:border-mac-accent outline-none font-body">Check expiry date. Both.
+
+In front pocket of backpack.</textarea>
+</div>
+<div>
+<label class="block text-xs font-semibold text-mac-text-dark/60 mb-2">Tags</label>
+<div class="flex flex-wrap gap-2">
+<span class="px-2 py-1 bg-gray-100 border border-gray-200 rounded text-xs text-gray-600">Essential</span>
+<span class="px-2 py-1 bg-gray-100 border border-gray-200 rounded text-xs text-gray-600">Airport</span>
+<button class="px-2 py-1 border border-dashed border-gray-300 rounded text-xs text-gray-400 hover:text-gray-600 hover:border-gray-400">+</button>
+</div>
+</div>
+</div>
+</div>
+</aside>
+</div>
+</div>
+</body></html>

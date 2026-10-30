@@ -516,6 +516,24 @@ fileprivate struct FfiConverterString: FfiConverter {
     }
 }
 
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+fileprivate struct FfiConverterData: FfiConverterRustBuffer {
+    typealias SwiftType = Data
+
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> Data {
+        let len: Int32 = try readInt(&buf)
+        return Data(try readBytes(&buf, count: Int(len)))
+    }
+
+    public static func write(_ value: Data, into buf: inout [UInt8]) {
+        let len = Int32(value.count)
+        writeInt(&buf, len)
+        writeBytes(&buf, value)
+    }
+}
+
 
 
 
@@ -941,13 +959,31 @@ public func FfiConverterTypeLlmTransport_lower(_ value: LlmTransport) -> UnsafeM
 
 public protocol SundryCoreProtocol: AnyObject, Sendable {
     
+    func addManualItem(tripId: String, name: String, category: String, quantity: UInt32, essential: Bool) throws  -> String
+    
     func createTrip(title: String, city: String, countryCode: String, year: Int32, month: UInt32, nights: UInt32, travellerNames: [String], purposes: [String]) throws  -> String
     
+    func dedupeTrip(tripId: String) throws  -> UInt32
+    
+    func ensureTravellers(tripId: String, names: [String]) throws 
+    
+    func exportTrip(tripId: String) throws  -> Data
+    
     func generate(tripId: String) async throws  -> GenerationOutcomeDto
+    
+    /**
+     * Import a shared `.automerge` file. Merges into an existing trip with the same id,
+     * otherwise saves it as a new trip on this Mac.
+     */
+    func importTrip(bytes: Data) throws  -> String
     
     func listTrips() throws  -> [TripSummaryDto]
     
     func loadItems(tripId: String) throws  -> [ItemDto]
+    
+    func loadTripFacts(tripId: String) throws  -> TripFactsDto
+    
+    func setItemPackedFor(tripId: String, itemId: String, travellerName: String) throws 
     
     func setItemState(tripId: String, itemId: String, state: ItemStateDto) throws 
     
@@ -1014,6 +1050,18 @@ public convenience init(storageRoot: String, climate: ClimateTransport, llm: Llm
     
 
     
+open func addManualItem(tripId: String, name: String, category: String, quantity: UInt32, essential: Bool)throws  -> String  {
+    return try  FfiConverterString.lift(try rustCallWithError(FfiConverterTypeSundryError_lift) {
+    uniffi_sundry_ffi_fn_method_sundrycore_add_manual_item(self.uniffiClonePointer(),
+        FfiConverterString.lower(tripId),
+        FfiConverterString.lower(name),
+        FfiConverterString.lower(category),
+        FfiConverterUInt32.lower(quantity),
+        FfiConverterBool.lower(essential),$0
+    )
+})
+}
+    
 open func createTrip(title: String, city: String, countryCode: String, year: Int32, month: UInt32, nights: UInt32, travellerNames: [String], purposes: [String])throws  -> String  {
     return try  FfiConverterString.lift(try rustCallWithError(FfiConverterTypeSundryError_lift) {
     uniffi_sundry_ffi_fn_method_sundrycore_create_trip(self.uniffiClonePointer(),
@@ -1025,6 +1073,30 @@ open func createTrip(title: String, city: String, countryCode: String, year: Int
         FfiConverterUInt32.lower(nights),
         FfiConverterSequenceString.lower(travellerNames),
         FfiConverterSequenceString.lower(purposes),$0
+    )
+})
+}
+    
+open func dedupeTrip(tripId: String)throws  -> UInt32  {
+    return try  FfiConverterUInt32.lift(try rustCallWithError(FfiConverterTypeSundryError_lift) {
+    uniffi_sundry_ffi_fn_method_sundrycore_dedupe_trip(self.uniffiClonePointer(),
+        FfiConverterString.lower(tripId),$0
+    )
+})
+}
+    
+open func ensureTravellers(tripId: String, names: [String])throws   {try rustCallWithError(FfiConverterTypeSundryError_lift) {
+    uniffi_sundry_ffi_fn_method_sundrycore_ensure_travellers(self.uniffiClonePointer(),
+        FfiConverterString.lower(tripId),
+        FfiConverterSequenceString.lower(names),$0
+    )
+}
+}
+    
+open func exportTrip(tripId: String)throws  -> Data  {
+    return try  FfiConverterData.lift(try rustCallWithError(FfiConverterTypeSundryError_lift) {
+    uniffi_sundry_ffi_fn_method_sundrycore_export_trip(self.uniffiClonePointer(),
+        FfiConverterString.lower(tripId),$0
     )
 })
 }
@@ -1046,6 +1118,18 @@ open func generate(tripId: String)async throws  -> GenerationOutcomeDto  {
         )
 }
     
+    /**
+     * Import a shared `.automerge` file. Merges into an existing trip with the same id,
+     * otherwise saves it as a new trip on this Mac.
+     */
+open func importTrip(bytes: Data)throws  -> String  {
+    return try  FfiConverterString.lift(try rustCallWithError(FfiConverterTypeSundryError_lift) {
+    uniffi_sundry_ffi_fn_method_sundrycore_import_trip(self.uniffiClonePointer(),
+        FfiConverterData.lower(bytes),$0
+    )
+})
+}
+    
 open func listTrips()throws  -> [TripSummaryDto]  {
     return try  FfiConverterSequenceTypeTripSummaryDto.lift(try rustCallWithError(FfiConverterTypeSundryError_lift) {
     uniffi_sundry_ffi_fn_method_sundrycore_list_trips(self.uniffiClonePointer(),$0
@@ -1059,6 +1143,23 @@ open func loadItems(tripId: String)throws  -> [ItemDto]  {
         FfiConverterString.lower(tripId),$0
     )
 })
+}
+    
+open func loadTripFacts(tripId: String)throws  -> TripFactsDto  {
+    return try  FfiConverterTypeTripFactsDto_lift(try rustCallWithError(FfiConverterTypeSundryError_lift) {
+    uniffi_sundry_ffi_fn_method_sundrycore_load_trip_facts(self.uniffiClonePointer(),
+        FfiConverterString.lower(tripId),$0
+    )
+})
+}
+    
+open func setItemPackedFor(tripId: String, itemId: String, travellerName: String)throws   {try rustCallWithError(FfiConverterTypeSundryError_lift) {
+    uniffi_sundry_ffi_fn_method_sundrycore_set_item_packed_for(self.uniffiClonePointer(),
+        FfiConverterString.lower(tripId),
+        FfiConverterString.lower(itemId),
+        FfiConverterString.lower(travellerName),$0
+    )
+}
 }
     
 open func setItemState(tripId: String, itemId: String, state: ItemStateDto)throws   {try rustCallWithError(FfiConverterTypeSundryError_lift) {
@@ -1368,10 +1469,11 @@ public struct ItemDto {
     public var state: ItemStateDto
     public var rationale: String?
     public var essential: Bool
+    public var ownerName: String?
 
     // Default memberwise initializers are never public by default, so we
     // declare one manually.
-    public init(id: String, name: String, quantity: UInt32, category: String, state: ItemStateDto, rationale: String?, essential: Bool) {
+    public init(id: String, name: String, quantity: UInt32, category: String, state: ItemStateDto, rationale: String?, essential: Bool, ownerName: String?) {
         self.id = id
         self.name = name
         self.quantity = quantity
@@ -1379,6 +1481,7 @@ public struct ItemDto {
         self.state = state
         self.rationale = rationale
         self.essential = essential
+        self.ownerName = ownerName
     }
 }
 
@@ -1410,6 +1513,9 @@ extension ItemDto: Equatable, Hashable {
         if lhs.essential != rhs.essential {
             return false
         }
+        if lhs.ownerName != rhs.ownerName {
+            return false
+        }
         return true
     }
 
@@ -1421,6 +1527,7 @@ extension ItemDto: Equatable, Hashable {
         hasher.combine(state)
         hasher.combine(rationale)
         hasher.combine(essential)
+        hasher.combine(ownerName)
     }
 }
 
@@ -1439,7 +1546,8 @@ public struct FfiConverterTypeItemDto: FfiConverterRustBuffer {
                 category: FfiConverterString.read(from: &buf), 
                 state: FfiConverterTypeItemStateDto.read(from: &buf), 
                 rationale: FfiConverterOptionString.read(from: &buf), 
-                essential: FfiConverterBool.read(from: &buf)
+                essential: FfiConverterBool.read(from: &buf), 
+                ownerName: FfiConverterOptionString.read(from: &buf)
         )
     }
 
@@ -1451,6 +1559,7 @@ public struct FfiConverterTypeItemDto: FfiConverterRustBuffer {
         FfiConverterTypeItemStateDto.write(value.state, into: &buf)
         FfiConverterOptionString.write(value.rationale, into: &buf)
         FfiConverterBool.write(value.essential, into: &buf)
+        FfiConverterOptionString.write(value.ownerName, into: &buf)
     }
 }
 
@@ -1467,6 +1576,116 @@ public func FfiConverterTypeItemDto_lift(_ buf: RustBuffer) throws -> ItemDto {
 #endif
 public func FfiConverterTypeItemDto_lower(_ value: ItemDto) -> RustBuffer {
     return FfiConverterTypeItemDto.lower(value)
+}
+
+
+public struct TripFactsDto {
+    public var city: String
+    public var countryCode: String
+    public var countryName: String?
+    public var plugTypes: [String]
+    public var voltage: UInt32?
+    public var frequency: UInt32?
+    public var currency: String?
+
+    // Default memberwise initializers are never public by default, so we
+    // declare one manually.
+    public init(city: String, countryCode: String, countryName: String?, plugTypes: [String], voltage: UInt32?, frequency: UInt32?, currency: String?) {
+        self.city = city
+        self.countryCode = countryCode
+        self.countryName = countryName
+        self.plugTypes = plugTypes
+        self.voltage = voltage
+        self.frequency = frequency
+        self.currency = currency
+    }
+}
+
+#if compiler(>=6)
+extension TripFactsDto: Sendable {}
+#endif
+
+
+extension TripFactsDto: Equatable, Hashable {
+    public static func ==(lhs: TripFactsDto, rhs: TripFactsDto) -> Bool {
+        if lhs.city != rhs.city {
+            return false
+        }
+        if lhs.countryCode != rhs.countryCode {
+            return false
+        }
+        if lhs.countryName != rhs.countryName {
+            return false
+        }
+        if lhs.plugTypes != rhs.plugTypes {
+            return false
+        }
+        if lhs.voltage != rhs.voltage {
+            return false
+        }
+        if lhs.frequency != rhs.frequency {
+            return false
+        }
+        if lhs.currency != rhs.currency {
+            return false
+        }
+        return true
+    }
+
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(city)
+        hasher.combine(countryCode)
+        hasher.combine(countryName)
+        hasher.combine(plugTypes)
+        hasher.combine(voltage)
+        hasher.combine(frequency)
+        hasher.combine(currency)
+    }
+}
+
+
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public struct FfiConverterTypeTripFactsDto: FfiConverterRustBuffer {
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> TripFactsDto {
+        return
+            try TripFactsDto(
+                city: FfiConverterString.read(from: &buf), 
+                countryCode: FfiConverterString.read(from: &buf), 
+                countryName: FfiConverterOptionString.read(from: &buf), 
+                plugTypes: FfiConverterSequenceString.read(from: &buf), 
+                voltage: FfiConverterOptionUInt32.read(from: &buf), 
+                frequency: FfiConverterOptionUInt32.read(from: &buf), 
+                currency: FfiConverterOptionString.read(from: &buf)
+        )
+    }
+
+    public static func write(_ value: TripFactsDto, into buf: inout [UInt8]) {
+        FfiConverterString.write(value.city, into: &buf)
+        FfiConverterString.write(value.countryCode, into: &buf)
+        FfiConverterOptionString.write(value.countryName, into: &buf)
+        FfiConverterSequenceString.write(value.plugTypes, into: &buf)
+        FfiConverterOptionUInt32.write(value.voltage, into: &buf)
+        FfiConverterOptionUInt32.write(value.frequency, into: &buf)
+        FfiConverterOptionString.write(value.currency, into: &buf)
+    }
+}
+
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public func FfiConverterTypeTripFactsDto_lift(_ buf: RustBuffer) throws -> TripFactsDto {
+    return try FfiConverterTypeTripFactsDto.lift(buf)
+}
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public func FfiConverterTypeTripFactsDto_lower(_ value: TripFactsDto) -> RustBuffer {
+    return FfiConverterTypeTripFactsDto.lower(value)
 }
 
 
@@ -1717,6 +1936,30 @@ extension SundryError: Foundation.LocalizedError {
 
 
 
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+fileprivate struct FfiConverterOptionUInt32: FfiConverterRustBuffer {
+    typealias SwiftType = UInt32?
+
+    public static func write(_ value: SwiftType, into buf: inout [UInt8]) {
+        guard let value = value else {
+            writeInt(&buf, Int8(0))
+            return
+        }
+        writeInt(&buf, Int8(1))
+        FfiConverterUInt32.write(value, into: &buf)
+    }
+
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> SwiftType {
+        switch try readInt(&buf) as Int8 {
+        case 0: return nil
+        case 1: return try FfiConverterUInt32.read(from: &buf)
+        default: throw UniffiInternalError.unexpectedOptionalTag
+        }
+    }
+}
 
 #if swift(>=5.8)
 @_documentation(visibility: private)
@@ -2028,16 +2271,37 @@ private let initializationResult: InitializationResult = {
     if (uniffi_sundry_ffi_checksum_method_llmtransport_generate() != 36341) {
         return InitializationResult.apiChecksumMismatch
     }
+    if (uniffi_sundry_ffi_checksum_method_sundrycore_add_manual_item() != 44432) {
+        return InitializationResult.apiChecksumMismatch
+    }
     if (uniffi_sundry_ffi_checksum_method_sundrycore_create_trip() != 13592) {
         return InitializationResult.apiChecksumMismatch
     }
+    if (uniffi_sundry_ffi_checksum_method_sundrycore_dedupe_trip() != 62118) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_sundry_ffi_checksum_method_sundrycore_ensure_travellers() != 61433) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_sundry_ffi_checksum_method_sundrycore_export_trip() != 3927) {
+        return InitializationResult.apiChecksumMismatch
+    }
     if (uniffi_sundry_ffi_checksum_method_sundrycore_generate() != 18689) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_sundry_ffi_checksum_method_sundrycore_import_trip() != 53495) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_sundry_ffi_checksum_method_sundrycore_list_trips() != 27310) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_sundry_ffi_checksum_method_sundrycore_load_items() != 59513) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_sundry_ffi_checksum_method_sundrycore_load_trip_facts() != 11594) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_sundry_ffi_checksum_method_sundrycore_set_item_packed_for() != 65500) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_sundry_ffi_checksum_method_sundrycore_set_item_state() != 13483) {
