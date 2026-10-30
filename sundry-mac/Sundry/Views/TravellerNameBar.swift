@@ -20,7 +20,25 @@ struct TravellerNameBar: View {
                     .focused($focusedIndex, equals: index)
                     .onSubmit { commit(at: index) }
                     .accessibilityLabel("Traveller \(index + 1)")
+                    .contextMenu {
+                        Button("Remove \(drafts[index])", role: .destructive) {
+                            focusedIndex = nil
+                            store.removeTraveller(at: index)
+                            syncDrafts()
+                        }
+                        .disabled(drafts.count <= 1)
+                    }
             }
+            Button {
+                focusedIndex = nil
+                store.addTraveller()
+                syncDrafts()
+            } label: {
+                Image(systemName: "person.badge.plus")
+            }
+            .buttonStyle(.borderless)
+            .help("Add a traveller to this trip")
+            .accessibilityLabel("Add traveller")
         }
         .onAppear { syncDrafts() }
         .onChange(of: store.travellerNames) { _, _ in

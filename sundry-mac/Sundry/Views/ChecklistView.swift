@@ -103,6 +103,8 @@ struct ChecklistView: View {
                             essentialsFirst: false,
                             packedStyle: true
                         )
+                        // 1-2 travellers get roomy columns; 3+ stay readable side by side.
+                        .frame(minWidth: store.travellerNames.count >= 3 ? 150 : 200)
                     }
 
                     if selectedItem != nil {

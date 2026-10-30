@@ -384,9 +384,19 @@ RustBuffer uniffi_sundry_ffi_fn_method_sundrycore_list_trips(void*_Nonnull ptr, 
 RustBuffer uniffi_sundry_ffi_fn_method_sundrycore_load_items(void*_Nonnull ptr, RustBuffer trip_id, RustCallStatus *_Nonnull out_status
 );
 #endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_SUNDRY_FFI_FN_METHOD_SUNDRYCORE_LOAD_TRAVELLERS
+#define UNIFFI_FFIDEF_UNIFFI_SUNDRY_FFI_FN_METHOD_SUNDRYCORE_LOAD_TRAVELLERS
+RustBuffer uniffi_sundry_ffi_fn_method_sundrycore_load_travellers(void*_Nonnull ptr, RustBuffer trip_id, RustCallStatus *_Nonnull out_status
+);
+#endif
 #ifndef UNIFFI_FFIDEF_UNIFFI_SUNDRY_FFI_FN_METHOD_SUNDRYCORE_LOAD_TRIP_FACTS
 #define UNIFFI_FFIDEF_UNIFFI_SUNDRY_FFI_FN_METHOD_SUNDRYCORE_LOAD_TRIP_FACTS
 RustBuffer uniffi_sundry_ffi_fn_method_sundrycore_load_trip_facts(void*_Nonnull ptr, RustBuffer trip_id, RustCallStatus *_Nonnull out_status
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_SUNDRY_FFI_FN_METHOD_SUNDRYCORE_REMOVE_TRAVELLER
+#define UNIFFI_FFIDEF_UNIFFI_SUNDRY_FFI_FN_METHOD_SUNDRYCORE_REMOVE_TRAVELLER
+void uniffi_sundry_ffi_fn_method_sundrycore_remove_traveller(void*_Nonnull ptr, RustBuffer trip_id, uint32_t index, RustCallStatus *_Nonnull out_status
 );
 #endif
 #ifndef UNIFFI_FFIDEF_UNIFFI_SUNDRY_FFI_FN_METHOD_SUNDRYCORE_SET_ITEM_PACKED_FOR
@@ -763,9 +773,21 @@ uint16_t uniffi_sundry_ffi_checksum_method_sundrycore_load_items(void
     
 );
 #endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_SUNDRY_FFI_CHECKSUM_METHOD_SUNDRYCORE_LOAD_TRAVELLERS
+#define UNIFFI_FFIDEF_UNIFFI_SUNDRY_FFI_CHECKSUM_METHOD_SUNDRYCORE_LOAD_TRAVELLERS
+uint16_t uniffi_sundry_ffi_checksum_method_sundrycore_load_travellers(void
+    
+);
+#endif
 #ifndef UNIFFI_FFIDEF_UNIFFI_SUNDRY_FFI_CHECKSUM_METHOD_SUNDRYCORE_LOAD_TRIP_FACTS
 #define UNIFFI_FFIDEF_UNIFFI_SUNDRY_FFI_CHECKSUM_METHOD_SUNDRYCORE_LOAD_TRIP_FACTS
 uint16_t uniffi_sundry_ffi_checksum_method_sundrycore_load_trip_facts(void
+    
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_SUNDRY_FFI_CHECKSUM_METHOD_SUNDRYCORE_REMOVE_TRAVELLER
+#define UNIFFI_FFIDEF_UNIFFI_SUNDRY_FFI_CHECKSUM_METHOD_SUNDRYCORE_REMOVE_TRAVELLER
+uint16_t uniffi_sundry_ffi_checksum_method_sundrycore_remove_traveller(void
     
 );
 #endif

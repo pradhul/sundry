@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Build a shareable Sundry.dmg (ad-hoc signed — free; her Mac may need
+# Build a shareable Sundry.dmg (ad-hoc signed — free; the other Mac may need
 # right-click → Open the first time).
 set -euo pipefail
 
@@ -77,5 +77,5 @@ rm -rf "$STAGING"
 
 echo
 echo "Packed: $DIST/$DMG_NAME"
-echo "AirDrop that file. On her Mac: open the DMG, drag Sundry → Applications,"
+echo "AirDrop that file. On the other Mac: open the DMG, drag Sundry → Applications,"
 echo "then right-click Sundry → Open the first time (ad-hoc signed, no \$99 cert)."

@@ -25,8 +25,11 @@ final class TripStore {
     var orderedCategories: [String] = []
     var statusMessage: String?
     var tripPendingDelete: TripSummaryDto?
-    /// Editable packing-for names (toolbar). Drives columns, chips, and trip travellers.
+    /// The selected trip's travellers (columns, chips, toolbar). Falls back to
+    /// the app defaults when no trip is selected.
     var travellerNames: [String] = Travellers.load()
+    /// App-level defaults copied into new trips.
+    var defaultTravellers: [String] = Travellers.load()
 
     private let core: SundryCore
     private let inboxWatcher = TripInboxWatcher()
@@ -45,7 +48,24 @@ final class TripStore {
         )
         orderedCategories = categoryOrder()
         refresh()
+        migrateDefaultTravellersIfNeeded()
         startInboxWatch()
+    }
+
+    /// Installs from before per-trip travellers never saved defaults (the old
+    /// code fell back to a built-in pair). Adopt the travellers of the most
+    /// recent existing trip so new trips keep looking the same; a fresh install
+    /// with no trips keeps the macOS-user default.
+    private func migrateDefaultTravellersIfNeeded() {
+        guard !Travellers.hasSaved else { return }
+        for trip in trips.reversed() {
+            if let names = try? core.loadTravellers(tripId: trip.id), !names.isEmpty {
+                Travellers.save(names)
+                defaultTravellers = names
+                if selectedTripId == nil { travellerNames = names }
+                return
+            }
+        }
     }
 
     func setTravellerName(at index: Int, to raw: String) {
@@ -55,14 +75,51 @@ final class TripStore {
         guard travellerNames[index] != trimmed else { return }
 
         travellerNames[index] = trimmed
-        Travellers.save(travellerNames)
-        applyTravellersToSelectedTrip()
+        applyTravellers()
+    }
+
+    func addTraveller() {
+        travellerNames.append(Travellers.placeholderName(forIndex: travellerNames.count))
+        applyTravellers()
+    }
+
+    func removeTraveller(at index: Int) {
+        guard travellerNames.count > 1, travellerNames.indices.contains(index) else { return }
+        if let id = selectedTripId {
+            // Id-preserving removal in the core so other travellers keep their packed items.
+            try? core.removeTraveller(tripId: id, index: UInt32(index))
+            travellerNames = (try? core.loadTravellers(tripId: id)) ?? travellerNames
+        } else {
+            travellerNames.remove(at: index)
+        }
+        saveDefaults(travellerNames)
         refresh()
     }
 
-    private func applyTravellersToSelectedTrip() {
-        guard let id = selectedTripId else { return }
-        try? core.ensureTravellers(tripId: id, names: travellerNames)
+    func saveDefaults(_ names: [String]) {
+        Travellers.save(names)
+        defaultTravellers = Travellers.load()
+    }
+
+    /// Writes the edited names to the selected trip (by position) and makes
+    /// them the defaults for the next new trip.
+    private func applyTravellers() {
+        if let id = selectedTripId {
+            try? core.ensureTravellers(tripId: id, names: travellerNames)
+        }
+        saveDefaults(travellerNames)
+        refresh()
+    }
+
+    /// Trips keep their own travellers. Only a legacy trip with none gets the defaults.
+    private func loadTravellers(for id: String) {
+        let stored = (try? core.loadTravellers(tripId: id)) ?? []
+        if stored.isEmpty {
+            try? core.ensureTravellers(tripId: id, names: defaultTravellers)
+            travellerNames = defaultTravellers
+        } else {
+            travellerNames = stored
+        }
     }
 
     func refresh() {
@@ -83,8 +140,10 @@ final class TripStore {
         }
         selectedTripId = id
         if let id {
-            try? core.ensureTravellers(tripId: id, names: travellerNames)
+            loadTravellers(for: id)
             _ = try? core.dedupeTrip(tripId: id)
+        } else {
+            travellerNames = defaultTravellers
         }
         refresh()
     }
@@ -96,8 +155,12 @@ final class TripStore {
         year: Int32,
         month: UInt32,
         nights: UInt32,
-        purposes: [String]
+        purposes: [String],
+        travellers: [String]
     ) throws {
+        let names = Travellers.sanitise(travellers)
+        let chosen = names.isEmpty ? defaultTravellers : names
+        saveDefaults(chosen)
         let id = try core.createTrip(
             title: title,
             city: city,
@@ -105,7 +168,7 @@ final class TripStore {
             year: year,
             month: month,
             nights: nights,
-            travellerNames: travellerNames,
+            travellerNames: chosen,
             purposes: purposes
         )
         isCreatingTrip = false
@@ -169,7 +232,7 @@ final class TripStore {
         }
         do {
             try TripSyncShare.airDrop(data: data, suggestedName: trip.title)
-            statusMessage = "AirDrop open — pick her Mac. Keep Sundry open on both sides."
+            statusMessage = "AirDrop open — pick the other Mac. Keep Sundry open on both sides."
         } catch {
             statusMessage = error.localizedDescription
         }
@@ -186,7 +249,6 @@ final class TripStore {
             }
             let data = try Data(contentsOf: url)
             let id = try core.importTrip(bytes: data)
-            try? core.ensureTravellers(tripId: id, names: travellerNames)
             _ = try? core.dedupeTrip(tripId: id)
             importedPaths.insert(path)
             select(id)
