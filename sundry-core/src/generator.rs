@@ -1,9 +1,9 @@
 use crate::climate::ClimateProvider;
 use crate::document::{DocError, TripDocument};
 use crate::facts::FactsTable;
-use crate::llm::{parse_and_validate, LlmBackend};
+use crate::llm::{parse_and_validate, GeneratedItem, LlmBackend, LlmError};
 use crate::model::Category;
-use crate::prompt::{build_prompt, GroundedContext};
+use crate::prompt::{build_prompt, is_cold, GroundedContext};
 
 pub struct CategoryOutcome {
     pub category: Category,
@@ -70,30 +70,28 @@ impl<'a> Generator<'a> {
         let mut per_category = Vec::with_capacity(Category::ALL.len());
 
         for category in Category::ALL {
-            let already_listed: Vec<String> =
-                doc.items()?.into_iter().map(|i| i.name).collect();
-            let prompt = build_prompt(&ctx, category, &already_listed);
-            let outcome = match self.llm.generate(prompt).await {
-                Err(e) => CategoryOutcome {
-                    category,
-                    added: 0,
-                    error: Some(e.to_string()),
-                },
-                Ok(raw) => match parse_and_validate(&raw) {
-                    Err(e) => CategoryOutcome {
-                        category,
-                        added: 0,
-                        error: Some(e.to_string()),
-                    },
-                    Ok(items) => {
-                        let report = doc.merge_generated(category, &items)?;
-                        CategoryOutcome {
-                            category,
-                            added: report.added,
-                            error: None,
-                        }
-                    }
-                },
+            let (mut added, mut error) = match self.attempt(doc, &ctx, category).await? {
+                Ok(n) => (n, None),
+                Err(e) => (0, Some(e)),
+            };
+            let unavailable = error.as_deref() == Some(&LlmError::Unavailable.to_string());
+            if added < MIN_PER_CATEGORY && !unavailable {
+                if let Ok(n) = self.attempt(doc, &ctx, category).await? {
+                    added += n;
+                    error = None;
+                }
+            }
+            if error.is_none() {
+                let existing: Vec<String> = doc.items()?.into_iter().map(|i| i.name).collect();
+                let staples = staples(&ctx, category, &existing);
+                if !staples.is_empty() {
+                    added += doc.merge_generated(category, &staples)?.added;
+                }
+            }
+            let outcome = CategoryOutcome {
+                category,
+                added,
+                error,
             };
             per_category.push(outcome);
         }
@@ -103,6 +101,151 @@ impl<'a> Generator<'a> {
             per_category,
         })
     }
+}
+
+impl Generator<'_> {
+    /// One generation attempt for a category. The inner error is a model or
+    /// validation failure; the outer one is a document failure.
+    async fn attempt(
+        &self,
+        doc: &mut TripDocument,
+        ctx: &GroundedContext,
+        category: Category,
+    ) -> Result<Result<usize, String>, DocError> {
+        let already: Vec<String> = doc.items()?.into_iter().map(|i| i.name).collect();
+        let prompt = build_prompt(ctx, category, &already);
+        let raw = match self.llm.generate(prompt).await {
+            Ok(raw) => raw,
+            Err(e) => return Ok(Err(e.to_string())),
+        };
+        match parse_and_validate(&raw) {
+            Ok(items) => Ok(Ok(doc.merge_generated(category, &items)?.added)),
+            Err(e) => Ok(Err(e.to_string())),
+        }
+    }
+}
+
+/// Retry a category once if fewer than this many items survived validation.
+pub const MIN_PER_CATEGORY: usize = 3;
+
+fn staple(name: &str, rationale: String, essential: bool) -> GeneratedItem {
+    GeneratedItem {
+        name: name.to_string(),
+        quantity: 1,
+        rationale,
+        essential,
+    }
+}
+
+/// Deterministic basics the on-device model often forgets. Each is only added
+/// if nothing in the list already covers it (checked by keyword).
+pub fn staples(
+    ctx: &GroundedContext,
+    category: Category,
+    existing: &[String],
+) -> Vec<GeneratedItem> {
+    let cold = is_cold(ctx.climate.as_ref());
+    let mut out = Vec::new();
+    match category {
+        Category::Electronics => {
+            for f in &ctx.facts {
+                out.push((
+                    vec!["adapter", "converter"],
+                    staple(
+                        &format!("Type {} plug adapter", f.plug_types.join("/")),
+                        format!(
+                            "{} uses type {} sockets at {}V.",
+                            f.name,
+                            f.plug_types.join("/"),
+                            f.voltage
+                        ),
+                        true,
+                    ),
+                ));
+            }
+            out.push((
+                vec!["charger"],
+                staple(
+                    "Phone charger",
+                    "Keeps phones topped up for maps and tickets.".into(),
+                    true,
+                ),
+            ));
+        }
+        Category::Clothing => {
+            out.push((
+                vec!["underwear"],
+                staple(
+                    "Underwear",
+                    format!("One per day for {} nights.", ctx.trip.nights),
+                    true,
+                ),
+            ));
+            out.push((
+                vec!["trouser", "pants", "jeans", "chino", "slacks"],
+                staple(
+                    "Trousers",
+                    "Everyday bottoms for city walking.".into(),
+                    false,
+                ),
+            ));
+            out.push((
+                vec!["shirt", "top", "tee", "blouse"],
+                staple(
+                    "Long-sleeve tops",
+                    "Everyday layers to wear under a jumper or coat.".into(),
+                    false,
+                ),
+            ));
+            if cold {
+                let why = |w: &str| {
+                    format!(
+                        "Average lows around {:.0}C call for {w}.",
+                        ctx.climate.map(|c| c.avg_low_c).unwrap_or(0.0)
+                    )
+                };
+                out.push((
+                    vec!["coat", "parka", "down jacket", "puffer"],
+                    staple("Warm coat", why("a warm coat"), true),
+                ));
+                out.push((
+                    vec!["sweater", "jumper", "fleece", "cardigan"],
+                    staple("Sweater", why("an insulating mid layer"), false),
+                ));
+                out.push((
+                    vec!["glove", "mitten"],
+                    staple("Gloves", why("gloves"), false),
+                ));
+                out.push((vec!["scarf"], staple("Scarf", why("a scarf"), false)));
+                out.push((
+                    vec!["hat", "beanie"],
+                    staple("Warm hat", why("a warm hat"), false),
+                ));
+            }
+        }
+        Category::Footwear => {
+            out.push((
+                vec!["sock"],
+                staple(
+                    if cold { "Warm socks" } else { "Socks" },
+                    format!("A fresh pair for each of {} days.", ctx.trip.nights),
+                    true,
+                ),
+            ));
+        }
+        Category::Toiletries => {
+            out.push((
+                vec!["toothpaste"],
+                staple("Toothpaste", "Pairs with your toothbrush.".into(), false),
+            ));
+        }
+        _ => {}
+    }
+    let existing: Vec<String> = existing.iter().map(|n| n.to_lowercase()).collect();
+    out.into_iter()
+        .filter(|(keys, _)| !existing.iter().any(|e| keys.iter().any(|k| e.contains(k))))
+        .map(|(_, item)| item)
+        .collect()
 }
 
 #[cfg(test)]
@@ -181,7 +324,11 @@ mod tests {
     fn a_failing_category_does_not_abort_the_others() {
         let facts = crate::facts::FactsTable::load();
         let climate = FakeClimateProvider::returning(normals());
-        let llm = FakeLlmBackend::replaying(vec!["not json".to_string(), ONE_ITEM.to_string()]);
+        let llm = FakeLlmBackend::replaying(vec![
+            "not json".to_string(),
+            "not json".to_string(),
+            ONE_ITEM.to_string(),
+        ]);
         let generator = Generator::new(&facts, &climate, &llm);
         let mut doc = TripDocument::new(&a_trip());
 
@@ -234,5 +381,88 @@ mod tests {
 
         let outcome = block_on(generator.generate_all(&mut doc)).unwrap();
         assert!(outcome.per_category.iter().any(|c| c.added > 0));
+    }
+
+    fn kyoto_ctx(cold: bool) -> GroundedContext {
+        let facts = crate::facts::FactsTable::load();
+        GroundedContext {
+            trip: a_trip(),
+            facts: vec![facts.get("JP").unwrap().clone()],
+            climate: Some(ClimateNormals {
+                avg_high_c: if cold { 10.0 } else { 30.0 },
+                avg_low_c: if cold { 1.0 } else { 22.0 },
+                precipitation_mm: 70.0,
+                daylight_hours: 10.0,
+            }),
+        }
+    }
+
+    fn names(items: Vec<GeneratedItem>) -> Vec<String> {
+        items.into_iter().map(|i| i.name).collect()
+    }
+
+    #[test]
+    fn electronics_staples_use_the_destination_plug_types() {
+        let n = names(staples(&kyoto_ctx(true), Category::Electronics, &[]));
+        assert!(n.contains(&"Type A/B plug adapter".to_string()), "{n:?}");
+        assert!(n.contains(&"Phone charger".to_string()));
+    }
+
+    #[test]
+    fn cold_trip_gets_winter_clothing_staples() {
+        let n = names(staples(&kyoto_ctx(true), Category::Clothing, &[]));
+        for want in [
+            "Underwear",
+            "Trousers",
+            "Long-sleeve tops",
+            "Warm coat",
+            "Gloves",
+            "Scarf",
+            "Warm hat",
+        ] {
+            assert!(n.contains(&want.to_string()), "missing {want}: {n:?}");
+        }
+        let hot = names(staples(&kyoto_ctx(false), Category::Clothing, &[]));
+        assert!(!hot.contains(&"Warm coat".to_string()));
+    }
+
+    #[test]
+    fn staples_skip_what_the_model_already_listed() {
+        let n = names(staples(
+            &kyoto_ctx(true),
+            Category::Clothing,
+            &["Winter coat".into(), "Wool beanie".into()],
+        ));
+        assert!(!n.contains(&"Warm coat".to_string()));
+        assert!(!n.contains(&"Warm hat".to_string()));
+    }
+
+    #[test]
+    fn thin_category_gets_one_retry_and_staples() {
+        let facts = crate::facts::FactsTable::load();
+        let climate = FakeClimateProvider::returning(ClimateNormals {
+            avg_high_c: 10.0,
+            avg_low_c: 1.0,
+            precipitation_mm: 70.0,
+            daylight_hours: 10.0,
+        });
+        let first =
+            r#"{"items":[{"name":"Rain jacket","quantity":1,"rationale":"r","essential":false}]}"#;
+        let second = r#"{"items":[{"name":"Trousers","quantity":2,"rationale":"r","essential":false},{"name":"Sweater","quantity":2,"rationale":"r","essential":false}]}"#;
+        let llm = FakeLlmBackend::replaying(vec![first.into(), second.into()]);
+        let generator = Generator::new(&facts, &climate, &llm);
+        let mut doc = TripDocument::new(&a_trip());
+        block_on(generator.generate_all(&mut doc)).unwrap();
+        let n: Vec<String> = doc.items().unwrap().into_iter().map(|i| i.name).collect();
+        for want in [
+            "Trousers",
+            "Warm coat",
+            "Underwear",
+            "Type A/B plug adapter",
+            "Warm socks",
+            "Toothpaste",
+        ] {
+            assert!(n.contains(&want.to_string()), "missing {want}: {n:?}");
+        }
     }
 }

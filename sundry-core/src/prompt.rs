@@ -124,6 +124,69 @@ fn relevant_facts(category: Category) -> RelevantFacts {
     }
 }
 
+/// Below this average low (C) we treat the trip as cold-weather.
+pub const COLD_LOW_C: f64 = 8.0;
+/// Above this average high (C) we treat the trip as hot-weather.
+pub const HOT_HIGH_C: f64 = 26.0;
+
+pub fn is_cold(climate: Option<&ClimateNormals>) -> bool {
+    climate.is_some_and(|c| c.avg_low_c < COLD_LOW_C)
+}
+
+fn is_hot(climate: Option<&ClimateNormals>) -> bool {
+    climate.is_some_and(|c| c.avg_high_c > HOT_HIGH_C)
+}
+
+/// The basics a complete list should cover, so the model does not stop at one or two items.
+fn category_checklist(category: Category, climate: Option<&ClimateNormals>) -> String {
+    let cold = is_cold(climate);
+    let hot = is_hot(climate);
+    let mut s = String::from("Cover the basics: ");
+    s.push_str(match category {
+        Category::Documents => {
+            "passport, tickets or booking confirmations, travel insurance, copies of ID."
+        }
+        Category::Money => "local cash, a debit or credit card, a wallet.",
+        Category::Electronics => {
+            "phone charger, a plug adapter for the listed socket types, a power bank, cables."
+        }
+        Category::Clothing => {
+            "tops, trousers, underwear, sleepwear, and an outer layer suited to the climate."
+        }
+        Category::Footwear => "comfortable walking shoes and enough socks for every day.",
+        Category::Toiletries => {
+            "toothbrush, toothpaste, deodorant, shampoo, and skin care suited to the climate."
+        }
+        Category::Health => "personal medication, pain relief, a small first aid kit.",
+        Category::Bags => "a daypack, packing cubes, a laundry bag.",
+        Category::Comfort => "something to read, earplugs or an eye mask, snacks for transit.",
+        Category::Activity => "gear specific to the trip's purposes, not clothing already covered.",
+        Category::Misc => "small useful extras such as an umbrella or a reusable water bottle.",
+    });
+    if cold {
+        match category {
+            Category::Clothing => s.push_str(
+                " It is cold: include a warm coat, sweaters, gloves, a scarf, and a warm hat.",
+            ),
+            Category::Footwear => {
+                s.push_str(" It is cold: prefer warm socks and insulated or waterproof shoes.")
+            }
+            Category::Toiletries => {
+                s.push_str(" Cold air is dry: include lip balm and moisturiser.")
+            }
+            _ => {}
+        }
+    }
+    if hot {
+        match category {
+            Category::Clothing => s.push_str(" It is hot: prefer breathable layers and a sun hat."),
+            Category::Toiletries => s.push_str(" It is hot: include sunscreen."),
+            _ => {}
+        }
+    }
+    s
+}
+
 pub fn build_prompt(
     ctx: &GroundedContext,
     category: Category,
@@ -207,6 +270,10 @@ pub fn build_prompt(
     }
 
     out.push_str(&format!("\n{}\n", category_scope(category)));
+    out.push_str(&format!(
+        "{}\n",
+        category_checklist(category, ctx.climate.as_ref())
+    ));
 
     if !already_listed.is_empty() {
         out.push_str("\nAlready on the packing list (do not repeat these names in any form):\n");
@@ -216,7 +283,7 @@ pub fn build_prompt(
     }
 
     out.push_str(&format!(
-        "\nTask: list at most 5 items in the category \"{}\" that these travellers should pack \
+        "\nTask: list 4 to 8 items in the category \"{}\" that these travellers should pack \
          for this trip. Only this category — refuse anything that belongs elsewhere. Use the \
          facts above rather than your own knowledge. Each name must be a plain, real product \
          name a shop would use (for example \"Rain jacket\", \"Thermal base layer\", \
@@ -367,7 +434,7 @@ mod tests {
     fn prompt_asks_for_concrete_attributes() {
         let p = prompt(&kyoto_context(None), Category::Toiletries);
         assert!(p.contains("SPF"));
-        assert!(p.contains("at most 5"));
+        assert!(p.contains("4 to 8"));
         assert!(p.contains("plain, real product name"));
     }
 

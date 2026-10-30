@@ -125,6 +125,10 @@ fn has_forbidden_leak(category: Category, name: &str) -> bool {
 fn tidy(name: &str) -> String {
     let collapsed = name.split_whitespace().collect::<Vec<_>>().join(" ");
     let trimmed = collapsed.trim_matches(|c: char| c == ',' || c == '-' || c == '(' || c == ' ');
+    // Leave brand-style casing alone ("iPhone charger").
+    if trimmed.chars().nth(1).is_some_and(|c| c.is_uppercase()) {
+        return trimmed.to_string();
+    }
     let mut chars = trimmed.chars();
     match chars.next() {
         Some(first) => first.to_uppercase().collect::<String>() + chars.as_str(),
@@ -360,5 +364,36 @@ mod tests {
         assert!(!is_near_duplicate("Phone charger", "Phone"));
         assert!(!is_near_duplicate("Walking shoes", "Socks"));
         assert!(!is_near_duplicate("Rain jacket", "Fleece jacket"));
+    }
+
+    #[test]
+    fn distinct_basics_survive_dedup_and_cleaning() {
+        assert!(!is_near_duplicate("Rain jacket", "Warm winter coat"));
+        assert!(!is_near_duplicate("Socks", "Underwear"));
+        assert!(!is_near_duplicate("Warm socks", "Thermal base layer"));
+        assert!(!is_near_duplicate("Trousers", "Thermal leggings"));
+        assert_eq!(
+            c(Electronics, "Type A plug adapter").as_deref(),
+            Some("Type A plug adapter")
+        );
+        assert!(crate::category_filter::item_fits_category(
+            Electronics,
+            "Type A plug adapter"
+        ));
+        for (cat, n) in [
+            (Clothing, "Underwear"),
+            (Footwear, "Socks"),
+            (Clothing, "Trousers"),
+            (Clothing, "Gloves"),
+            (Clothing, "Warm hat"),
+            (Clothing, "Scarf"),
+            (Toiletries, "Toothpaste"),
+        ] {
+            assert_eq!(c(cat, n).as_deref(), Some(n));
+            assert!(
+                crate::category_filter::item_fits_category(cat, n),
+                "{n} rejected"
+            );
+        }
     }
 }
