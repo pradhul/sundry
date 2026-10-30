@@ -125,15 +125,68 @@ fn has_forbidden_leak(category: Category, name: &str) -> bool {
 fn tidy(name: &str) -> String {
     let collapsed = name.split_whitespace().collect::<Vec<_>>().join(" ");
     let trimmed = collapsed.trim_matches(|c: char| c == ',' || c == '-' || c == '(' || c == ' ');
-    // Leave brand-style casing alone ("iPhone charger").
-    if trimmed.chars().nth(1).is_some_and(|c| c.is_uppercase()) {
-        return trimmed.to_string();
+    sentence_case(trimmed)
+}
+
+/// Proper nouns that keep their capital even mid-name.
+const PROPER_NOUNS: [&str; 14] = [
+    "visa",
+    "mastercard",
+    "amex",
+    "maestro",
+    "kindle",
+    "android",
+    "apple",
+    "google",
+    "samsung",
+    "bluetooth",
+    "gore-tex",
+    "ziploc",
+    "europe",
+    "japan",
+];
+
+/// Words whose casing carries meaning: acronyms (SPF, SIM, USB-C), inner
+/// capitals (iPhone, AirPods, RuPay), single plug letters (A, A/B), or digits.
+fn keeps_casing(word: &str) -> bool {
+    let core: String = word.chars().filter(|c| c.is_alphanumeric()).collect();
+    if core.is_empty() {
+        return true;
     }
-    let mut chars = trimmed.chars();
-    match chars.next() {
-        Some(first) => first.to_uppercase().collect::<String>() + chars.as_str(),
-        None => String::new(),
+    if core.chars().any(|c| c.is_ascii_digit()) {
+        return true;
     }
+    let uppers = core.chars().filter(|c| c.is_uppercase()).count();
+    let first_lower = core.chars().next().is_some_and(|c| c.is_lowercase());
+    uppers >= 2 || (first_lower && uppers >= 1) || (core.len() == 1 && uppers == 1)
+}
+
+/// Sentence case for model names ("Phone Charger" -> "Phone charger") while
+/// preserving brands and acronyms.
+pub fn sentence_case(name: &str) -> String {
+    let mut out: Vec<String> = Vec::new();
+    for (i, word) in name.split(' ').enumerate() {
+        let w = if keeps_casing(word) {
+            word.to_string()
+        } else if i == 0
+            || PROPER_NOUNS.contains(
+                &word
+                    .to_lowercase()
+                    .trim_matches(|c: char| !c.is_alphanumeric() && c != '-'),
+            )
+        {
+            let lower = word.to_lowercase();
+            let mut chars = lower.chars();
+            match chars.next() {
+                Some(f) => f.to_uppercase().collect::<String>() + chars.as_str(),
+                None => String::new(),
+            }
+        } else {
+            word.to_lowercase()
+        };
+        out.push(w);
+    }
+    out.join(" ")
 }
 
 /// Returns a plain product name, or `None` when the name is nothing but leaked
@@ -529,5 +582,28 @@ mod tests {
         assert!(!is_near_duplicate("SIM card", "Credit card"));
         assert!(!is_near_duplicate("ID card", "Debit card"));
         assert_eq!(card_kind("Card holder"), None);
+    }
+
+    #[test]
+    fn sentence_case_preserves_brands_and_acronyms() {
+        let t = |n: &str| sentence_case(n);
+        assert_eq!(t("Phone Charger"), "Phone charger");
+        assert_eq!(t("Power Bank"), "Power bank");
+        assert_eq!(t("Travel Insurance"), "Travel insurance");
+        assert_eq!(t("WARM socks"), "WARM socks"); // shouting kept rather than guessed
+        assert_eq!(t("iPhone Charger"), "iPhone charger");
+        assert_eq!(t("USB-C Cable"), "USB-C cable");
+        assert_eq!(t("SPF 50 Sunscreen"), "SPF 50 sunscreen");
+        assert_eq!(t("Local SIM Card"), "Local SIM card");
+        assert_eq!(t("AirPods Case"), "AirPods case");
+        assert_eq!(t("Type A/B Plug Adapter"), "Type A/B plug adapter");
+        assert_eq!(t("JPY Cash"), "JPY cash");
+        assert_eq!(t("Prepaid Visa Card"), "Prepaid Visa card");
+        assert_eq!(t("RuPay Debit Card"), "RuPay debit card");
+        assert_eq!(t("toothbrush"), "Toothbrush");
+        assert_eq!(
+            clean_name(Electronics, "Phone Charger").as_deref(),
+            Some("Phone charger")
+        );
     }
 }
