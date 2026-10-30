@@ -34,6 +34,7 @@ final class OpenMeteoClimateProvider: ClimateTransport, Sendable {
 
     private struct ClimateResponse: Decodable {
         struct Daily: Decodable {
+            let time: [String]
             let temperature_2m_max: [Double?]
             let temperature_2m_min: [Double?]
             let precipitation_sum: [Double?]
@@ -91,6 +92,9 @@ final class OpenMeteoClimateProvider: ClimateTransport, Sendable {
     }
 
     /// Uses the most recent complete decade as the climate baseline.
+    /// The archive API only accepts one continuous range, so we fetch 2014-<month>
+    /// through 2023-<month> and keep only days that fall in the target month;
+    /// averaging the whole range would blend every month of the year.
     private func normals(at coords: (Double, Double), month: UInt32) async -> ClimateNormalsDto? {
         let start = String(format: "2014-%02d-01", month)
         let calendar = Calendar(identifier: .gregorian)
@@ -121,13 +125,21 @@ final class OpenMeteoClimateProvider: ClimateTransport, Sendable {
         }
 
         let daily = decoded.daily
-        let monthlyPrecipitation = mean(daily.precipitation_sum) * Double(daysInMonth)
+        let monthTag = String(format: "-%02d-", month)
+        let indices = daily.time.indices.filter { daily.time[$0].dropFirst(4).hasPrefix(monthTag) }
+        guard !indices.isEmpty else { return nil }
+
+        func inMonth(_ values: [Double?]) -> [Double?] {
+            indices.map { $0 < values.count ? values[$0] : nil }
+        }
+
+        let monthlyPrecipitation = mean(inMonth(daily.precipitation_sum)) * Double(daysInMonth)
 
         return ClimateNormalsDto(
-            avgHighC: mean(daily.temperature_2m_max),
-            avgLowC: mean(daily.temperature_2m_min),
+            avgHighC: mean(inMonth(daily.temperature_2m_max)),
+            avgLowC: mean(inMonth(daily.temperature_2m_min)),
             precipitationMm: monthlyPrecipitation,
-            daylightHours: mean(daily.daylight_duration) / 3600.0
+            daylightHours: mean(inMonth(daily.daylight_duration)) / 3600.0
         )
     }
 }
