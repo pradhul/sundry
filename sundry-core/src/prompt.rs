@@ -74,7 +74,61 @@ fn category_scope(category: Category) -> &'static str {
     }
 }
 
-pub fn build_prompt(ctx: &GroundedContext, category: Category, already_listed: &[String]) -> String {
+struct RelevantFacts {
+    electricity: bool,
+    currency: bool,
+    driving: bool,
+    tap_water: bool,
+    climate: bool,
+}
+
+/// Each category only sees the grounding facts that can change what goes in it;
+/// irrelevant facts otherwise leak into item names.
+fn relevant_facts(category: Category) -> RelevantFacts {
+    let none = RelevantFacts {
+        electricity: false,
+        currency: false,
+        driving: false,
+        tap_water: false,
+        climate: false,
+    };
+    match category {
+        Category::Electronics => RelevantFacts {
+            electricity: true,
+            ..none
+        },
+        Category::Money => RelevantFacts {
+            currency: true,
+            ..none
+        },
+        Category::Documents => RelevantFacts {
+            currency: true,
+            driving: true,
+            ..none
+        },
+        Category::Clothing | Category::Footwear | Category::Activity | Category::Bags => {
+            RelevantFacts {
+                climate: true,
+                ..none
+            }
+        }
+        Category::Toiletries | Category::Comfort | Category::Misc => RelevantFacts {
+            climate: true,
+            ..none
+        },
+        Category::Health => RelevantFacts {
+            tap_water: true,
+            climate: true,
+            ..none
+        },
+    }
+}
+
+pub fn build_prompt(
+    ctx: &GroundedContext,
+    category: Category,
+    already_listed: &[String],
+) -> String {
     let mut out = String::new();
 
     out.push_str("Trip facts (authoritative — do not contradict these):\n");
@@ -97,56 +151,65 @@ pub fn build_prompt(ctx: &GroundedContext, category: Category, already_listed: &
         out.push_str(&format!("- Purpose: {}\n", purposes.join(", ")));
     }
 
+    let rel = relevant_facts(category);
     for facts in &ctx.facts {
-        out.push_str(&format!(
-            "- {} mains electricity: {}V, {}Hz, socket types {}\n",
-            facts.name,
-            facts.voltage,
-            facts.frequency,
-            facts.plug_types.join(", ")
-        ));
-        out.push_str(&format!("- {} currency: {}\n", facts.name, facts.currency));
-        out.push_str(&format!(
-            "- {} drives on the {}\n",
-            facts.name,
-            match facts.drives_on {
-                DrivingSide::Left => "left",
-                DrivingSide::Right => "right",
-            }
-        ));
-        out.push_str(&format!(
-            "- {} tap water: {}\n",
-            facts.name,
-            match facts.tap_water {
-                TapWater::Potable => "safe to drink",
-                TapWater::NotPotable => "not safe to drink",
-                TapWater::Caution => "varies by region, treat with caution",
-            }
-        ));
+        if rel.electricity {
+            out.push_str(&format!(
+                "- {} mains electricity: {}V, {}Hz, socket types {}\n",
+                facts.name,
+                facts.voltage,
+                facts.frequency,
+                facts.plug_types.join(", ")
+            ));
+        }
+        if rel.currency {
+            out.push_str(&format!("- {} currency: {}\n", facts.name, facts.currency));
+        }
+        if rel.driving {
+            out.push_str(&format!(
+                "- {} drives on the {}\n",
+                facts.name,
+                match facts.drives_on {
+                    DrivingSide::Left => "left",
+                    DrivingSide::Right => "right",
+                }
+            ));
+        }
+        if rel.tap_water {
+            out.push_str(&format!(
+                "- {} tap water: {}\n",
+                facts.name,
+                match facts.tap_water {
+                    TapWater::Potable => "safe to drink",
+                    TapWater::NotPotable => "not safe to drink",
+                    TapWater::Caution => "varies by region, treat with caution",
+                }
+            ));
+        }
     }
 
-    match &ctx.climate {
-        Some(c) => out.push_str(&format!(
-            "- Climate normals for {}: average high {:.0}C, average low {:.0}C, \
+    if rel.climate {
+        match &ctx.climate {
+            Some(c) => out.push_str(&format!(
+                "- Climate normals for {}: average high {:.0}C, average low {:.0}C, \
              {:.0}mm precipitation over the month, about {:.0} hours of daylight\n",
-            month_name(ctx.trip.window.month()),
-            c.avg_high_c,
-            c.avg_low_c,
-            c.precipitation_mm,
-            c.daylight_hours
-        )),
-        None => out.push_str(
-            "- Climate data is unavailable for this destination. Do not guess the \
+                month_name(ctx.trip.window.month()),
+                c.avg_high_c,
+                c.avg_low_c,
+                c.precipitation_mm,
+                c.daylight_hours
+            )),
+            None => out.push_str(
+                "- Climate data is unavailable for this destination. Do not guess the \
              weather; suggest only items that hold regardless of conditions.\n",
-        ),
+            ),
+        }
     }
 
     out.push_str(&format!("\n{}\n", category_scope(category)));
 
     if !already_listed.is_empty() {
-        out.push_str(
-            "\nAlready on the packing list (do not repeat these names in any form):\n",
-        );
+        out.push_str("\nAlready on the packing list (do not repeat these names in any form):\n");
         for name in already_listed {
             out.push_str(&format!("- {name}\n"));
         }
@@ -155,18 +218,20 @@ pub fn build_prompt(ctx: &GroundedContext, category: Category, already_listed: &
     out.push_str(&format!(
         "\nTask: list at most 5 items in the category \"{}\" that these travellers should pack \
          for this trip. Only this category — refuse anything that belongs elsewhere. Use the \
-         facts above rather than your own knowledge. Give each item a one-sentence reason \
-         referring to something specific about this trip. Prefer concrete attributes in the \
-         name or reason (SPF number for sunscreen, plug type letter and which sockets it fits, \
-         voltage notes for adapters, currency code for cash). Mark an item essential only if \
-         the trip fails without it.\n",
+         facts above rather than your own knowledge. Each name must be a plain, real product \
+         name a shop would use (for example \"Rain jacket\", \"Thermal base layer\", \
+         \"Toothbrush\"). Never put trip facts such as voltage, plug or socket types, currency \
+         codes, driving side, tap water, or climate numbers into a name unless the fact is the \
+         product itself (a plug adapter, local cash, sunscreen SPF). Put the trip-specific \
+         justification in the one-sentence reason instead. List each kind of item once; do not \
+         list variations of the same item. Mark an item essential only if the trip fails \
+         without it.\n",
         category.label()
     ));
 
     out.push_str(
-        "You MUST reason about the supplied mains electricity, currency, driving side, \
-         tap water, and climate facts. Do not ignore a fact that is relevant to this category. \
-         Name the destination country correctly when citing socket or currency facts.\n",
+        "Only use a supplied fact when it genuinely changes what to pack in this category; \
+         ignore it otherwise. Name the destination country correctly when citing a fact.\n",
     );
 
     if category == Category::Documents {
@@ -303,7 +368,7 @@ mod tests {
         let p = prompt(&kyoto_context(None), Category::Toiletries);
         assert!(p.contains("SPF"));
         assert!(p.contains("at most 5"));
-        assert!(p.contains("plug type"));
+        assert!(p.contains("plain, real product name"));
     }
 
     #[test]
@@ -317,5 +382,20 @@ mod tests {
         assert!(p.contains("Passport"));
         assert!(p.contains("Comfortable walking shoes"));
         assert!(p.contains("do not repeat"));
+    }
+
+    #[test]
+    fn only_relevant_facts_reach_each_category() {
+        let ctx = kyoto_context(None);
+        let clothing = prompt(&ctx, Category::Clothing);
+        assert!(!clothing.contains("100V"));
+        assert!(!clothing.contains("JPY"));
+        assert!(!clothing.contains("drives on"));
+        assert!(!clothing.contains("tap water:"));
+        let money = prompt(&ctx, Category::Money);
+        assert!(money.contains("JPY"));
+        assert!(!money.contains("100V"));
+        let toiletries = prompt(&ctx, Category::Toiletries);
+        assert!(!toiletries.contains("mains electricity"));
     }
 }

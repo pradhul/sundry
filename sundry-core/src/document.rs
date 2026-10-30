@@ -116,11 +116,7 @@ impl TripDocument {
         self.add_item(&item)
     }
 
-    pub fn set_item_packed_for(
-        &mut self,
-        id: Uuid,
-        traveller_name: &str,
-    ) -> Result<(), DocError> {
+    pub fn set_item_packed_for(&mut self, id: Uuid, traveller_name: &str) -> Result<(), DocError> {
         let trip = self.trip()?;
         let traveller = trip
             .travellers
@@ -231,28 +227,31 @@ impl TripDocument {
         category: Category,
         generated: &[GeneratedItem],
     ) -> Result<MergeReport, DocError> {
-        let mut existing_names: HashSet<String> = self
-            .items()?
-            .into_iter()
-            .map(|i| normalise(&i.name))
-            .collect();
+        let mut existing_names: Vec<String> = self.items()?.into_iter().map(|i| i.name).collect();
 
         let mut report = MergeReport::default();
 
         for g in generated {
-            if !item_fits_category(category, &g.name) {
+            let Some(name) = crate::item_quality::clean_name(category, &g.name) else {
+                report.skipped_off_category += 1;
+                continue;
+            };
+            if !item_fits_category(category, &name) {
                 report.skipped_off_category += 1;
                 continue;
             }
-            let key = normalise(&g.name);
-            if existing_names.contains(&key) {
+            let key = normalise(&name);
+            if existing_names
+                .iter()
+                .any(|e| normalise(e) == key || crate::item_quality::is_near_duplicate(e, &name))
+            {
                 report.skipped_existing += 1;
                 continue;
             }
-            existing_names.insert(key);
+            existing_names.push(name.clone());
             let item = Item {
                 id: Uuid::new_v4(),
-                name: g.name.clone(),
+                name,
                 quantity: g.quantity,
                 category,
                 owner: Owner::Shared,
@@ -377,10 +376,7 @@ mod tests {
         let item = Item::manual("Passport", Category::Documents);
         doc.add_item(&item).unwrap();
         doc.set_item_packed_for(item.id, "Appu").unwrap();
-        assert!(matches!(
-            doc.items().unwrap()[0].owner,
-            Owner::Traveller(_)
-        ));
+        assert!(matches!(doc.items().unwrap()[0].owner, Owner::Traveller(_)));
         doc.set_item_state(item.id, ItemState::Todo).unwrap();
         assert_eq!(doc.items().unwrap()[0].owner, Owner::Shared);
         assert_eq!(doc.items().unwrap()[0].state, ItemState::Todo);
