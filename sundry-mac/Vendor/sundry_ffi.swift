@@ -983,7 +983,14 @@ public protocol SundryCoreProtocol: AnyObject, Sendable {
     
     func loadItems(tripId: String) throws  -> [ItemDto]
     
+    /**
+     * The trip's own travellers, in column order.
+     */
+    func loadTravellers(tripId: String) throws  -> [String]
+    
     func loadTripFacts(tripId: String) throws  -> TripFactsDto
+    
+    func removeTraveller(tripId: String, index: UInt32) throws 
     
     func setItemPackedFor(tripId: String, itemId: String, travellerName: String) throws 
     
@@ -1154,12 +1161,31 @@ open func loadItems(tripId: String)throws  -> [ItemDto]  {
 })
 }
     
+    /**
+     * The trip's own travellers, in column order.
+     */
+open func loadTravellers(tripId: String)throws  -> [String]  {
+    return try  FfiConverterSequenceString.lift(try rustCallWithError(FfiConverterTypeSundryError_lift) {
+    uniffi_sundry_ffi_fn_method_sundrycore_load_travellers(self.uniffiClonePointer(),
+        FfiConverterString.lower(tripId),$0
+    )
+})
+}
+    
 open func loadTripFacts(tripId: String)throws  -> TripFactsDto  {
     return try  FfiConverterTypeTripFactsDto_lift(try rustCallWithError(FfiConverterTypeSundryError_lift) {
     uniffi_sundry_ffi_fn_method_sundrycore_load_trip_facts(self.uniffiClonePointer(),
         FfiConverterString.lower(tripId),$0
     )
 })
+}
+    
+open func removeTraveller(tripId: String, index: UInt32)throws   {try rustCallWithError(FfiConverterTypeSundryError_lift) {
+    uniffi_sundry_ffi_fn_method_sundrycore_remove_traveller(self.uniffiClonePointer(),
+        FfiConverterString.lower(tripId),
+        FfiConverterUInt32.lower(index),$0
+    )
+}
 }
     
 open func setItemPackedFor(tripId: String, itemId: String, travellerName: String)throws   {try rustCallWithError(FfiConverterTypeSundryError_lift) {
@@ -2310,7 +2336,13 @@ private let initializationResult: InitializationResult = {
     if (uniffi_sundry_ffi_checksum_method_sundrycore_load_items() != 59513) {
         return InitializationResult.apiChecksumMismatch
     }
+    if (uniffi_sundry_ffi_checksum_method_sundrycore_load_travellers() != 31894) {
+        return InitializationResult.apiChecksumMismatch
+    }
     if (uniffi_sundry_ffi_checksum_method_sundrycore_load_trip_facts() != 11594) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_sundry_ffi_checksum_method_sundrycore_remove_traveller() != 33715) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_sundry_ffi_checksum_method_sundrycore_set_item_packed_for() != 65500) {

@@ -135,8 +135,12 @@ impl TripDocument {
         self.add_item(&item)
     }
 
-    /// Rename/replace travellers by order so the UI constants (Appu, Swathi) stick.
+    /// Rename or append travellers by position (ids are kept by index). An empty
+    /// list is ignored so a trip always keeps at least one traveller.
     pub fn ensure_travellers(&mut self, names: &[String]) -> Result<(), DocError> {
+        if names.is_empty() {
+            return Ok(());
+        }
         let mut trip = self.trip()?;
         let same = trip
             .travellers
@@ -176,6 +180,37 @@ impl TripDocument {
             }
         }
         Ok(())
+    }
+
+    /// Remove one traveller by position, keeping every other traveller's id (and
+    /// so their packed items). The removed traveller's packed items go back to
+    /// the to-pack list. The last remaining traveller cannot be removed.
+    pub fn remove_traveller(&mut self, index: usize) -> Result<(), DocError> {
+        let mut trip = self.trip()?;
+        if trip.travellers.len() <= 1 || index >= trip.travellers.len() {
+            return Ok(());
+        }
+        let removed = trip.travellers.remove(index).id;
+        self.put_trip(&trip)?;
+        for mut item in self.items()? {
+            if item.owner == Owner::Traveller(removed) {
+                item.owner = Owner::Shared;
+                if item.state == ItemState::Packed {
+                    item.state = ItemState::Todo;
+                }
+                self.add_item(&item)?;
+            }
+        }
+        Ok(())
+    }
+
+    pub fn traveller_names(&self) -> Result<Vec<String>, DocError> {
+        Ok(self
+            .trip()?
+            .travellers
+            .into_iter()
+            .map(|t| t.name)
+            .collect())
     }
 
     /// Keep one item per normalised name. Prefer essential, earlier category, then non-todo.
@@ -341,11 +376,11 @@ mod tests {
             travellers: vec![
                 Traveller {
                     id: Uuid::new_v4(),
-                    name: "Appu".into(),
+                    name: "Ana".into(),
                 },
                 Traveller {
                     id: Uuid::new_v4(),
-                    name: "Swathi".into(),
+                    name: "Ben".into(),
                 },
             ],
             purposes: vec![Purpose::City],
@@ -394,7 +429,7 @@ mod tests {
         let mut doc = TripDocument::new(&a_trip());
         let item = Item::manual("Passport", Category::Documents);
         doc.add_item(&item).unwrap();
-        doc.set_item_packed_for(item.id, "Appu").unwrap();
+        doc.set_item_packed_for(item.id, "Ana").unwrap();
         assert!(matches!(doc.items().unwrap()[0].owner, Owner::Traveller(_)));
         doc.set_item_state(item.id, ItemState::Todo).unwrap();
         assert_eq!(doc.items().unwrap()[0].owner, Owner::Shared);
@@ -406,12 +441,12 @@ mod tests {
         let mut doc = TripDocument::new(&a_trip());
         let item = Item::manual("Passport", Category::Documents);
         doc.add_item(&item).unwrap();
-        doc.set_item_packed_for(item.id, "Swathi").unwrap();
+        doc.set_item_packed_for(item.id, "Ben").unwrap();
         let packed = &doc.items().unwrap()[0];
         assert_eq!(packed.state, ItemState::Packed);
         let trip = doc.trip().unwrap();
-        let swathi = trip.travellers.iter().find(|t| t.name == "Swathi").unwrap();
-        assert_eq!(packed.owner, Owner::Traveller(swathi.id));
+        let ben = trip.travellers.iter().find(|t| t.name == "Ben").unwrap();
+        assert_eq!(packed.owner, Owner::Traveller(ben.id));
     }
 
     #[test]
@@ -539,7 +574,7 @@ mod tests {
     #[test]
     fn ensure_travellers_renames_in_place() {
         let mut doc = TripDocument::new(&a_trip());
-        doc.ensure_travellers(&["Appu".into(), "Swathi".into()])
+        doc.ensure_travellers(&["Ana".into(), "Ben".into()])
             .unwrap();
         let names: Vec<_> = doc
             .trip()
@@ -548,7 +583,7 @@ mod tests {
             .into_iter()
             .map(|t| t.name)
             .collect();
-        assert_eq!(names, vec!["Appu".to_string(), "Swathi".to_string()]);
+        assert_eq!(names, vec!["Ana".to_string(), "Ben".to_string()]);
     }
 
     #[test]
@@ -586,5 +621,42 @@ mod tests {
         assert!(names.contains(&"Rain jacket".to_string()));
         assert!(names.contains(&"Down jacket".to_string()));
         assert_eq!(names.len(), 3);
+    }
+
+    #[test]
+    fn removing_a_traveller_keeps_the_others_packed_items() {
+        let mut doc = TripDocument::new(&a_trip());
+        doc.ensure_travellers(&["Ana".into(), "Ben".into(), "Cy".into()])
+            .unwrap();
+        let mut ids = vec![];
+        for (name, who) in [("Coat", "Ana"), ("Hat", "Ben"), ("Scarf", "Cy")] {
+            let item = Item::manual(name, Category::Clothing);
+            doc.add_item(&item).unwrap();
+            doc.set_item_packed_for(item.id, who).unwrap();
+            ids.push(item.id);
+        }
+        doc.remove_traveller(0).unwrap();
+        assert_eq!(
+            doc.traveller_names().unwrap(),
+            vec!["Ben".to_string(), "Cy".to_string()]
+        );
+        let trip = doc.trip().unwrap();
+        let items = doc.items().unwrap();
+        let get = |id: Uuid| items.iter().find(|i| i.id == id).unwrap().clone();
+        assert_eq!(get(ids[0]).state, ItemState::Todo);
+        assert_eq!(get(ids[1]).owner, Owner::Traveller(trip.travellers[0].id));
+        assert_eq!(get(ids[2]).owner, Owner::Traveller(trip.travellers[1].id));
+        // Never drops to zero travellers.
+        doc.remove_traveller(0).unwrap();
+        doc.remove_traveller(0).unwrap();
+        assert_eq!(doc.traveller_names().unwrap().len(), 1);
+    }
+
+    #[test]
+    fn empty_traveller_list_is_ignored() {
+        let mut doc = TripDocument::new(&a_trip());
+        let before = doc.traveller_names().unwrap();
+        doc.ensure_travellers(&[]).unwrap();
+        assert_eq!(doc.traveller_names().unwrap(), before);
     }
 }

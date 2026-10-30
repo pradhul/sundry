@@ -1,20 +1,41 @@
 import Foundation
 
+/// App-level default travellers. New trips copy these; each trip then owns its
+/// own traveller list (stored in the trip document), so editing defaults never
+/// rewrites existing trips.
 enum Travellers {
-    static let defaults = ["Appu", "Swathi"]
     private static let storageKey = "sundry.travellerNames"
 
+    /// Fresh install: one traveller named after the macOS user.
+    static var freshInstallDefault: [String] {
+        let full = NSFullUserName().trimmingCharacters(in: .whitespacesAndNewlines)
+        return [full.isEmpty ? "Me" : full]
+    }
+
+    static var hasSaved: Bool {
+        UserDefaults.standard.stringArray(forKey: storageKey) != nil
+    }
+
     static func load() -> [String] {
-        guard let saved = UserDefaults.standard.stringArray(forKey: storageKey),
-              saved.count >= 2
-        else {
-            return defaults
+        guard let saved = UserDefaults.standard.stringArray(forKey: storageKey) else {
+            return freshInstallDefault
         }
-        return saved.map { $0.trimmingCharacters(in: .whitespacesAndNewlines) }
-            .map { $0.isEmpty ? "Traveller" : $0 }
+        let cleaned = sanitise(saved)
+        return cleaned.isEmpty ? freshInstallDefault : cleaned
     }
 
     static func save(_ names: [String]) {
-        UserDefaults.standard.set(names, forKey: storageKey)
+        let cleaned = sanitise(names)
+        guard !cleaned.isEmpty else { return }
+        UserDefaults.standard.set(cleaned, forKey: storageKey)
+    }
+
+    static func sanitise(_ names: [String]) -> [String] {
+        names.map { $0.trimmingCharacters(in: .whitespacesAndNewlines) }
+            .filter { !$0.isEmpty }
+    }
+
+    static func placeholderName(forIndex index: Int) -> String {
+        "Traveller \(index + 1)"
     }
 }

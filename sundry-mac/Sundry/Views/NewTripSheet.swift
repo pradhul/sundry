@@ -10,6 +10,7 @@ struct NewTripSheet: View {
     @State private var year = Int32(Calendar.current.component(.year, from: .now))
     @State private var nights = 7.0
     @State private var purposes: Set<String> = ["leisure"]
+    @State private var travellers: [String] = []
 
     @State private var hits: [PlaceHit] = []
     @State private var selectedHit: PlaceHit?
@@ -26,6 +27,7 @@ struct NewTripSheet: View {
 
     private var isValid: Bool {
         guard !trimmedPlace.isEmpty, !purposes.isEmpty else { return false }
+        guard !Travellers.sanitise(travellers).isEmpty else { return false }
         if showCountryFallback {
             return !countryName.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
         }
@@ -85,10 +87,6 @@ struct NewTripSheet: View {
                 Stepper("Year: \(String(year))", value: $year, in: 2026...2035)
                 Stepper("Nights: \(Int(nights))", value: $nights, in: 1...90)
 
-                Text("Packing for \(store.travellerNames.joined(separator: " & "))")
-                    .font(.callout)
-                    .foregroundStyle(Olive.taupe)
-
                 LabeledContent("Purpose") {
                     HStack {
                         ForEach(allPurposes, id: \.self) { p in
@@ -106,6 +104,39 @@ struct NewTripSheet: View {
                             .scaleEffect(on && !reduceMotion ? 1.04 : 1)
                             .animation(Olive.spring(reduceMotion), value: on)
                         }
+                    }
+                }
+
+                LabeledContent("Packing for") {
+                    VStack(alignment: .trailing, spacing: 6) {
+                        ForEach(travellers.indices, id: \.self) { index in
+                            HStack(spacing: 6) {
+                                TextField(
+                                    Travellers.placeholderName(forIndex: index),
+                                    text: $travellers[index]
+                                )
+                                .textFieldStyle(.roundedBorder)
+                                .frame(width: 180)
+                                .accessibilityLabel("Traveller \(index + 1)")
+                                Button {
+                                    travellers.remove(at: index)
+                                } label: {
+                                    Image(systemName: "minus.circle")
+                                }
+                                .buttonStyle(.plain)
+                                .foregroundStyle(Olive.taupe)
+                                .disabled(travellers.count <= 1)
+                                .accessibilityLabel("Remove traveller \(index + 1)")
+                            }
+                        }
+                        Button {
+                            travellers.append("")
+                        } label: {
+                            Label("Add traveller", systemImage: "plus.circle")
+                        }
+                        .buttonStyle(.plain)
+                        .foregroundStyle(Olive.sap)
+                        .font(.callout)
                     }
                 }
             }
@@ -129,6 +160,9 @@ struct NewTripSheet: View {
         }
         .background(Olive.paper)
         .frame(width: 500)
+        .onAppear {
+            if travellers.isEmpty { travellers = store.defaultTravellers }
+        }
         .oliveJournal()
     }
 
@@ -174,7 +208,8 @@ struct NewTripSheet: View {
                 year: year,
                 month: month,
                 nights: UInt32(nights),
-                purposes: Array(purposes)
+                purposes: Array(purposes),
+                travellers: travellers
             )
         } catch {
             errorMessage = error.localizedDescription

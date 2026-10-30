@@ -294,14 +294,10 @@ impl SundryCore {
         let id = parse_id(&trip_id)?;
         let doc = self.store.load(id).map_err(core_err)?;
         let trip = doc.trip().map_err(core_err)?;
-        let dest = trip
-            .destinations
-            .first()
-            .cloned()
-            .unwrap_or(Destination {
-                country_code: String::new(),
-                city: String::new(),
-            });
+        let dest = trip.destinations.first().cloned().unwrap_or(Destination {
+            country_code: String::new(),
+            city: String::new(),
+        });
         let facts = self.facts.get(&dest.country_code);
         Ok(TripFactsDto {
             city: dest.city,
@@ -322,6 +318,20 @@ impl SundryCore {
         let tid = parse_id(&trip_id)?;
         let mut doc = self.store.load(tid).map_err(core_err)?;
         doc.ensure_travellers(&names).map_err(core_err)?;
+        self.store.save(&mut doc).map_err(core_err)
+    }
+
+    /// The trip's own travellers, in column order.
+    pub fn load_travellers(&self, trip_id: String) -> Result<Vec<String>, SundryError> {
+        let tid = parse_id(&trip_id)?;
+        let doc = self.store.load(tid).map_err(core_err)?;
+        doc.traveller_names().map_err(core_err)
+    }
+
+    pub fn remove_traveller(&self, trip_id: String, index: u32) -> Result<(), SundryError> {
+        let tid = parse_id(&trip_id)?;
+        let mut doc = self.store.load(tid).map_err(core_err)?;
+        doc.remove_traveller(index as usize).map_err(core_err)?;
         self.store.save(&mut doc).map_err(core_err)
     }
 
