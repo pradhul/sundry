@@ -85,7 +85,7 @@ impl<'a> Generator<'a> {
                 let existing: Vec<String> = doc.items()?.into_iter().map(|i| i.name).collect();
                 let staples = staples(&ctx, category, &existing);
                 if !staples.is_empty() {
-                    added += doc.merge_generated(category, &staples)?.added;
+                    added += place_and_merge(doc, &ctx, category, staples)?;
                 }
             }
             let outcome = CategoryOutcome {
@@ -119,10 +119,7 @@ impl Generator<'_> {
             Err(e) => return Ok(Err(e.to_string())),
         };
         match parse_and_validate(&raw) {
-            Ok(items) => {
-                let items = specialise(ctx, category, items);
-                Ok(Ok(doc.merge_generated(category, &items)?.added))
-            }
+            Ok(items) => Ok(Ok(place_and_merge(doc, ctx, category, items)?)),
             Err(e) => Ok(Err(e.to_string())),
         }
     }
@@ -170,6 +167,46 @@ pub fn specialise(
             item
         })
         .collect()
+}
+
+fn traveller_count(ctx: &GroundedContext) -> u32 {
+    (ctx.trip.travellers.len() as u32).max(1)
+}
+
+/// Purpose fit, home category, destination-specific names, and per-traveller
+/// quantities, then merge each item into the category it belongs in.
+/// Quantities from the model and staples are per person.
+pub fn prepare(
+    ctx: &GroundedContext,
+    category: Category,
+    items: Vec<GeneratedItem>,
+) -> Vec<(Category, GeneratedItem)> {
+    let travellers = traveller_count(ctx);
+    items
+        .into_iter()
+        .filter_map(|mut item| {
+            item.name = crate::placement::fit_purpose(&item.name, &ctx.trip.purposes)?;
+            let target = crate::placement::home_category(&item.name).unwrap_or(category);
+            let mut item = specialise(ctx, target, vec![item]).pop()?;
+            if crate::placement::is_personal(&item.name) {
+                item.quantity = (item.quantity * travellers).min(crate::llm::MAX_QUANTITY);
+            }
+            Some((target, item))
+        })
+        .collect()
+}
+
+fn place_and_merge(
+    doc: &mut TripDocument,
+    ctx: &GroundedContext,
+    category: Category,
+    items: Vec<GeneratedItem>,
+) -> Result<usize, DocError> {
+    let mut added = 0;
+    for (target, item) in prepare(ctx, category, items) {
+        added += doc.merge_generated(target, &[item])?.added;
+    }
+    Ok(added)
 }
 
 /// Retry a category once if fewer than this many items survived validation.
@@ -574,5 +611,63 @@ mod tests {
                 .quantity,
             8
         );
+    }
+
+    #[test]
+    fn prepare_moves_scales_and_filters() {
+        let mut ctx = kyoto_ctx(true);
+        ctx.trip.purposes = vec![Purpose::Leisure, Purpose::City];
+        ctx.trip.travellers = vec![
+            Traveller {
+                id: Uuid::new_v4(),
+                name: "A".into(),
+            },
+            Traveller {
+                id: Uuid::new_v4(),
+                name: "B".into(),
+            },
+            Traveller {
+                id: Uuid::new_v4(),
+                name: "C".into(),
+            },
+        ];
+        let out = prepare(
+            &ctx,
+            Category::Misc,
+            vec![
+                gen("Sunscreen SPF 30", 1),
+                gen("Headlamp", 1),
+                gen("Compact umbrella", 1),
+                gen("Travel adapter", 1),
+                gen("Reusable water bottle", 1),
+                gen("Underwear", 1),
+            ],
+        );
+        let find = |n: &str| out.iter().find(|(_, i)| i.name == n).cloned();
+        assert_eq!(find("Sunscreen SPF 30").unwrap().0, Category::Toiletries);
+        assert!(find("Headlamp").is_none());
+        assert_eq!(find("Compact umbrella").unwrap().1.quantity, 1);
+        let adapter = find("Type A/B plug adapter").unwrap();
+        assert_eq!((adapter.0, adapter.1.quantity), (Category::Electronics, 1));
+        assert_eq!(find("Reusable water bottle").unwrap().1.quantity, 3);
+        // 7 nights + 1 spare, times 3 travellers, capped at MAX_QUANTITY.
+        assert_eq!(find("Underwear").unwrap().1.quantity, 20);
+    }
+
+    #[test]
+    fn traveller_count_drives_quantity_not_a_constant() {
+        let mut ctx = kyoto_ctx(true);
+        ctx.trip.travellers = vec![Traveller {
+            id: Uuid::new_v4(),
+            name: "Solo".into(),
+        }];
+        let out = prepare(&ctx, Category::Clothing, vec![gen("Warm coat", 1)]);
+        assert_eq!(out[0].1.quantity, 1);
+        ctx.trip.travellers.push(Traveller {
+            id: Uuid::new_v4(),
+            name: "Two".into(),
+        });
+        let out = prepare(&ctx, Category::Clothing, vec![gen("Warm coat", 1)]);
+        assert_eq!(out[0].1.quantity, 2);
     }
 }

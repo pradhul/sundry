@@ -138,7 +138,11 @@ fn is_hot(climate: Option<&ClimateNormals>) -> bool {
 }
 
 /// The basics a complete list should cover, so the model does not stop at one or two items.
-fn category_checklist(category: Category, climate: Option<&ClimateNormals>) -> String {
+fn category_checklist(
+    category: Category,
+    climate: Option<&ClimateNormals>,
+    ctx_outdoor: bool,
+) -> String {
     let cold = is_cold(climate);
     let hot = is_hot(climate);
     let mut s = String::from("Cover the basics: ");
@@ -163,6 +167,14 @@ fn category_checklist(category: Category, climate: Option<&ClimateNormals>) -> S
         Category::Activity => "gear specific to the trip's purposes, not clothing already covered.",
         Category::Misc => "small useful extras such as an umbrella or a reusable water bottle.",
     });
+    let outdoor = ctx_outdoor;
+    if !outdoor {
+        match category {
+            Category::Footwear => s.push_str(" This is not a hiking trip: comfortable walking shoes, and waterproof boots only if wet or cold; no hiking boots."),
+            Category::Activity | Category::Misc | Category::Bags => s.push_str(" This is not a hiking or camping trip: no headlamps, flashlights, tents, or trekking gear."),
+            _ => {}
+        }
+    }
     if cold {
         match category {
             Category::Clothing => s.push_str(
@@ -272,7 +284,11 @@ pub fn build_prompt(
     out.push_str(&format!("\n{}\n", category_scope(category)));
     out.push_str(&format!(
         "{}\n",
-        category_checklist(category, ctx.climate.as_ref())
+        category_checklist(
+            category,
+            ctx.climate.as_ref(),
+            crate::placement::is_outdoor(&ctx.trip.purposes),
+        )
     ));
 
     if !already_listed.is_empty() {
@@ -291,7 +307,7 @@ pub fn build_prompt(
          codes, driving side, tap water, or climate numbers into a name unless the fact is the \
          product itself (a plug adapter, local cash, sunscreen SPF). Put the trip-specific \
          justification in the one-sentence reason instead. List each kind of item once; do not \
-         list variations of the same item. Mark an item essential only if the trip fails \
+         list variations of the same item. Quantity is per person; the app multiplies personal items by the number of travellers. Mark an item essential only if the trip fails \
          without it.\n",
         category.label()
     ));
