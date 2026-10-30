@@ -241,6 +241,32 @@ fn dup_key(name: &str) -> Vec<String> {
     words
 }
 
+fn ordered_tokens(name: &str) -> Vec<String> {
+    name.to_lowercase()
+        .split(|c: char| !c.is_alphanumeric())
+        .filter(|w| !w.is_empty() && !["a", "an", "the", "of", "pair", "pairs", "set"].contains(w))
+        .map(|w| {
+            if w.len() > 3 && w.ends_with('s') && !w.ends_with("ss") {
+                w[..w.len() - 1].to_string()
+            } else {
+                w.to_string()
+            }
+        })
+        .collect()
+}
+
+/// True when `specific` is a modified form of `general` with the same head
+/// noun ("Sweater" -> "Thermal sweater", "Socks" -> "Warm socks"). Two
+/// different modifiers ("Rain jacket" vs "Down jacket") are not refinements.
+pub fn refines(general: &str, specific: &str) -> bool {
+    let g = ordered_tokens(general);
+    let s = ordered_tokens(specific);
+    if g.is_empty() || s.len() <= g.len() {
+        return false;
+    }
+    g.last() == s.last() && g.iter().all(|w| s.contains(w))
+}
+
 /// True when two names describe the same thing ("SPF-rated thermal base
 /// layers" vs "Thermal base layer").
 pub fn is_near_duplicate(a: &str, b: &str) -> bool {
@@ -411,5 +437,17 @@ mod tests {
         assert!(is_near_duplicate("Visa card", "Credit card"));
         assert!(is_near_duplicate("Mastercard", "Credit card"));
         assert!(!is_near_duplicate("Debit card", "Credit card"));
+    }
+
+    #[test]
+    fn refinement_is_conservative() {
+        assert!(refines("Sweater", "Thermal sweater"));
+        assert!(refines("Socks", "Warm wool socks"));
+        assert!(refines("Rain jacket", "Waterproof rain jacket"));
+        assert!(!refines("Rain jacket", "Down jacket"));
+        assert!(!refines("Down jacket", "Rain jacket"));
+        assert!(!refines("Phone", "Phone charger"));
+        assert!(!refines("Thermal sweater", "Sweater"));
+        assert!(!refines("Sweater", "Sweater"));
     }
 }

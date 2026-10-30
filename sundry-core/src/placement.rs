@@ -179,6 +179,40 @@ pub fn is_personal(name: &str) -> bool {
     ) && !has(&n, &["laptop", "shoe bag", "boot bag"])
 }
 
+/// Shared consumables that run out with more people.
+pub fn is_shared_consumable(name: &str) -> bool {
+    let n = name.to_lowercase();
+    has(
+        &n,
+        &[
+            "deodorant",
+            "shampoo",
+            "conditioner",
+            "toothpaste",
+            "moisturi",
+            "sunscreen",
+            "sun cream",
+            "body wash",
+            "soap",
+            "lotion",
+        ],
+    )
+}
+
+/// Quantity policy for items that are not personal:
+/// - consumable toiletries: one full-size per two travellers, rounded up
+///   (1 for 1-2 people, 2 for 3-4, ...);
+/// - everything else (adapter, power bank, umbrella, first aid kit, laundry
+///   bag, guidebook, camera, packing cubes, local cash, ...): one shared line
+///   with quantity 1, regardless of what the model suggested.
+pub fn shared_quantity(name: &str, travellers: u32) -> u32 {
+    if is_shared_consumable(name) {
+        travellers.max(1).div_ceil(2)
+    } else {
+        1
+    }
+}
+
 /// Personal items where one per person is the right answer, whatever count the
 /// model suggested (it often gives a total instead of a per-person number).
 pub fn is_one_per_person(name: &str) -> bool {
@@ -288,5 +322,16 @@ mod tests {
         ] {
             assert!(!is_personal(s), "{s} should be shared");
         }
+    }
+
+    #[test]
+    fn shared_quantities() {
+        assert_eq!(shared_quantity("Type A/B plug adapter", 2), 1);
+        assert_eq!(shared_quantity("Power bank", 4), 1);
+        assert_eq!(shared_quantity("Packing cubes", 3), 1);
+        assert_eq!(shared_quantity("Shampoo", 1), 1);
+        assert_eq!(shared_quantity("Shampoo", 2), 1);
+        assert_eq!(shared_quantity("Toothpaste", 3), 2);
+        assert_eq!(shared_quantity("Sunscreen SPF 30", 5), 3);
     }
 }

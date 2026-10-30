@@ -227,7 +227,7 @@ impl TripDocument {
         category: Category,
         generated: &[GeneratedItem],
     ) -> Result<MergeReport, DocError> {
-        let mut existing_names: Vec<String> = self.items()?.into_iter().map(|i| i.name).collect();
+        let mut existing: Vec<Item> = self.items()?;
 
         let mut report = MergeReport::default();
 
@@ -240,15 +240,33 @@ impl TripDocument {
                 report.skipped_off_category += 1;
                 continue;
             }
-            let key = normalise(&name);
-            if existing_names
-                .iter()
-                .any(|e| normalise(e) == key || crate::item_quality::is_near_duplicate(e, &name))
-            {
+            // Same-category variants ("Sweater" vs "Thermal sweater"): keep the
+            // more specific name on a single row.
+            if let Some(pos) = existing.iter().position(|e| {
+                e.category == category
+                    && (crate::item_quality::refines(&e.name, &name)
+                        || crate::item_quality::refines(&name, &e.name))
+            }) {
+                let incumbent = &mut existing[pos];
+                if crate::item_quality::refines(&incumbent.name, &name)
+                    && incumbent.source == ItemSource::Model
+                    && incumbent.state == ItemState::Todo
+                {
+                    incumbent.name = name.clone();
+                    incumbent.quantity = incumbent.quantity.max(g.quantity);
+                    let updated = incumbent.clone();
+                    self.add_item(&updated)?;
+                }
                 report.skipped_existing += 1;
                 continue;
             }
-            existing_names.push(name.clone());
+            let key = normalise(&name);
+            if existing.iter().any(|e| {
+                normalise(&e.name) == key || crate::item_quality::is_near_duplicate(&e.name, &name)
+            }) {
+                report.skipped_existing += 1;
+                continue;
+            }
             let item = Item {
                 id: Uuid::new_v4(),
                 name,
@@ -262,6 +280,7 @@ impl TripDocument {
                 essential: g.essential,
             };
             self.add_item(&item)?;
+            existing.push(item);
             report.added += 1;
         }
 
@@ -547,5 +566,25 @@ mod tests {
         let names: Vec<String> = a.items().unwrap().into_iter().map(|i| i.name).collect();
         assert!(names.contains(&"From A".to_string()));
         assert!(names.contains(&"From B".to_string()));
+    }
+
+    #[test]
+    fn variant_merges_into_the_more_specific_name() {
+        let mut doc = TripDocument::new(&a_trip());
+        doc.merge_generated(Category::Clothing, &[generated("Sweater")])
+            .unwrap();
+        doc.merge_generated(Category::Clothing, &[generated("Thermal sweater")])
+            .unwrap();
+        doc.merge_generated(
+            Category::Clothing,
+            &[generated("Rain jacket"), generated("Down jacket")],
+        )
+        .unwrap();
+        let names: Vec<String> = doc.items().unwrap().into_iter().map(|i| i.name).collect();
+        assert!(names.contains(&"Thermal sweater".to_string()), "{names:?}");
+        assert!(!names.contains(&"Sweater".to_string()));
+        assert!(names.contains(&"Rain jacket".to_string()));
+        assert!(names.contains(&"Down jacket".to_string()));
+        assert_eq!(names.len(), 3);
     }
 }

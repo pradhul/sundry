@@ -193,6 +193,8 @@ pub fn prepare(
             }
             if crate::placement::is_personal(&item.name) {
                 item.quantity = (item.quantity * travellers).min(crate::llm::MAX_QUANTITY);
+            } else {
+                item.quantity = crate::placement::shared_quantity(&item.name, travellers);
             }
             Some((target, item))
         })
